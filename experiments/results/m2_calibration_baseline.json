@@ -1,0 +1,32 @@
+{
+  "n_train": 1341,
+  "n_test": 219,
+  "test_miss_rate": 0.018,
+  "anchors": {
+    "raw_relerr": 0.7302,
+    "raw_bias": 0.68,
+    "m2_neural_relerr": 0.564,
+    "m2_neural_note": "m2_refiner.json 공식"
+  },
+  "A_global_affine": {
+    "a": 1.1927,
+    "b": -1.158,
+    "relerr": 0.6794,
+    "bias": 0.6335
+  },
+  "B_quantile_ratio": {
+    "ratios": [
+      0.865,
+      0.91,
+      0.773,
+      0.837,
+      1.041
+    ],
+    "relerr": 0.4804,
+    "bias": 0.4106
+  },
+  "C_feature_affine": {
+    "relerr": 0.6367,
+    "bias": 0.5892
+  }
+}

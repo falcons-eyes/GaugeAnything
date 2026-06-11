@@ -1,77 +1,77 @@
 {
   "config": {
-    "prompt": "metal rod",
-    "n": 20,
+    "prompt": "steel bar",
+    "n": 40,
     "seed": 0,
     "tile": 640,
     "overlap": 0.25,
-    "threshold": 0.35,
+    "threshold": 0.4,
     "min_area": 100,
     "note": "SAHI-style tiled SAM3 inference; no training."
   },
   "summary": {
-    "n": 20,
-    "MAE": 7.35,
-    "rel_err_mean": 0.5288,
-    "count_acc@10pct": 0.2,
+    "n": 40,
+    "MAE": 8.9,
+    "rel_err_mean": 0.4491,
+    "count_acc@10pct": 0.075,
     "exact_rate": 0.05,
-    "gt_mean": 20.2,
-    "pred_mean": 15.0
+    "gt_mean": 22.5,
+    "pred_mean": 14.8
   },
   "rows": [
     {
       "img": "000000000597.jpg",
       "gt": 11,
-      "pred": 6,
-      "abs_err": 5
+      "pred": 4,
+      "abs_err": 7
     },
     {
       "img": "000000001072.jpg",
       "gt": 20,
-      "pred": 17,
-      "abs_err": 3
+      "pred": 15,
+      "abs_err": 5
     },
     {
       "img": "000000000293.jpg",
       "gt": 1,
-      "pred": 5,
-      "abs_err": 4
+      "pred": 0,
+      "abs_err": 1
     },
     {
       "img": "000000001493.jpg",
       "gt": 30,
-      "pred": 24,
-      "abs_err": 6
+      "pred": 22,
+      "abs_err": 8
     },
     {
       "img": "000000001477.jpg",
       "gt": 16,
-      "pred": 14,
-      "abs_err": 2
+      "pred": 13,
+      "abs_err": 3
     },
     {
       "img": "000000001563.jpg",
       "gt": 61,
-      "pred": 30,
-      "abs_err": 31
+      "pred": 28,
+      "abs_err": 33
     },
     {
       "img": "000000001255.jpg",
       "gt": 81,
-      "pred": 40,
-      "abs_err": 41
+      "pred": 42,
+      "abs_err": 39
     },
     {
       "img": "000000000283.jpg",
       "gt": 1,
-      "pred": 2,
+      "pred": 0,
       "abs_err": 1
     },
     {
       "img": "000000000525.jpg",
       "gt": 4,
-      "pred": 8,
-      "abs_err": 4
+      "pred": 7,
+      "abs_err": 3
     },
     {
       "img": "000000000118.jpg",
@@ -88,56 +88,176 @@
     {
       "img": "000000000221.jpg",
       "gt": 8,
-      "pred": 12,
-      "abs_err": 4
+      "pred": 3,
+      "abs_err": 5
     },
     {
       "img": "000000001337.jpg",
       "gt": 48,
-      "pred": 28,
-      "abs_err": 20
+      "pred": 18,
+      "abs_err": 30
     },
     {
       "img": "000000000207.jpg",
       "gt": 8,
-      "pred": 12,
-      "abs_err": 4
+      "pred": 11,
+      "abs_err": 3
     },
     {
       "img": "000000001468.jpg",
       "gt": 33,
-      "pred": 20,
-      "abs_err": 13
+      "pred": 19,
+      "abs_err": 14
     },
     {
       "img": "000000000246.jpg",
       "gt": 7,
-      "pred": 5,
-      "abs_err": 2
+      "pred": 4,
+      "abs_err": 3
     },
     {
       "img": "000000001495.jpg",
       "gt": 22,
-      "pred": 20,
-      "abs_err": 2
+      "pred": 22,
+      "abs_err": 0
     },
     {
       "img": "000000000224.jpg",
       "gt": 12,
-      "pred": 14,
-      "abs_err": 2
+      "pred": 9,
+      "abs_err": 3
     },
     {
       "img": "000000000333.jpg",
       "gt": 7,
-      "pred": 7,
-      "abs_err": 0
+      "pred": 0,
+      "abs_err": 7
     },
     {
       "img": "000000000531.jpg",
       "gt": 11,
-      "pred": 12,
+      "pred": 1,
+      "abs_err": 10
+    },
+    {
+      "img": "000000001361.jpg",
+      "gt": 31,
+      "pred": 18,
+      "abs_err": 13
+    },
+    {
+      "img": "000000000421.jpg",
+      "gt": 8,
+      "pred": 8,
+      "abs_err": 0
+    },
+    {
+      "img": "000000001213.jpg",
+      "gt": 15,
+      "pred": 10,
+      "abs_err": 5
+    },
+    {
+      "img": "000000000037.jpg",
+      "gt": 1,
+      "pred": 2,
       "abs_err": 1
+    },
+    {
+      "img": "000000001077.jpg",
+      "gt": 18,
+      "pred": 15,
+      "abs_err": 3
+    },
+    {
+      "img": "000000000210.jpg",
+      "gt": 7,
+      "pred": 10,
+      "abs_err": 3
+    },
+    {
+      "img": "000000000271.jpg",
+      "gt": 1,
+      "pred": 0,
+      "abs_err": 1
+    },
+    {
+      "img": "000000001191.jpg",
+      "gt": 28,
+      "pred": 18,
+      "abs_err": 10
+    },
+    {
+      "img": "000000001529.jpg",
+      "gt": 38,
+      "pred": 33,
+      "abs_err": 5
+    },
+    {
+      "img": "000000001487.jpg",
+      "gt": 10,
+      "pred": 13,
+      "abs_err": 3
+    },
+    {
+      "img": "000000001390.jpg",
+      "gt": 20,
+      "pred": 15,
+      "abs_err": 5
+    },
+    {
+      "img": "000000000150.jpg",
+      "gt": 68,
+      "pred": 27,
+      "abs_err": 41
+    },
+    {
+      "img": "000000001038.jpg",
+      "gt": 26,
+      "pred": 10,
+      "abs_err": 16
+    },
+    {
+      "img": "000000001016.jpg",
+      "gt": 35,
+      "pred": 25,
+      "abs_err": 10
+    },
+    {
+      "img": "000000001106.jpg",
+      "gt": 19,
+      "pred": 29,
+      "abs_err": 10
+    },
+    {
+      "img": "000000001241.jpg",
+      "gt": 17,
+      "pred": 8,
+      "abs_err": 9
+    },
+    {
+      "img": "000000001555.jpg",
+      "gt": 22,
+      "pred": 16,
+      "abs_err": 6
+    },
+    {
+      "img": "000000001091.jpg",
+      "gt": 26,
+      "pred": 22,
+      "abs_err": 4
+    },
+    {
+      "img": "000000001581.jpg",
+      "gt": 30,
+      "pred": 20,
+      "abs_err": 10
+    },
+    {
+      "img": "000000001140.jpg",
+      "gt": 75,
+      "pred": 51,
+      "abs_err": 24
     }
   ]
 }
