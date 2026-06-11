@@ -90,6 +90,10 @@ def train_profile_cnn(epochs: int = 12, seed: int = 0):
         if (ep + 1) % 4 == 0:
             print(f"  [1D CNN] ep{ep+1} train loss {tot/n:.2f}")
     net.eval()
+    Path("checkpoints").mkdir(exist_ok=True)
+    torch.save({"model": net.state_dict(), "input": "501px normalized brightness profile",
+                "output": "crack width (um)", "train": "krkCMd group-split train 14,424"},
+               "checkpoints/profile_width_cnn.pt")
     with torch.no_grad():
         pe = net(torch.from_numpy(X[te_idx]).unsqueeze(1).to(dev)).squeeze(1).cpu().numpy()
     mae = float(np.abs(pe - y[te_idx]).mean())
