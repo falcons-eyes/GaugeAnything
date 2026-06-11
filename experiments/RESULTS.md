@@ -296,3 +296,38 @@ python experiments/smoke_ncmapss.py --epochs 15
 | mechanical_bearing | (다중) | **4** |
 | imfds_motor | IMFDS 모터 | 3 |
 | vm_bearing | (다중) | 3 |
+
+## M2 v1 + N3 — 측정 보정: 신경 refiner vs 보정-only (정직 격하) ⚠️
+
+**프로토콜**: CrackSeg9k 홀드아웃 소스(cfd/cracktree200/deepcrack, n=219). 모든 보정은
+train+val 소스에서만 적합. 재현: `experiments/m2_refiner.py`, `experiments/m2_calibration_baseline.py`.
+
+| 방법 | test width rel_err ↓ | bias |
+|---|---:|---:|
+| raw SAM3 | 0.730 | +0.680 |
+| 전역 아핀 보정 | 0.679 | +0.633 |
+| M2 v1 신경 refiner (1.9M) | 0.564 | +0.503 |
+| **분위 배율 보정 (숫자 5개)** | **0.480** | +0.411 |
+
+**판정**: 분위 보정이 신경 refiner를 이김 → M2 v1의 신경망 기여는 과대평가였음 (감사 N3 적중).
+**M2 v2 합격선 = 0.480** + per-source worst-case 동시 개선. 잔여 bias(+0.41)는 보정 한계가
+아니라 thin 크랙에서 SAM3 마스크 자체가 두꺼운 것이 원인 — 마스크 정제가 본질 과제.
+
+## N2 — T-LESS 측정 상한: 완벽 마스크 + plane-scale (방법론 한계 정량화)
+
+**프로토콜**: GT mask_visib + pose 깊이(t_z/fx) plane-scale, GT는 CAD 정점 투영 최대 chord의
+3D mm 거리 (visib≥0.95, 6 scenes, n=53). 재현: `experiments/tless_upper_bound.py`.
+
+| rel_err 평균 | 중앙값 | ±5% | ±10% | worst |
+|---:|---:|---:|---:|---:|
+| 4.22% | **2.83%** | 76% | 94% | 34.6% (깊이-연장 객체) |
+
+**판정**: 분할이 완벽해도 단일-깊이 가정 상한은 중앙값 ~3%, **객체 기하 의존**
+(평면형 동전 1.74% → 입체 부품 2.8% → 깊이-연장 obj1 13.8%). depth-aware 모드의 필요
+지점을 수치로 특정. 다음: 동일 케이스 SAM3 분할로 실제 promptable 시험.
+
+## D — SAM3 메타데이터 감사: 로짓 노출 확정
+
+`eda_probe.py`: raw 출력에 **pred_masks (200쿼리 소프트 로짓, −67~+10)** · pred_logits ·
+presence_logits · semantic_seg 노출. post_process는 binary지만 raw에서 sigmoid confidence map
+추출 가능 → M2 v2 입력·측정 불확실성·후보 score 스펙트럼(thr=0: 200개, 0.007~0.867) 활용 확정.

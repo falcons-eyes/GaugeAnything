@@ -135,7 +135,7 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 - [x] SAM 3 integration + classical baselines + cross-source benchmark
 - [x] Regime router (sharp / fuzzy / field) + soft measurement
 - [x] PlaneScale (tilt-robust mm) + prompt-set ensemble
-- [x] Measurement-aware refinement head (M2 v1) — width rel. err −23% on held-out sources; domain-dependent bias sign discovered (v2: domain-conditioned calibration)
+- [x] Measurement-aware refinement head (M2 v1) — superseded: a 5-number quantile calibration beats it (0.480 vs 0.564 rel. err, held-out); M2 v2 bar = 0.480 + per-source worst-case
 - [x] Real-metric substitutes — coins LOO 1.74% real-photo consistency; krkCMd profile-level crack width MAE 27.8±2.5μm (5-fold; single split 25.9) vs manual GT
 - [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
 - [ ] Counting & spacing validation (fastener datasets)
