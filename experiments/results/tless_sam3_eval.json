@@ -1,0 +1,37 @@
+{
+  "prompts": {
+    "electrical component": {
+      "n_gt": 35,
+      "match_rate": 1.0,
+      "iou_median": 0.938,
+      "rel_err_median": 0.0251,
+      "pass@10pct": 0.943
+    },
+    "plastic part": {
+      "n_gt": 35,
+      "match_rate": 1.0,
+      "iou_median": 0.937,
+      "rel_err_median": 0.0252,
+      "pass@10pct": 0.943
+    },
+    "white object": {
+      "n_gt": 35,
+      "match_rate": 1.0,
+      "iou_median": 0.937,
+      "rel_err_median": 0.0252,
+      "pass@10pct": 0.914
+    },
+    "industrial part": {
+      "n_gt": 35,
+      "match_rate": 0.0,
+      "iou_median": 0.0,
+      "rel_err_median": NaN,
+      "pass@10pct": 0.0
+    }
+  },
+  "anchor_N2": {
+    "rel_err_median": 0.0283,
+    "pass@10pct": 0.94
+  },
+  "protocol": "N2 동일 케이스, mask=SAM3, IoU>=0.3 매칭"
+}

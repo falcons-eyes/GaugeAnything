@@ -1,0 +1,54 @@
+{
+  "series": "CMd_0.23_2mths",
+  "image": "1",
+  "results": {
+    "rung1": [
+      {
+        "stage": 1,
+        "n": 79,
+        "match_rate": 0.878,
+        "MAE_um": 95.8
+      },
+      {
+        "stage": 2,
+        "n": 67,
+        "match_rate": 0.744,
+        "MAE_um": 37.0
+      },
+      {
+        "stage": 3,
+        "n": 70,
+        "match_rate": 0.778,
+        "MAE_um": 35.2
+      }
+    ],
+    "rung2": [
+      {
+        "stage": 1,
+        "n": 79,
+        "MAE_um": 185.8,
+        "median_um": 170.7
+      },
+      {
+        "stage": 2,
+        "n": 67,
+        "MAE_um": 154.1,
+        "median_um": 138.9
+      },
+      {
+        "stage": 3,
+        "n": 70,
+        "MAE_um": 144.5,
+        "median_um": 134.9
+      }
+    ]
+  },
+  "params": {
+    "downscale": 2,
+    "mask_th": 0.7
+  },
+  "anchors": {
+    "profile_level_cal_MAE": 27.8,
+    "DLM": 11.1
+  }
+}

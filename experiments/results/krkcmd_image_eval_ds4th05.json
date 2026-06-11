@@ -1,0 +1,86 @@
+{
+  "series": "CMd_0.23_2mths",
+  "image": "1",
+  "results": {
+    "rung1": [
+      {
+        "stage": 1,
+        "n": 79,
+        "match_rate": 0.878,
+        "MAE_um": 95.8
+      },
+      {
+        "stage": 2,
+        "n": 67,
+        "match_rate": 0.744,
+        "MAE_um": 37.0
+      },
+      {
+        "stage": 3,
+        "n": 70,
+        "match_rate": 0.778,
+        "MAE_um": 35.2
+      },
+      {
+        "stage": 4,
+        "n": 66,
+        "match_rate": 0.733,
+        "MAE_um": 70.0
+      },
+      {
+        "stage": 5,
+        "n": 67,
+        "match_rate": 0.744,
+        "MAE_um": 65.3
+      },
+      {
+        "stage": 6,
+        "n": 74,
+        "match_rate": 0.822,
+        "MAE_um": 43.0
+      }
+    ],
+    "rung2": [
+      {
+        "stage": 1,
+        "n": 79,
+        "MAE_um": 236.5,
+        "median_um": 218.3
+      },
+      {
+        "stage": 2,
+        "n": 67,
+        "MAE_um": 216.9,
+        "median_um": 190.5
+      },
+      {
+        "stage": 3,
+        "n": 70,
+        "MAE_um": 203.0,
+        "median_um": 188.5
+      },
+      {
+        "stage": 4,
+        "n": 66,
+        "MAE_um": 263.5,
+        "median_um": 240.1
+      },
+      {
+        "stage": 5,
+        "n": 67,
+        "MAE_um": 259.0,
+        "median_um": 230.2
+      },
+      {
+        "stage": 6,
+        "n": 74,
+        "MAE_um": 217.5,
+        "median_um": 200.4
+      }
+    ]
+  },
+  "anchors": {
+    "profile_level_cal_MAE": 27.8,
+    "DLM": 11.1
+  }
+}
