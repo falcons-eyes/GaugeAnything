@@ -1,0 +1,32 @@
+{
+  "table_cnn_MAE": 18.6,
+  "anchors": {
+    "DLM": 11.1,
+    "rung1_minrun_oracle": "35-43",
+    "rung2_mask_best": "144-186"
+  },
+  "A1_minrun5": {
+    "oracle_MAE": 57.9,
+    "sam3_MAE": 112.6,
+    "n_oracle": 216,
+    "n_sam3": 190
+  },
+  "A2_EW": {
+    "oracle_MAE": 128.5,
+    "sam3_MAE": 156.8,
+    "n_oracle": 216,
+    "n_sam3": 190
+  },
+  "A3_halfdepth": {
+    "oracle_MAE": 88.8,
+    "sam3_MAE": 129.3,
+    "n_oracle": 216,
+    "n_sam3": 190
+  },
+  "A4_cnn": {
+    "oracle_MAE": 26.2,
+    "sam3_MAE": 96.6,
+    "n_oracle": 216,
+    "n_sam3": 190
+  }
+}
