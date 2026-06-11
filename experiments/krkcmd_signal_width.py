@@ -104,19 +104,43 @@ def train_profile_cnn(epochs: int = 12, seed: int = 0):
 
 
 # ---------- SAM3 스켈레톤 위치 ----------
-def sam3_skeleton_rows(gray: np.ndarray, ds: int = 2):
-    """SAM3 'crack' (ds 추론) → 스켈레톤 → 열별 중심 행 dict."""
+def sam3_skeleton_rows(gray: np.ndarray, ds: int = 2, tile: int = 1024, overlap: float = 0.2):
+    """SAM3 'crack' 타일 추론(SAHI) → 최암·최장 성분 → 스켈레톤 → 열별 중심 행.
+
+    진단(2026-06-12): 전역 추론은 내부 리사이즈로 크랙이 ~7px가 되어 다른 어두운
+    구조를 잡음(중앙 1090px 오프). 타일에서는 크랙이 충분히 두꺼움. 성분 선택은
+    promptable 원칙 유지(GT 불사용): 이미지 폭 30%+ 성분 중 평균 밝기 최암."""
+    from scipy import ndimage
     from skimage.morphology import skeletonize
     from gaugeanything.segmenters import segment_sam3
     g8 = np.clip(gray / max(gray.max(), 1) * 255, 0, 255).astype(np.uint8)
     small = g8[::ds, ::ds]
-    insts = segment_sam3(np.stack([small] * 3, -1), "crack", threshold=0.3)
-    if not insts:
-        return {}
+    h, w = small.shape
     m = np.zeros(small.shape, bool)
-    for inst in insts:
-        m |= inst.mask
-    sk = skeletonize(m)
+    stride = max(1, int(tile * (1 - overlap)))
+    xs = sorted({min(x, max(w - tile, 0)) for x in range(0, max(w - tile, 0) + stride, stride)})
+    ys = sorted({min(y, max(h - tile, 0)) for y in range(0, max(h - tile, 0) + stride, stride)})
+    for y0 in ys:
+        for x0 in xs:
+            crop = small[y0:y0 + tile, x0:x0 + tile]
+            insts = segment_sam3(np.stack([crop] * 3, -1), "crack", threshold=0.3)
+            for inst in insts:
+                m[y0:y0 + tile, x0:x0 + tile] |= inst.mask
+    if not m.any():
+        return {}
+    lab, n = ndimage.label(m)
+    best, best_dark = None, 1e9
+    for k in range(1, n + 1):
+        comp = lab == k
+        xs_k = np.nonzero(comp.any(0))[0]
+        if len(xs_k) and (xs_k[-1] - xs_k[0]) >= 0.3 * w:
+            dark = float(small[comp].mean())
+            if dark < best_dark:
+                best, best_dark = comp, dark
+    if best is None:   # 폴백: 최암 성분
+        means = ndimage.mean(small, lab, np.arange(1, n + 1))
+        best = lab == (1 + int(np.argmin(means)))
+    sk = skeletonize(best)
     ys, xs = np.nonzero(sk)
     col_rows: dict[int, list[int]] = {}
     for y, x in zip(ys, xs):
