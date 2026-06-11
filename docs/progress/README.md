@@ -6,6 +6,7 @@
 | 날짜 | 단계 | 파일 | 핵심 결과 |
 |---|---|---|---|
 | 2026-06-11 | 엄밀성 감사 + 수정 배치 + 후속 2종 | [2026-06-11_audit-fixes.md](2026-06-11_audit-fixes.md) | 2.44× 공식화 · matting 실전이 실패(정직) · 앙상블 구조 0→0.37 · 틸트 19%→0.7% |
+| 2026-06-11 | OSS 분리 + matting v2 + 라우터 통합 | [2026-06-11_oss-migration-matting-v2.md](2026-06-11_oss-migration-matting-v2.md) | 공개 repo 전환 · v2 실 fray 0.949(>고전 0.860) · PlaneScale/앙상블 라우터 |
 
 이전 단계들의 결과 요약은 [../../experiments/RESULTS.md](../../experiments/RESULTS.md),
 감사 자체는 [../RIGOR_AUDIT.md](../RIGOR_AUDIT.md) 참조.
