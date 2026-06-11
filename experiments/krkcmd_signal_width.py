@@ -164,6 +164,9 @@ def main():
                 j = int(np.argmin(np.abs(skel_cols - c)))
                 if abs(int(skel_cols[j]) - c) <= args.col_tol:
                     yc = skel[int(skel_cols[j])]
+                    # snap-to-valley: 스켈레톤 행 ±80px에서 최암점으로 재중심화
+                    lo = max(0, yc - 80); hi = min(H, yc + 81)
+                    yc = lo + int(np.argmin(gray[lo:hi, c]))
                     a = max(0, yc - N_P // 2)
                     p = gray[a: a + N_P, c]
                     if len(p) == N_P:
