@@ -1,0 +1,53 @@
+{
+  "test_overall": {
+    "raw": {
+      "mIoU": 0.4818,
+      "width_rel_err": 0.7302,
+      "width_bias": 0.68
+    },
+    "refined": {
+      "mIoU": 0.4872,
+      "width_rel_err": 0.564,
+      "width_bias": 0.5033
+    }
+  },
+  "test_per_source": {
+    "cfd": {
+      "raw": {
+        "mIoU": 0.4042,
+        "width_rel_err": 0.9925,
+        "width_bias": 0.9125
+      },
+      "refined": {
+        "mIoU": 0.4165,
+        "width_rel_err": 0.7752,
+        "width_bias": 0.6952
+      }
+    },
+    "cracktree200": {
+      "raw": {
+        "mIoU": 0.0141,
+        "width_rel_err": 1.0807,
+        "width_bias": 1.0807
+      },
+      "refined": {
+        "mIoU": 0.0177,
+        "width_rel_err": 0.6261,
+        "width_bias": 0.6261
+      }
+    },
+    "deepcrack": {
+      "raw": {
+        "mIoU": 0.6482,
+        "width_rel_err": 0.4012,
+        "width_bias": 0.3714
+      },
+      "refined": {
+        "mIoU": 0.6471,
+        "width_rel_err": 0.341,
+        "width_bias": 0.288
+      }
+    }
+  },
+  "note": "폭 GT는 마스크 유래(실 mm 아님). test 소스는 학습 미노출."
+}
