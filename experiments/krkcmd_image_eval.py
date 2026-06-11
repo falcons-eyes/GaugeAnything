@@ -124,7 +124,8 @@ def main():
             c = r["gx"]
             if c >= W:
                 continue
-            y0, score = refine_y(gray[:, c], r["x"], r["gy"])
+            # ImageJ ROI 이름 y는 라인 중점 기준 → 시작점 = gy − RoiL/2 (진단: 차이 252≈250)
+            y0, score = refine_y(gray[:, c], r["x"], r["gy"] - 250, win=60)
             if score < 0.95:    # 위치 신뢰 게이트 (상관 검증)
                 continue
             matched += 1
