@@ -377,3 +377,25 @@ per-source (θ*+qcal): deepcrack **0.269** · cfd 0.562 · cracktree200 0.664.
    θ*는 rel_err 기준 선택이 transfer에 더 강건.
 3. 한계(정직): cracktree200은 보정 불능 영역(0.664) — 원인은 분할 자체(IoU 0.079).
    보정의 천장 = 마스크 품질. 다음 단계는 보정이 아니라 thin-구조 분할 개선.
+
+## E-mm-3b — krkCMd 이미지 레벨: prompt→mask→μm 체인 개통 (정직한 첫 수치)
+
+**돌파구**: Gridline 컬럼 = ImageJ ROI 좌표(yyyy-xxxx, y는 라인 중점) → 19,098 프로파일의
+이미지 좌표 직접 복원(상관 게이트 0.95 검증, 복원율 73~88%). 1.07GB TIF는 38.6GB zip에서
+HTTP Range(remotezip) 선별 추출. 재현: `experiments/krkcmd_image_eval.py`.
+
+CMd_0.23_2mths/Image1 (6,305×9,448px, 6 stages × 90 profiles):
+
+| 단계 | 방법 | MAE (μm) |
+|---|---|---:|
+| rung1 | 이미지 추출 프로파일 + minrun5 (무보정) | **35~43** (stage 2/3/6) — profile-level 앵커 31.3과 일치 → **체인 검증 ✓** (stage 1/4/5는 66~96) |
+| rung2 | SAM3 "crack" ds4, mask_th 0.5 | 203~264 |
+| rung2 | SAM3 "crack" **ds2, θ\*=0.7 (M2v2-a 이식)** | **144~186 (−30%)** |
+
+**판정**:
+1. 이미지→위치→프로파일→μm 체인이 물리 GT로 검증됨 (rung1 ≈ profile-level).
+2. **M2v2-a의 θ\* 노브가 다른 데이터셋·물리 단위로 전이** — CrackSeg9k에서 선택한 0.7이
+   krkCMd에서 ~30% 개선. 로짓 iso-level 보정의 일반성 첫 증거.
+3. 정직한 한계: zero-shot promptable 폭은 아직 144~186μm (크랙 폭 ~100-300μm 도메인) —
+   profile rule(35μm) 대비 4~5×. 원인: 다운스케일 마스크 경계 거칠기 + zero-shot 마스크 품질.
+   "promptable image→μm 작동, 정밀도는 마스크가 병목" — M2 v2 본 트랙(마스크 정제)의 근거.
