@@ -15,7 +15,7 @@ segmentation backbone (SAM 3).
 > length 212 mm, on a real concrete surface, zero-shot. *(Assumed scale 0.25 mm/px — real-metric
 > capture with ArUco markers is the next data milestone; see [Metrology Rigor](#metrology-rigor).)*
 
-🌐 **Project page**: **https://falcons-eyes.github.io/GaugeAnything/** (live) · local: `cd docs && python3 -m http.server 8848`
+🌐 **Project page**: **https://falcons-eyes.github.io/GaugeAnything/** (live) · 🤗 **Weights**: [James-joobs/GaugeAnything](https://huggingface.co/James-joobs/GaugeAnything) · local: `cd docs && python3 -m http.server 8848`
 📄 **Design doc**: [DESIGN.md](DESIGN.md) · **Results log**: [experiments/RESULTS.md](experiments/RESULTS.md) · **Rigor audit**: [docs/RIGOR_AUDIT.md](docs/RIGOR_AUDIT.md)
 
 ---
@@ -139,7 +139,8 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 - [x] Real-metric substitutes — coins LOO 1.74% real-photo consistency; krkCMd profile-level crack width MAE 27.8±2.5μm (5-fold; single split 25.9) vs manual GT
 - [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
 - [ ] Counting & spacing validation (fastener datasets)
-- [ ] HuggingFace weights release + paper
+- [x] HuggingFace weights release — **https://huggingface.co/James-joobs/GaugeAnything** (5 task heads + audited model card)
+- [ ] Paper draft (arXiv)
 
 ## License & third-party
 
