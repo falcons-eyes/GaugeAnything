@@ -399,3 +399,28 @@ CMd_0.23_2mths/Image1 (6,305×9,448px, 6 stages × 90 profiles):
 3. 정직한 한계: zero-shot promptable 폭은 아직 144~186μm (크랙 폭 ~100-300μm 도메인) —
    profile rule(35μm) 대비 4~5×. 원인: 다운스케일 마스크 경계 거칠기 + zero-shot 마스크 품질.
    "promptable image→μm 작동, 정밀도는 마스크가 병목" — M2 v2 본 트랙(마스크 정제)의 근거.
+
+## E-mm-3c — 신호 기반 폭: "mask=WHERE, signal=WIDTH" 채택 ⭐⭐⭐
+
+**배경**: "마스크 정제가 안 되면 제품 불가인가?"에 대한 정면 검증
+([docs/WIDTH_BOTTLENECK_ANALYSIS.md](../docs/WIDTH_BOTTLENECK_ANALYSIS.md) — 물리 분석 + 방법 공간 전수).
+재현: `experiments/krkcmd_signal_width.py`.
+
+**설계**: 마스크는 중심선 위치만(WHERE), 폭은 full-res 원신호에서 직접(WIDTH).
+위치 2모드(oracle/SAM3 타일 스켈레톤+snap-to-valley) × 추정기 4종.
+
+| 추정기 | table test | oracle 위치 | SAM3 위치(성공분, n=113) |
+|---|---:|---:|---:|
+| **A4 1D CNN** (19k 프로파일 학습, CC BY 클린) | **17.9μm** | **26.2μm** | **39.9μm (중앙 23.2)** |
+| A1 minrun5 | 31.3 | 57.9 | 71.9 (중앙 43.7) |
+| A2 EW (PSF 불변 가설) | — | 128.5 | 기각 (텍스처가 배경 오염) |
+| 앵커 | DLM 11.1 | rung2 mask 최선 144~186 | 위치 실패분(n=53) 186 |
+
+**판정**:
+1. **binary mask 폭 대비 4~6× 개선** (144→26/40μm) — 병목은 마스크 품질이 아니라
+   "마스크 기하에서 폭을 읽는" 설계였음이 실증됨.
+2. 잔여 항목은 위치 커버리지(46~66%) 하나 — 전역 SAM3는 1,090px 오프(진단),
+   타일화로 성공 시 17px. 고전 CV 엔지니어링 영역.
+3. 제품 문법: 위치 신뢰 게이트 + 커버리지·σ 보고 — 게이트 실패 지점은 '측정 불가' 정직 표기.
+4. 비교표 (d) 갱신: promptable 단안 RGB에서 물리 GT MAE 39.9μm(조건부)/23.2μm(중앙) —
+   RGB-only 골격법(240μm)과 센서법(50μm) 사이 목표를 달성.
