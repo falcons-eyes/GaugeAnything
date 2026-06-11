@@ -11,6 +11,7 @@
 | **CrackSeg9k** | 분할·측정 벤치 (Gauge-Bench), M2 refiner 학습/홀드아웃 | 크랙 분할 마스크, 14개 원본 소스 통합(파일 접두사로 식별) | 9,159쌍 | CC0 (DeepCrack/GAPs 서브셋은 원본 NC — 상업 학습 시 제외 규칙) | Harvard Dataverse DVN/EGIEBY; Kulkarni+ 2022 |
 | **Magnetic-Tile Defect** | 멀티도메인 일반화, soft 검사(3-regime), 학습형 헤드(DRAEM/matting) 학습·평가 | 결함 5종+정상, 픽셀 GT 마스크 | 1,344장 (Free 952 학습풀) | 미명시(연구 관행) | Huang+ (github abin24); Surface-defect-detection 계열 |
 | **VT LCW** (Bianchi&Hebdon) | 크랙 도메인 보조 (다운로드 완료, 평가 일부) | 실제 교량검사 크랙 분할 | 3,817장 | **CC0** | VT figshare 16624672 |
+| **krkCMd table** | E-mm-3 profile-level 물리 폭 GT 검증 | 501px cross-crack brightness profile + `MANwidth` 수동 폭(μm), 저자 DLM/AED 출력 포함 | 19,098 profiles | **CC BY 4.0** | Zenodo 14568863; Jakubowski&Tomczak, Sci Data 2025 |
 | 합성 (자체) | 계측 self-test GT, matting/DRAEM 학습 신호 | 폭 기지 크랙, ArUco 렌더, 방향성 fray(I=αF+(1−α)B), 저주파 mura | — | 자체 | 본 repo 코드 |
 
 주: 모 프로젝트(Industrial Anything)의 진동/PHM 데이터(KAIST·Paderborn·N-CMAPSS 등)는
@@ -24,7 +25,7 @@
 | **ROI-1555 Rebar** | E-cnt-1: 카운팅 MAE | 박스+인스턴스 마스크 | 1,555장 | 미명시 | HF tsrobcvai/ROI-1555 |
 | **SmartDoc15-CH1** | PlaneScale 실사진 검증 | A4(210×297mm) GT quad, 실제 perspective | ~25k 프레임 | 공개 | Zenodo 1230218 |
 | **T-LESS** (BOP) | E-mm-2: 산업부품 치수 유도 검증 | CAD(mm)+intrinsics+pose | 30부품 | **CC BY 4.0** | HF bop-benchmark/tless |
-| **krkCMd** | E-mm-3: 크랙 폭 물리 GT 검증 | 명시적 폭 측정 19,098개(0–800μm), 3.97μm/px | 36GB | **CC BY 4.0** | Zenodo 14568863; Jakubowski&Tomczak, Sci Data 2025 |
+| **krkCMd image zip** | E-mm-3 확장: image-level segmentation→profile 폭 검증 | 원본 scanner image stack; table 실험은 완료, image zip은 대용량 subset 추출 예정 | 36GB | **CC BY 4.0** | Zenodo 14568863; Jakubowski&Tomczak, Sci Data 2025 |
 
 ## 3. 조사 완료, 후보 (필요 시)
 

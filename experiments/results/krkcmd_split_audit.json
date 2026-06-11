@@ -1,0 +1,891 @@
+{
+  "meta": {
+    "dataset": "krkCMd",
+    "n_profiles": 19098,
+    "n_groups": 36,
+    "n_series": 4,
+    "n_stages": 6,
+    "gt": "MANwidth",
+    "note": "Audit for split sensitivity/cherry-picking risk. Calibration is fit on train split only."
+  },
+  "summary": {
+    "group_5fold": {
+      "DLMwidth(author)": {
+        "folds": 5,
+        "MAE_mean_um": 14.003,
+        "MAE_std_um": 2.449,
+        "MAE_min_um": 11.108,
+        "MAE_max_um": 18.503
+      },
+      "AEDwidth(author)": {
+        "folds": 5,
+        "MAE_mean_um": 34.449,
+        "MAE_std_um": 5.381,
+        "MAE_min_um": 26.492,
+        "MAE_max_um": 40.118
+      },
+      "GaugeProfile-minrun5": {
+        "folds": 5,
+        "MAE_mean_um": 35.919,
+        "MAE_std_um": 3.061,
+        "MAE_min_um": 31.337,
+        "MAE_max_um": 40.24
+      },
+      "GaugeProfile-minrun5+linear-cal": {
+        "folds": 5,
+        "MAE_mean_um": 27.822,
+        "MAE_std_um": 2.498,
+        "MAE_min_um": 24.723,
+        "MAE_max_um": 31.348
+      }
+    },
+    "leave_one_series": {
+      "DLMwidth(author)": {
+        "folds": 4,
+        "MAE_mean_um": 16.684,
+        "MAE_std_um": 9.179,
+        "MAE_min_um": 8.196,
+        "MAE_max_um": 32.175
+      },
+      "AEDwidth(author)": {
+        "folds": 4,
+        "MAE_mean_um": 38.562,
+        "MAE_std_um": 13.103,
+        "MAE_min_um": 22.835,
+        "MAE_max_um": 56.823
+      },
+      "GaugeProfile-minrun5": {
+        "folds": 4,
+        "MAE_mean_um": 38.959,
+        "MAE_std_um": 10.011,
+        "MAE_min_um": 27.131,
+        "MAE_max_um": 54.182
+      },
+      "GaugeProfile-minrun5+linear-cal": {
+        "folds": 4,
+        "MAE_mean_um": 30.654,
+        "MAE_std_um": 9.891,
+        "MAE_min_um": 19.821,
+        "MAE_max_um": 46.741
+      }
+    },
+    "leave_one_stage": {
+      "DLMwidth(author)": {
+        "folds": 6,
+        "MAE_mean_um": 13.855,
+        "MAE_std_um": 1.883,
+        "MAE_min_um": 11.607,
+        "MAE_max_um": 17.502
+      },
+      "AEDwidth(author)": {
+        "folds": 6,
+        "MAE_mean_um": 34.054,
+        "MAE_std_um": 2.258,
+        "MAE_min_um": 30.605,
+        "MAE_max_um": 37.547
+      },
+      "GaugeProfile-minrun5": {
+        "folds": 6,
+        "MAE_mean_um": 35.637,
+        "MAE_std_um": 1.409,
+        "MAE_min_um": 33.377,
+        "MAE_max_um": 37.538
+      },
+      "GaugeProfile-minrun5+linear-cal": {
+        "folds": 6,
+        "MAE_mean_um": 27.733,
+        "MAE_std_um": 2.084,
+        "MAE_min_um": 25.285,
+        "MAE_max_um": 31.129
+      }
+    }
+  },
+  "folds": {
+    "group_5fold": {
+      "group_fold_0": {
+        "train_n": 14424,
+        "test_n": 4674,
+        "DLMwidth(author)": {
+          "n": 4674,
+          "MAE_um": 11.108,
+          "RMSE_um": 22.913,
+          "median_abs_err_um": 5.455,
+          "bias_um": 1.334,
+          "rel_err_median": 0.077,
+          "pass@50um": 0.965,
+          "pass@100um": 0.993,
+          "pearson_r": 0.9728
+        },
+        "AEDwidth(author)": {
+          "n": 4674,
+          "MAE_um": 26.492,
+          "RMSE_um": 39.956,
+          "median_abs_err_um": 23.812,
+          "bias_um": -13.988,
+          "rel_err_median": 0.238,
+          "pass@50um": 0.913,
+          "pass@100um": 0.981,
+          "pearson_r": 0.9299
+        },
+        "GaugeProfile-minrun5": {
+          "n": 4674,
+          "MAE_um": 31.337,
+          "RMSE_um": 50.15,
+          "median_abs_err_um": 23.812,
+          "bias_um": -6.555,
+          "rel_err_median": 0.357,
+          "pass@50um": 0.886,
+          "pass@100um": 0.981,
+          "pearson_r": 0.8638
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 4674,
+          "MAE_um": 25.911,
+          "RMSE_um": 50.573,
+          "median_abs_err_um": 15.97,
+          "bias_um": 7.626,
+          "rel_err_median": 0.209,
+          "pass@50um": 0.846,
+          "pass@100um": 0.979,
+          "pearson_r": 0.8638,
+          "calibration": {
+            "slope": 1.075689,
+            "intercept": 7.432
+          }
+        }
+      },
+      "group_fold_1": {
+        "train_n": 15174,
+        "test_n": 3924,
+        "DLMwidth(author)": {
+          "n": 3924,
+          "MAE_um": 13.522,
+          "RMSE_um": 25.339,
+          "median_abs_err_um": 6.927,
+          "bias_um": 0.502,
+          "rel_err_median": 0.047,
+          "pass@50um": 0.952,
+          "pass@100um": 0.987,
+          "pearson_r": 0.9826
+        },
+        "AEDwidth(author)": {
+          "n": 3924,
+          "MAE_um": 35.403,
+          "RMSE_um": 52.645,
+          "median_abs_err_um": 27.781,
+          "bias_um": -25.35,
+          "rel_err_median": 0.159,
+          "pass@50um": 0.84,
+          "pass@100um": 0.952,
+          "pearson_r": 0.941
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3924,
+          "MAE_um": 34.356,
+          "RMSE_um": 44.335,
+          "median_abs_err_um": 27.781,
+          "bias_um": -18.789,
+          "rel_err_median": 0.188,
+          "pass@50um": 0.848,
+          "pass@100um": 0.967,
+          "pearson_r": 0.9574
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3924,
+          "MAE_um": 24.723,
+          "RMSE_um": 39.317,
+          "median_abs_err_um": 14.098,
+          "bias_um": -1.55,
+          "rel_err_median": 0.1,
+          "pass@50um": 0.87,
+          "pass@100um": 0.97,
+          "pearson_r": 0.9574,
+          "calibration": {
+            "slope": 1.074542,
+            "intercept": 5.4
+          }
+        }
+      },
+      "group_fold_2": {
+        "train_n": 15600,
+        "test_n": 3498,
+        "DLMwidth(author)": {
+          "n": 3498,
+          "MAE_um": 13.935,
+          "RMSE_um": 25.805,
+          "median_abs_err_um": 7.227,
+          "bias_um": -0.453,
+          "rel_err_median": 0.044,
+          "pass@50um": 0.953,
+          "pass@100um": 0.989,
+          "pearson_r": 0.9883
+        },
+        "AEDwidth(author)": {
+          "n": 3498,
+          "MAE_um": 39.99,
+          "RMSE_um": 73.3,
+          "median_abs_err_um": 27.781,
+          "bias_um": -28.261,
+          "rel_err_median": 0.164,
+          "pass@50um": 0.835,
+          "pass@100um": 0.944,
+          "pearson_r": 0.9149
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3498,
+          "MAE_um": 38.072,
+          "RMSE_um": 64.814,
+          "median_abs_err_um": 27.781,
+          "bias_um": -22.14,
+          "rel_err_median": 0.175,
+          "pass@50um": 0.846,
+          "pass@100um": 0.958,
+          "pearson_r": 0.9318
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3498,
+          "MAE_um": 27.079,
+          "RMSE_um": 61.795,
+          "median_abs_err_um": 16.018,
+          "bias_um": -1.732,
+          "rel_err_median": 0.085,
+          "pass@50um": 0.893,
+          "pass@100um": 0.966,
+          "pearson_r": 0.9318,
+          "calibration": {
+            "slope": 1.092485,
+            "intercept": 3.011
+          }
+        }
+      },
+      "group_fold_3": {
+        "train_n": 15738,
+        "test_n": 3360,
+        "DLMwidth(author)": {
+          "n": 3360,
+          "MAE_um": 12.945,
+          "RMSE_um": 25.713,
+          "median_abs_err_um": 5.841,
+          "bias_um": -0.867,
+          "rel_err_median": 0.069,
+          "pass@50um": 0.943,
+          "pass@100um": 0.986,
+          "pearson_r": 0.9803
+        },
+        "AEDwidth(author)": {
+          "n": 3360,
+          "MAE_um": 30.243,
+          "RMSE_um": 49.117,
+          "median_abs_err_um": 23.812,
+          "bias_um": -20.16,
+          "rel_err_median": 0.233,
+          "pass@50um": 0.87,
+          "pass@100um": 0.951,
+          "pearson_r": 0.9443
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3360,
+          "MAE_um": 35.589,
+          "RMSE_um": 48.986,
+          "median_abs_err_um": 27.781,
+          "bias_um": -10.409,
+          "rel_err_median": 0.4,
+          "pass@50um": 0.841,
+          "pass@100um": 0.956,
+          "pearson_r": 0.9376
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3360,
+          "MAE_um": 30.048,
+          "RMSE_um": 46.275,
+          "median_abs_err_um": 20.231,
+          "bias_um": 4.386,
+          "rel_err_median": 0.258,
+          "pass@50um": 0.826,
+          "pass@100um": 0.957,
+          "pearson_r": 0.9376,
+          "calibration": {
+            "slope": 1.060052,
+            "intercept": 8.42
+          }
+        }
+      },
+      "group_fold_4": {
+        "train_n": 15456,
+        "test_n": 3642,
+        "DLMwidth(author)": {
+          "n": 3642,
+          "MAE_um": 18.503,
+          "RMSE_um": 35.268,
+          "median_abs_err_um": 8.028,
+          "bias_um": -7.092,
+          "rel_err_median": 0.077,
+          "pass@50um": 0.902,
+          "pass@100um": 0.975,
+          "pearson_r": 0.9719
+        },
+        "AEDwidth(author)": {
+          "n": 3642,
+          "MAE_um": 40.118,
+          "RMSE_um": 63.369,
+          "median_abs_err_um": 27.781,
+          "bias_um": -30.881,
+          "rel_err_median": 0.229,
+          "pass@50um": 0.787,
+          "pass@100um": 0.929,
+          "pearson_r": 0.9276
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3642,
+          "MAE_um": 40.24,
+          "RMSE_um": 56.588,
+          "median_abs_err_um": 27.781,
+          "bias_um": -22.539,
+          "rel_err_median": 0.3,
+          "pass@50um": 0.785,
+          "pass@100um": 0.944,
+          "pearson_r": 0.9389
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3642,
+          "MAE_um": 31.348,
+          "RMSE_um": 51.277,
+          "median_abs_err_um": 17.742,
+          "bias_um": -8.41,
+          "rel_err_median": 0.208,
+          "pass@50um": 0.817,
+          "pass@100um": 0.949,
+          "pearson_r": 0.9389,
+          "calibration": {
+            "slope": 1.067957,
+            "intercept": 4.992
+          }
+        }
+      }
+    },
+    "leave_one_series": {
+      "leave_series_CMd_0.23_20mths": {
+        "train_n": 13254,
+        "test_n": 5844,
+        "DLMwidth(author)": {
+          "n": 5844,
+          "MAE_um": 8.196,
+          "RMSE_um": 15.274,
+          "median_abs_err_um": 4.795,
+          "bias_um": 2.538,
+          "rel_err_median": 0.039,
+          "pass@50um": 0.985,
+          "pass@100um": 0.997,
+          "pearson_r": 0.9926
+        },
+        "AEDwidth(author)": {
+          "n": 5844,
+          "MAE_um": 22.835,
+          "RMSE_um": 35.277,
+          "median_abs_err_um": 19.844,
+          "bias_um": -15.091,
+          "rel_err_median": 0.153,
+          "pass@50um": 0.957,
+          "pass@100um": 0.985,
+          "pearson_r": 0.9686
+        },
+        "GaugeProfile-minrun5": {
+          "n": 5844,
+          "MAE_um": 27.131,
+          "RMSE_um": 35.747,
+          "median_abs_err_um": 23.812,
+          "bias_um": -7.336,
+          "rel_err_median": 0.222,
+          "pass@50um": 0.933,
+          "pass@100um": 0.987,
+          "pearson_r": 0.963
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 5844,
+          "MAE_um": 19.821,
+          "RMSE_um": 35.296,
+          "median_abs_err_um": 9.409,
+          "bias_um": 11.088,
+          "rel_err_median": 0.072,
+          "pass@50um": 0.901,
+          "pass@100um": 0.982,
+          "pearson_r": 0.963,
+          "calibration": {
+            "slope": 1.062941,
+            "intercept": 10.657
+          }
+        }
+      },
+      "leave_series_CMd_0.23_2mths": {
+        "train_n": 15162,
+        "test_n": 3936,
+        "DLMwidth(author)": {
+          "n": 3936,
+          "MAE_um": 13.679,
+          "RMSE_um": 24.673,
+          "median_abs_err_um": 7.175,
+          "bias_um": -2.547,
+          "rel_err_median": 0.037,
+          "pass@50um": 0.95,
+          "pass@100um": 0.989,
+          "pearson_r": 0.9885
+        },
+        "AEDwidth(author)": {
+          "n": 3936,
+          "MAE_um": 44.461,
+          "RMSE_um": 65.721,
+          "median_abs_err_um": 31.75,
+          "bias_um": -39.3,
+          "rel_err_median": 0.149,
+          "pass@50um": 0.775,
+          "pass@100um": 0.924,
+          "pearson_r": 0.9446
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3936,
+          "MAE_um": 40.688,
+          "RMSE_um": 54.111,
+          "median_abs_err_um": 31.75,
+          "bias_um": -31.796,
+          "rel_err_median": 0.155,
+          "pass@50um": 0.793,
+          "pass@100um": 0.951,
+          "pearson_r": 0.9639
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3936,
+          "MAE_um": 27.206,
+          "RMSE_um": 45.28,
+          "median_abs_err_um": 16.442,
+          "bias_um": -15.078,
+          "rel_err_median": 0.086,
+          "pass@50um": 0.861,
+          "pass@100um": 0.962,
+          "pearson_r": 0.9639,
+          "calibration": {
+            "slope": 1.05391,
+            "intercept": 5.359
+          }
+        }
+      },
+      "leave_series_CMd_0.28_20mths": {
+        "train_n": 16806,
+        "test_n": 2292,
+        "DLMwidth(author)": {
+          "n": 2292,
+          "MAE_um": 32.175,
+          "RMSE_um": 48.924,
+          "median_abs_err_um": 19.456,
+          "bias_um": -4.097,
+          "rel_err_median": 0.202,
+          "pass@50um": 0.796,
+          "pass@100um": 0.94,
+          "pearson_r": 0.9422
+        },
+        "AEDwidth(author)": {
+          "n": 2292,
+          "MAE_um": 56.823,
+          "RMSE_um": 90.232,
+          "median_abs_err_um": 35.719,
+          "bias_um": -35.085,
+          "rel_err_median": 0.353,
+          "pass@50um": 0.628,
+          "pass@100um": 0.865,
+          "pearson_r": 0.8223
+        },
+        "GaugeProfile-minrun5": {
+          "n": 2292,
+          "MAE_um": 54.182,
+          "RMSE_um": 83.875,
+          "median_abs_err_um": 35.719,
+          "bias_um": -29.334,
+          "rel_err_median": 0.347,
+          "pass@50um": 0.64,
+          "pass@100um": 0.878,
+          "pearson_r": 0.8423
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 2292,
+          "MAE_um": 46.741,
+          "RMSE_um": 81.873,
+          "median_abs_err_um": 30.146,
+          "bias_um": -15.42,
+          "rel_err_median": 0.271,
+          "pass@50um": 0.713,
+          "pass@100um": 0.894,
+          "pearson_r": 0.8423,
+          "calibration": {
+            "slope": 1.092135,
+            "intercept": 1.524
+          }
+        }
+      },
+      "leave_series_CMd_0.28_2mths": {
+        "train_n": 12072,
+        "test_n": 7026,
+        "DLMwidth(author)": {
+          "n": 7026,
+          "MAE_um": 12.685,
+          "RMSE_um": 26.162,
+          "median_abs_err_um": 6.321,
+          "bias_um": -2.496,
+          "rel_err_median": 0.093,
+          "pass@50um": 0.955,
+          "pass@100um": 0.991,
+          "pearson_r": 0.9749
+        },
+        "AEDwidth(author)": {
+          "n": 7026,
+          "MAE_um": 30.128,
+          "RMSE_um": 49.086,
+          "median_abs_err_um": 23.812,
+          "bias_um": -17.169,
+          "rel_err_median": 0.25,
+          "pass@50um": 0.882,
+          "pass@100um": 0.971,
+          "pearson_r": 0.9219
+        },
+        "GaugeProfile-minrun5": {
+          "n": 7026,
+          "MAE_um": 33.833,
+          "RMSE_um": 51.688,
+          "median_abs_err_um": 27.781,
+          "bias_um": -9.054,
+          "rel_err_median": 0.429,
+          "pass@50um": 0.864,
+          "pass@100um": 0.976,
+          "pearson_r": 0.9016
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 7026,
+          "MAE_um": 28.848,
+          "RMSE_um": 51.023,
+          "median_abs_err_um": 19.602,
+          "bias_um": 6.326,
+          "rel_err_median": 0.275,
+          "pass@50um": 0.83,
+          "pass@100um": 0.975,
+          "pearson_r": 0.9016,
+          "calibration": {
+            "slope": 1.072862,
+            "intercept": 8.269
+          }
+        }
+      }
+    },
+    "leave_one_stage": {
+      "leave_stage_1": {
+        "train_n": 15915,
+        "test_n": 3183,
+        "DLMwidth(author)": {
+          "n": 3183,
+          "MAE_um": 17.502,
+          "RMSE_um": 34.254,
+          "median_abs_err_um": 8.389,
+          "bias_um": -1.823,
+          "rel_err_median": 0.049,
+          "pass@50um": 0.925,
+          "pass@100um": 0.974,
+          "pearson_r": 0.9699
+        },
+        "AEDwidth(author)": {
+          "n": 3183,
+          "MAE_um": 37.547,
+          "RMSE_um": 60.152,
+          "median_abs_err_um": 23.813,
+          "bias_um": -31.554,
+          "rel_err_median": 0.174,
+          "pass@50um": 0.835,
+          "pass@100um": 0.951,
+          "pearson_r": 0.9312
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3183,
+          "MAE_um": 37.538,
+          "RMSE_um": 60.139,
+          "median_abs_err_um": 23.813,
+          "bias_um": -31.543,
+          "rel_err_median": 0.174,
+          "pass@50um": 0.835,
+          "pass@100um": 0.951,
+          "pearson_r": 0.9312
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3183,
+          "MAE_um": 26.406,
+          "RMSE_um": 54.143,
+          "median_abs_err_um": 13.691,
+          "bias_um": -15.822,
+          "rel_err_median": 0.094,
+          "pass@50um": 0.883,
+          "pass@100um": 0.959,
+          "pearson_r": 0.9312,
+          "calibration": {
+            "slope": 1.079194,
+            "intercept": 2.462
+          }
+        }
+      },
+      "leave_stage_2": {
+        "train_n": 15915,
+        "test_n": 3183,
+        "DLMwidth(author)": {
+          "n": 3183,
+          "MAE_um": 14.801,
+          "RMSE_um": 28.445,
+          "median_abs_err_um": 7.199,
+          "bias_um": -1.515,
+          "rel_err_median": 0.063,
+          "pass@50um": 0.934,
+          "pass@100um": 0.987,
+          "pearson_r": 0.9778
+        },
+        "AEDwidth(author)": {
+          "n": 3183,
+          "MAE_um": 36.153,
+          "RMSE_um": 57.129,
+          "median_abs_err_um": 27.781,
+          "bias_um": -25.143,
+          "rel_err_median": 0.219,
+          "pass@50um": 0.846,
+          "pass@100um": 0.948,
+          "pearson_r": 0.9266
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3183,
+          "MAE_um": 35.185,
+          "RMSE_um": 51.237,
+          "median_abs_err_um": 27.781,
+          "bias_um": -19.343,
+          "rel_err_median": 0.239,
+          "pass@50um": 0.859,
+          "pass@100um": 0.963,
+          "pearson_r": 0.9385
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3183,
+          "MAE_um": 25.783,
+          "RMSE_um": 46.875,
+          "median_abs_err_um": 15.37,
+          "bias_um": -4.301,
+          "rel_err_median": 0.141,
+          "pass@50um": 0.885,
+          "pass@100um": 0.968,
+          "pearson_r": 0.9385,
+          "calibration": {
+            "slope": 1.074152,
+            "intercept": 5.054
+          }
+        }
+      },
+      "leave_stage_3": {
+        "train_n": 15915,
+        "test_n": 3183,
+        "DLMwidth(author)": {
+          "n": 3183,
+          "MAE_um": 13.426,
+          "RMSE_um": 24.309,
+          "median_abs_err_um": 6.709,
+          "bias_um": -0.474,
+          "rel_err_median": 0.069,
+          "pass@50um": 0.945,
+          "pass@100um": 0.989,
+          "pearson_r": 0.9843
+        },
+        "AEDwidth(author)": {
+          "n": 3183,
+          "MAE_um": 33.471,
+          "RMSE_um": 53.524,
+          "median_abs_err_um": 23.812,
+          "bias_um": -21.738,
+          "rel_err_median": 0.226,
+          "pass@50um": 0.86,
+          "pass@100um": 0.956,
+          "pearson_r": 0.9357
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3183,
+          "MAE_um": 33.377,
+          "RMSE_um": 46.654,
+          "median_abs_err_um": 27.781,
+          "bias_um": -14.714,
+          "rel_err_median": 0.286,
+          "pass@50um": 0.865,
+          "pass@100um": 0.969,
+          "pearson_r": 0.9492
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3183,
+          "MAE_um": 25.285,
+          "RMSE_um": 43.186,
+          "median_abs_err_um": 15.698,
+          "bias_um": 0.574,
+          "rel_err_median": 0.172,
+          "pass@50um": 0.877,
+          "pass@100um": 0.972,
+          "pearson_r": 0.9492,
+          "calibration": {
+            "slope": 1.072368,
+            "intercept": 6.104
+          }
+        }
+      },
+      "leave_stage_4": {
+        "train_n": 15915,
+        "test_n": 3183,
+        "DLMwidth(author)": {
+          "n": 3183,
+          "MAE_um": 12.909,
+          "RMSE_um": 23.264,
+          "median_abs_err_um": 6.341,
+          "bias_um": -0.629,
+          "rel_err_median": 0.068,
+          "pass@50um": 0.949,
+          "pass@100um": 0.992,
+          "pearson_r": 0.986
+        },
+        "AEDwidth(author)": {
+          "n": 3183,
+          "MAE_um": 33.782,
+          "RMSE_um": 56.82,
+          "median_abs_err_um": 23.812,
+          "bias_um": -21.598,
+          "rel_err_median": 0.222,
+          "pass@50um": 0.851,
+          "pass@100um": 0.949,
+          "pearson_r": 0.9265
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3183,
+          "MAE_um": 36.094,
+          "RMSE_um": 60.318,
+          "median_abs_err_um": 27.781,
+          "bias_um": -11.494,
+          "rel_err_median": 0.333,
+          "pass@50um": 0.839,
+          "pass@100um": 0.959,
+          "pearson_r": 0.9039
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3183,
+          "MAE_um": 29.25,
+          "RMSE_um": 59.894,
+          "median_abs_err_um": 17.931,
+          "bias_um": 3.883,
+          "rel_err_median": 0.223,
+          "pass@50um": 0.849,
+          "pass@100um": 0.961,
+          "pearson_r": 0.9039,
+          "calibration": {
+            "slope": 1.084662,
+            "intercept": 5.017
+          }
+        }
+      },
+      "leave_stage_5": {
+        "train_n": 15915,
+        "test_n": 3183,
+        "DLMwidth(author)": {
+          "n": 3183,
+          "MAE_um": 12.886,
+          "RMSE_um": 25.016,
+          "median_abs_err_um": 5.809,
+          "bias_um": -1.708,
+          "rel_err_median": 0.063,
+          "pass@50um": 0.949,
+          "pass@100um": 0.989,
+          "pearson_r": 0.9849
+        },
+        "AEDwidth(author)": {
+          "n": 3183,
+          "MAE_um": 32.765,
+          "RMSE_um": 53.877,
+          "median_abs_err_um": 23.812,
+          "bias_um": -19.187,
+          "rel_err_median": 0.2,
+          "pass@50um": 0.841,
+          "pass@100um": 0.953,
+          "pearson_r": 0.9391
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3183,
+          "MAE_um": 36.978,
+          "RMSE_um": 50.266,
+          "median_abs_err_um": 27.781,
+          "bias_um": -8.827,
+          "rel_err_median": 0.368,
+          "pass@50um": 0.81,
+          "pass@100um": 0.963,
+          "pearson_r": 0.9441
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3183,
+          "MAE_um": 31.129,
+          "RMSE_um": 48.255,
+          "median_abs_err_um": 21.147,
+          "bias_um": 7.234,
+          "rel_err_median": 0.24,
+          "pass@50um": 0.787,
+          "pass@100um": 0.964,
+          "pearson_r": 0.9441,
+          "calibration": {
+            "slope": 1.062764,
+            "intercept": 8.493
+          }
+        }
+      },
+      "leave_stage_6": {
+        "train_n": 15915,
+        "test_n": 3183,
+        "DLMwidth(author)": {
+          "n": 3183,
+          "MAE_um": 11.607,
+          "RMSE_um": 25.982,
+          "median_abs_err_um": 5.248,
+          "bias_um": -0.8,
+          "rel_err_median": 0.049,
+          "pass@50um": 0.962,
+          "pass@100um": 0.988,
+          "pearson_r": 0.9838
+        },
+        "AEDwidth(author)": {
+          "n": 3183,
+          "MAE_um": 30.605,
+          "RMSE_um": 54.12,
+          "median_abs_err_um": 23.812,
+          "bias_um": -20.246,
+          "rel_err_median": 0.171,
+          "pass@50um": 0.881,
+          "pass@100um": 0.959,
+          "pearson_r": 0.9393
+        },
+        "GaugeProfile-minrun5": {
+          "n": 3183,
+          "MAE_um": 34.649,
+          "RMSE_um": 48.44,
+          "median_abs_err_um": 27.781,
+          "bias_um": -7.976,
+          "rel_err_median": 0.324,
+          "pass@50um": 0.856,
+          "pass@100um": 0.97,
+          "pearson_r": 0.9474
+        },
+        "GaugeProfile-minrun5+linear-cal": {
+          "n": 3183,
+          "MAE_um": 28.543,
+          "RMSE_um": 47.197,
+          "median_abs_err_um": 17.654,
+          "bias_um": 8.726,
+          "rel_err_median": 0.184,
+          "pass@50um": 0.823,
+          "pass@100um": 0.966,
+          "pearson_r": 0.9474,
+          "calibration": {
+            "slope": 1.068752,
+            "intercept": 7.944
+          }
+        }
+      }
+    }
+  }
+}

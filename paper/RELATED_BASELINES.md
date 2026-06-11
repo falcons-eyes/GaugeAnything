@@ -65,10 +65,12 @@
 | RGB-D crossfusion [CBM 2025] | 절대오차 **<0.05mm** (<0.3mm 크랙) | RealSense **L515 필요** |
 | 레이저빔 [Appl.Sci 2023] | 0.02–0.57mm | 레이저 투사 필요 |
 | k-means 프로파일 [Sensors 2021, 코드有] | t-test 무유의차(수동 대비), 분해능 0.15mm | DSLR 11.5px/mm |
+| **GaugeProfile (우리, krkCMd E-mm-3)** | **MAE 27.8±2.5μm (5-fold)**, 단일 split 25.9 · leave-one-series worst 46.7 · 무보정 31.3μm | 6400dpi scanner brightness profile, `MANwidth` GT |
+| krkCMd DLM/AED anchors | DLM **11.1μm** · AED **26.5μm** (같은 split test) | 저자 제공 profile-level outputs |
 
 **우리 포지션**: RGB 단안 + promptable + 마커 기반 — "RGB-only 골격법(±0.24mm)과
-센서 의존법(±0.05mm) 사이"를 타깃, 단 **promptable로는 최초의 캘리퍼/물리 GT MAE 보고**.
-E-mm-3(krkCMd 물리 폭 19k개)가 이 표의 우리 셀을 채움.
+센서 의존법(±0.05mm) 사이"를 타깃. E-mm-3는 profile-level 물리 GT 셀을 채웠고, 남은 핵심
+camera-ready 실험은 `promptable image → mask/profile → μm` end-to-end 캘리퍼/물리 GT MAE.
 
 ## Camera-ready 전 재확인 목록
 - SAM3 LVIS 48.8 vs 48.5 (arXiv 최신판) · CACViT 원논문 수치 · HrSegNet 판본 선택

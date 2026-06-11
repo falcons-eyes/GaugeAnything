@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GaugeAnything: Promptable Quantitative Inspection for Industrial Micro-Vision</title>
-<meta name="description" content="A promptable foundation-model pipeline that outputs metric measurements (mm), counts, and condition grades for industrial inspection — not just masks.">
+<meta name="description" content="A promptable foundation-model pipeline that outputs metric measurements, physical crack-width evidence, counts, and condition grades for industrial inspection — not just masks.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/css/bulma-carousel.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -24,6 +24,13 @@
   figure.fig img{width:100%;display:block;border:1px solid #e6ecf1;border-radius:12px}
   .cap{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#6b7a88;text-align:center;margin-top:.6rem;line-height:1.5}
   .method-fig{padding:1.1rem;background:#fbfdff;border:1px solid #e6ecf1;border-radius:12px;max-width:1040px;margin:0 auto}
+  .story-hero{position:relative;max-width:1180px;margin:0 auto;border-radius:14px;overflow:hidden;border:1px solid #e6ecf1;background:#111}
+  .story-hero img{width:100%;display:block}
+  .story-overlay{position:absolute;left:0;top:0;bottom:0;width:46%;padding:42px 46px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(90deg,rgba(9,18,28,.88),rgba(9,18,28,.54),rgba(9,18,28,0))}
+  .story-overlay h2{color:#fff;font-size:2.25rem;line-height:1.08;font-weight:800;letter-spacing:-.02em;margin-bottom:1rem}
+  .story-overlay p{color:#d7e6ef;font-size:1.08rem;line-height:1.45;max-width:34ch}
+  .story-overlay .tag{font-family:'JetBrains Mono',monospace;color:#36e0b0;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
+  @media(max-width:768px){.story-overlay{position:relative;width:auto;background:#0e1620;padding:24px}.story-overlay h2{font-size:1.7rem}.story-overlay p{font-size:.96rem}}
   /* tables */
   table.gtab{font-family:'JetBrains Mono',monospace;font-size:.9rem}
   table.gtab td,table.gtab th{vertical-align:middle;border-color:#edf1f4}
@@ -83,7 +90,8 @@
       </div>
       <div style="margin-top:1rem">
         <span class="badge">SAM 3 backbone · commercial-OK</span>
-        <span class="badge">CrackSeg9k + Magnetic-Tile</span>
+        <span class="badge">CrackSeg9k + Magnetic-Tile + krkCMd</span>
+        <span class="badge">coins 1.74% · krkCMd 27.8±2.5 μm (5-fold)</span>
         <span class="badge">torch 2.12+cu130 · sm_121</span>
       </div>
     </div>
@@ -93,12 +101,28 @@
 <!-- ===== TEASER ===== -->
 <section class="hero teaser">
   <div class="container is-max-desktop">
-    <figure class="fig"><img src="assets/gauge_demo.png" alt="Crack width measurement"></figure>
+    <div class="story-hero">
+      <img src="assets/story_industrial_hero.png" alt="Industrial inspection scene with measurement overlays">
+      <div class="story-overlay">
+        <div class="tag">Field story</div>
+        <h2>Not just "where is the defect?"</h2>
+        <p>In the field, the next question is always quantitative: how wide, how many, how far apart, and what decision follows.</p>
+      </div>
+    </div>
     <p class="cap">
-      Prompt <b>"crack"</b> → SAM 3 segmentation → skeleton + EDT width profile.
-      Mean width <b>1.53 mm</b>, length 212 mm on a real concrete surface, zero-shot.
-      <b>No foundation model emits measurements as a first-class output — that gap is this project.</b>
+      Visual concept for communication; exact reported numbers are in the audited tables below.
+      <b>GaugeAnything turns perception into inspection atoms: find, measure, count, decide.</b>
     </p>
+  </div>
+</section>
+
+<!-- ===== STORYBOARD ===== -->
+<section class="section" style="padding-top:2.2rem;padding-bottom:1rem">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">One-Glance Story</div>
+    <h2 class="title is-3 has-text-centered">What GaugeAnything Adds</h2>
+    <p class="lead">Segment Anything shows masks. Count Anything shows counts. GaugeAnything shows the inspection quantities that turn a mask into a field decision.</p>
+    <figure class="fig" style="max-width:1180px"><img src="assets/story_inspection_atoms.png" alt="GaugeAnything story: detect, measure, validate, deploy honestly"></figure>
   </div>
 </section>
 
@@ -107,9 +131,9 @@
   <div class="container is-max-desktop">
     <div class="stats">
       <div class="stat"><div class="v">2.44×</div><div class="k">SAM 3 zero-shot vs. classical crack segmentation (mIoU)</div></div>
-      <div class="stat"><div class="v">1.53&nbsp;mm</div><div class="k">end-to-end crack width on real imagery (assumed scale — metric GT pending)</div></div>
-      <div class="stat"><div class="v">14/14</div><div class="k">metrology-core self-tests passing (sub-pixel, scale, severity)</div></div>
-      <div class="stat"><div class="v">0.50→0.68</div><div class="k">binary→continuous AUC on boundaryless defects</div></div>
+      <div class="stat"><div class="v">1.74%</div><div class="k">real-photo coin known-object mm consistency (22 scenes, pass@5% 100%)</div></div>
+      <div class="stat"><div class="v">27.8&nbsp;μm</div><div class="k">krkCMd profile-level crack-width MAE (5-fold ±2.5; single split 25.9) vs manual physical GT</div></div>
+      <div class="stat"><div class="v">0.50→0.67</div><div class="k">binary→continuous AUC on boundaryless defects</div></div>
     </div>
   </div>
 </section>
@@ -135,7 +159,9 @@
           (SAM&nbsp;3 by −22%), quantifying the absence of a measurement-ready model. For defects without a crisp boundary —
           frayed edges and uneven (mura) brightness — binary segmentation collapses to chance (AUC≈0.50), and we show that
           a <b>regime-aware soft representation</b> (matting for fuzzy edges, illumination-field modeling for boundaryless defects)
-          recovers signal that binary masks discard. All results are measured on an NVIDIA&nbsp;GB10.
+          recovers signal that binary masks discard. We further validate the measurement chain with real-metric substitutes:
+          coin known-object scenes reach <b>1.74% mean error</b>, and krkCMd profile-level crack-width evaluation reaches
+          <b>27.8&nbsp;±&nbsp;2.5&nbsp;μm MAE</b> (group 5-fold; leave-one-series worst 46.7&nbsp;μm) against manual physical GT. All results are measured on an NVIDIA&nbsp;GB10.
         </p>
       </div>
     </div></div>
@@ -254,14 +280,15 @@
           <tbody>
             <tr><td>binary mask (synthetic)</td><td>0.2007</td></tr>
             <tr class="win"><td>matting head, synthetic holdout</td><td>0.0100</td></tr>
-            <tr><td><b style="color:#e0394b">real fray transfer (mask IoU)</b></td><td><b style="color:#e0394b">0.483</b> vs guided filter <b>0.860</b></td></tr>
+            <tr><td>v1 real fray transfer (mask IoU)</td><td><span class="bad">0.483</span> vs guided filter <b>0.860</b></td></tr>
+            <tr class="win"><td>v2 directional matting, real fray</td><td><b>0.949</b> vs guided filter <b>0.860</b></td></tr>
           </tbody>
         </table>
-        <p class="cap"><span class="good">20× on synthetic</span>, but <span class="bad">fails to transfer to real fray</span> (blob synthesis ≠ directional texture). Production keeps the classical guided filter; the learned head is shelved until real-distribution synthesis. Honest negative result.</p>
+        <p class="cap">The first blob-synthesis head was an honest failure on real fray. Directional synthesis v2 fixes the transfer gap: learned matting reaches <span class="good">0.949 IoU</span> on real MT_Fray, above the guided filter anchor.</p>
       </div>
     </div>
     <p class="lead" style="margin-top:.4rem;font-size:.9rem">
-      Honest note: a well-tuned classical illumination model is still strongest on the narrow uneven case; learned synthesis closes the gap. For fuzzy boundaries, the matting head is decisive. The established result is that <b>continuous representations beat binary</b>, with the regime dictating the tool.
+      Honest note: a well-tuned classical illumination model is still strongest on the narrow uneven case; learned synthesis closes the gap. For fuzzy boundaries, directional matting v2 now transfers to real fray. The established result is that <b>continuous representations beat binary</b>, with the regime dictating the tool.
     </p>
   </div>
 </section>
@@ -339,6 +366,61 @@
   </div>
 </section>
 
+<!-- ===== REAL METRIC EVIDENCE ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">Real-Metric Evidence</div>
+    <h2 class="title is-3 has-text-centered">From Pixels to Physical Units</h2>
+    <p class="lead">We separate three claims: geometric scale, known-object real photos, and physical crack-width GT. The image-level promptable μm benchmark is still next.</p>
+
+    <div class="columns is-multiline">
+      <div class="column is-half">
+        <figure class="fig"><img src="assets/coins_mm.png" alt="Coin known-object mm consistency"></figure>
+        <table class="table is-fullwidth is-hoverable gtab" style="margin-top:1rem">
+          <thead><tr><th>E-mm-1</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>real photos</td><td>22 scenes, 8-60 coins/image</td></tr>
+            <tr class="win"><td>mean / median relative error</td><td>1.74% / 1.68%</td></tr>
+            <tr class="win"><td>pass@5% / pass@10%</td><td>100% / 100%</td></tr>
+          </tbody>
+        </table>
+        <p class="cap">Leave-one-out known-object consistency: each coin is measured using the other same-denomination coins as the scale reference. This validates the segmentation→diameter chain on real imagery, not the absolute marker chain.</p>
+      </div>
+
+      <div class="column is-half">
+        <figure class="fig"><img src="assets/krkcmd_profile.png" alt="krkCMd profile-level crack-width evaluation"></figure>
+        <table class="table is-fullwidth is-hoverable gtab" style="margin-top:1rem">
+          <thead><tr><th>E-mm-3</th><th>test MAE ↓</th><th>r</th></tr></thead>
+          <tbody>
+            <tr class="win"><td>author DLM anchor</td><td>11.1 μm</td><td>0.973</td></tr>
+            <tr class="win"><td>GaugeProfile + linear calibration</td><td>25.9 μm (5-fold 27.8 ± 2.5)</td><td>0.864</td></tr>
+            <tr><td>author AED anchor</td><td>26.5 μm</td><td>0.930</td></tr>
+            <tr><td>GaugeProfile, uncalibrated</td><td>31.3 μm</td><td>0.864</td></tr>
+          </tbody>
+        </table>
+        <p class="cap">krkCMd table: 19,098 scanner brightness profiles, manual width GT in μm, group-split test 4,674 profiles. This is profile-level physical GT, not yet promptable image segmentation.</p>
+      </div>
+    </div>
+
+    <div class="columns" style="margin-top:.5rem">
+      <div class="column is-half">
+        <div class="rcard" style="border-top:3px solid #16805d">
+          <div class="h" style="color:#16805d">Geometry scale</div>
+          <div class="tt">PlaneScale fixes tilt</div>
+          <p>At 50° tilt, a single marker-derived px/mm gives <b class="bad">19.3%</b> length error; local homography scale gives <b class="good">0.7%</b>. This protects every downstream millimeter.</p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="rcard" style="border-top:3px solid #e0394b">
+          <div class="h" style="color:#e0394b">Counting gap</div>
+          <div class="tt">Rebar zero-shot fails honestly</div>
+          <p>On ROI-1555, the best prompt reaches MAE <b>13.2</b> bars with <b class="bad">0%</b> acc@10%. The issue is not wording: touching, low-contrast rusty ends need tiling, density, or supervision.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== KEY FINDINGS ===== -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -357,9 +439,9 @@
         <p>On fray and uneven, SAM 3 binary AUC is <b class="bad">~0.50</b>. Fuzzy edges respond to matting; boundaryless fields to illumination modeling — <b>opposite</b> treatments.</p>
       </div></div>
       <div class="column"><div class="rcard" style="border-top:3px solid #ffb648">
-        <div class="h" style="color:#b5791a">Finding 03 · Backbone justified</div>
-        <div class="tt">SAM 3 = 2.44× classical</div>
-        <p>On real data SAM 3 zero-shot beats 50 years of hand-crafted features (envelope/Frangi), but is <b class="bad">weak on thin cracks</b> — motivating targeted fine-tuning.</p>
+        <div class="h" style="color:#b5791a">Finding 03 · Physical GT</div>
+        <div class="tt">μm evidence is now on the table</div>
+        <p>krkCMd gives a physical crack-width benchmark: GaugeProfile+cal reaches <b class="good">27.8 ± 2.5 μm MAE</b> (5-fold; single split 25.9, leave-one-series worst 46.7) vs manual GT; the specialized author DLM anchor reaches <b>11.1 μm</b>.</p>
       </div></div>
     </div>
   </div>
@@ -383,7 +465,7 @@
   <div class="container has-text-centered" style="padding:2.4rem 1.5rem">
     <p class="is-size-7">
       Page built on the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> · CC BY-SA 4.0.<br>
-      Measured on NVIDIA GB10 (aarch64, CUDA 13.1) · backbone SAM 3 · data CrackSeg9k / Magnetic-Tile / VT Bianchi suite.
+      Measured on NVIDIA GB10 (aarch64, CUDA 13.1) · backbone SAM 3 · data CrackSeg9k / Magnetic-Tile / krkCMd / ROI-1555 / VT Bianchi suite.
     </p>
   </div>
 </footer>

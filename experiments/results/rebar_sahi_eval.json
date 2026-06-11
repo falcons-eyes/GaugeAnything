@@ -1,0 +1,143 @@
+{
+  "config": {
+    "prompt": "metal rod",
+    "n": 20,
+    "seed": 0,
+    "tile": 640,
+    "overlap": 0.25,
+    "threshold": 0.35,
+    "min_area": 100,
+    "note": "SAHI-style tiled SAM3 inference; no training."
+  },
+  "summary": {
+    "n": 20,
+    "MAE": 7.35,
+    "rel_err_mean": 0.5288,
+    "count_acc@10pct": 0.2,
+    "exact_rate": 0.05,
+    "gt_mean": 20.2,
+    "pred_mean": 15.0
+  },
+  "rows": [
+    {
+      "img": "000000000597.jpg",
+      "gt": 11,
+      "pred": 6,
+      "abs_err": 5
+    },
+    {
+      "img": "000000001072.jpg",
+      "gt": 20,
+      "pred": 17,
+      "abs_err": 3
+    },
+    {
+      "img": "000000000293.jpg",
+      "gt": 1,
+      "pred": 5,
+      "abs_err": 4
+    },
+    {
+      "img": "000000001493.jpg",
+      "gt": 30,
+      "pred": 24,
+      "abs_err": 6
+    },
+    {
+      "img": "000000001477.jpg",
+      "gt": 16,
+      "pred": 14,
+      "abs_err": 2
+    },
+    {
+      "img": "000000001563.jpg",
+      "gt": 61,
+      "pred": 30,
+      "abs_err": 31
+    },
+    {
+      "img": "000000001255.jpg",
+      "gt": 81,
+      "pred": 40,
+      "abs_err": 41
+    },
+    {
+      "img": "000000000283.jpg",
+      "gt": 1,
+      "pred": 2,
+      "abs_err": 1
+    },
+    {
+      "img": "000000000525.jpg",
+      "gt": 4,
+      "pred": 8,
+      "abs_err": 4
+    },
+    {
+      "img": "000000000118.jpg",
+      "gt": 8,
+      "pred": 9,
+      "abs_err": 1
+    },
+    {
+      "img": "000000001230.jpg",
+      "gt": 16,
+      "pred": 15,
+      "abs_err": 1
+    },
+    {
+      "img": "000000000221.jpg",
+      "gt": 8,
+      "pred": 12,
+      "abs_err": 4
+    },
+    {
+      "img": "000000001337.jpg",
+      "gt": 48,
+      "pred": 28,
+      "abs_err": 20
+    },
+    {
+      "img": "000000000207.jpg",
+      "gt": 8,
+      "pred": 12,
+      "abs_err": 4
+    },
+    {
+      "img": "000000001468.jpg",
+      "gt": 33,
+      "pred": 20,
+      "abs_err": 13
+    },
+    {
+      "img": "000000000246.jpg",
+      "gt": 7,
+      "pred": 5,
+      "abs_err": 2
+    },
+    {
+      "img": "000000001495.jpg",
+      "gt": 22,
+      "pred": 20,
+      "abs_err": 2
+    },
+    {
+      "img": "000000000224.jpg",
+      "gt": 12,
+      "pred": 14,
+      "abs_err": 2
+    },
+    {
+      "img": "000000000333.jpg",
+      "gt": 7,
+      "pred": 7,
+      "abs_err": 0
+    },
+    {
+      "img": "000000000531.jpg",
+      "gt": 11,
+      "pred": 12,
+      "abs_err": 1
+    }
+  ]
+}

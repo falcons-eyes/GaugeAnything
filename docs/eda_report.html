@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GaugeAnything EDA Report</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; margin: 0; color: #17202a; background: #f7f8fa; }
+main { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; background: white; }
+h1, h2, h3 { line-height: 1.18; color: #0c1720; }
+h1 { font-size: 34px; margin: 0 0 20px; }
+h2 { font-size: 24px; margin-top: 42px; border-top: 1px solid #dfe5ea; padding-top: 24px; }
+h3 { font-size: 18px; margin-top: 26px; }
+p { max-width: 980px; }
+table { width: 100%; border-collapse: collapse; margin: 18px 0 28px; font-size: 14px; }
+th, td { border: 1px solid #d8dee4; padding: 8px 10px; vertical-align: top; }
+th { background: #eef3f7; text-align: left; }
+img { max-width: 360px; height: auto; border: 1px solid #d8dee4; background: #fff; }
+code { background: #edf2f7; padding: 2px 5px; border-radius: 4px; }
+</style>
+</head>
+<body><main>
+<h1>GaugeAnything EDA Report</h1>
+
+<p>Generated: 2026-06-11</p>
+
+<p>This exploratory report consolidates the training/evaluation artifacts from the current GaugeAnything session: audited result JSON files, representative images, model/regime metadata, and the known limits of each result. It is designed to be re-generated with <code>python experiments/eda_report.py</code>.</p>
+
+<h2>Executive findings</h2>
+
+<table>
+<thead><tr><th>Finding</th><th>Evidence</th><th>Interpretation</th></tr></thead>
+<tbody>
+<tr><td>SAM 3 is the best zero-shot crack segmenter</td><td>mIoU 0.442 vs adaptive 0.181 (2.45x)</td><td>Good backbone choice, but still far from supervised upper bounds.</td></tr>
+<tr><td>Segmentation quality is not measurement quality</td><td>SAM3 width rel.err 62.9%; adaptive 43.5%</td><td>GaugeAnything should optimize measurement atoms, not only IoU.</td></tr>
+<tr><td>M2 refiner helps width without hurting IoU</td><td>width rel.err 0.730->0.564 (22.8% relative reduction)</td><td>Promising, but bias sign is domain-dependent.</td></tr>
+<tr><td>Fuzzy/field defects need continuous outputs</td><td>SAM3 binary AUC about 0.50; soft methods 0.60-0.67</td><td>Route by visual regime: binary, matting, or field residual.</td></tr>
+<tr><td>PlaneScale fixes tilt-driven mm error</td><td>50 deg naive 19.290% vs homography 0.710%</td><td>Metric claims need local homography scale, not one global px/mm.</td></tr>
+<tr><td>Known-object real photos validate the diameter chain</td><td>coin LOO mean 1.7%, pass@5% 100.0%</td><td>This is not a field caliper dataset, but it is real-image mm consistency.</td></tr>
+<tr><td>krkCMd gives physical crack-width MAE in micrometers</td><td>GaugeProfile+cal test MAE 25.9um; author DLM 11.1um</td><td>This completes a profile-level physical GT cell; image-level promptable validation remains next.</td></tr>
+<tr><td>Rebar counting is a confirmed zero-shot failure</td><td>global MAE 13.20; SAHI MAE 7.35</td><td>Tiling helps, but touching, low-contrast circular ends still need density or supervision.</td></tr>
+<tr><td>Prompt synonyms can collapse completely</td><td>fracture/pit single prompt mIoU 0.0; ensemble recovers 0.35-0.37</td><td>Prompt-set routing is a required reliability layer.</td></tr>
+</tbody></table>
+
+<h2>Artifact inventory</h2>
+
+<h3>Local files</h3>
+
+<table>
+<thead><tr><th>Artifact</th><th>State</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>datasets/</td><td>not present in this checkout</td><td>raw benchmark images and labels</td></tr>
+<tr><td>checkpoints/m2_refiner.pt</td><td>not present in this checkout</td><td>measurement-aware refiner weights</td></tr>
+<tr><td>checkpoints/matte_fray_directional.pt</td><td>not present in this checkout</td><td>directional matting v2 weights</td></tr>
+<tr><td>checkpoints/draem_uneven.pt</td><td>not present in this checkout</td><td>field-regime DRAEM-lite weights</td></tr>
+<tr><td>docs/assets/</td><td>present</td><td>checked-in visual evidence</td></tr>
+<tr><td>datasets/coins</td><td>not present in this checkout</td><td>known-object real-photo mm substitute</td></tr>
+<tr><td>datasets/rebar_roi1555</td><td>not present in this checkout</td><td>rebar instance-count GT</td></tr>
+<tr><td>datasets/tless</td><td>not present in this checkout</td><td>CAD+pose metric object candidate</td></tr>
+<tr><td>datasets/krkcmd</td><td>not present in this checkout</td><td>crack-width real-mm candidate</td></tr>
+</tbody></table>
+
+<h3>Result JSON inputs</h3>
+
+<table>
+<thead><tr><th>File</th><th>Size</th></tr></thead>
+<tbody>
+<tr><td>audit_baselines.json</td><td>0.9 KB</td></tr>
+<tr><td>coins_mm_eval.json</td><td>3.1 KB</td></tr>
+<tr><td>draem_uneven.json</td><td>0.1 KB</td></tr>
+<tr><td>gauge_bench.json</td><td>1.6 KB</td></tr>
+<tr><td>gauge_bench_measure.json</td><td>0.7 KB</td></tr>
+<tr><td>gauge_multidomain.json</td><td>1.1 KB</td></tr>
+<tr><td>krkcmd_profile_eval.json</td><td>7.6 KB</td></tr>
+<tr><td>krkcmd_split_audit.json</td><td>23.9 KB</td></tr>
+<tr><td>m2_refiner.json</td><td>1.1 KB</td></tr>
+<tr><td>matte_fray.json</td><td>0.4 KB</td></tr>
+<tr><td>prompt_ensemble.json</td><td>0.3 KB</td></tr>
+<tr><td>prompt_sweep.json</td><td>0.7 KB</td></tr>
+<tr><td>rebar_count_eval.json</td><td>7.7 KB</td></tr>
+<tr><td>rebar_sahi_eval.json</td><td>2.3 KB</td></tr>
+<tr><td>scale_perspective.json</td><td>1.0 KB</td></tr>
+<tr><td>soft_inspection.json</td><td>0.3 KB</td></tr>
+<tr><td>uneven_protocol.json</td><td>0.3 KB</td></tr>
+</tbody></table>
+
+<h2>Visual case gallery</h2>
+
+<p>These are the checked-in visual artifacts used as qualitative anchors for the EDA.</p>
+
+<table>
+<thead><tr><th>Regime</th><th>Image</th><th>What to inspect</th></tr></thead>
+<tbody>
+<tr><td>End-to-end gauge demo</td><td><img src="assets/gauge_demo.png" alt="crack gauge demo" width="100%"></td><td>Mask-to-width/length atoms on a real concrete surface.</td></tr>
+<tr><td>Real-metric substitute</td><td><img src="assets/coins_mm.png" alt="coin millimeter evaluation" width="100%"></td><td>Known-object leave-one-out mm consistency with many instances.</td></tr>
+<tr><td>Crack source: CFD</td><td><img src="assets/gallery_cfd.png" alt="CFD crack gallery" width="100%"></td><td>Concrete crack morphology and SAM3 thin-structure behavior.</td></tr>
+<tr><td>Crack source: CrackTree200</td><td><img src="assets/gallery_cracktree200.png" alt="CrackTree200 crack gallery" width="100%"></td><td>Hard thin-crack source where per-source IoU is weak.</td></tr>
+<tr><td>Crack source: DeepCrack</td><td><img src="assets/gallery_deepcrack.png" alt="DeepCrack gallery" width="100%"></td><td>Held-out source used by M2 reporting.</td></tr>
+<tr><td>Magnetic tile: blowhole</td><td><img src="assets/dom_mt_blowhole.png" alt="magnetic tile blowhole" width="100%"></td><td>Blob-like defect where diameter is the natural measurement.</td></tr>
+<tr><td>Magnetic tile: fray</td><td><img src="assets/dom_mt_fray.png" alt="magnetic tile fray" width="100%"></td><td>Fuzzy boundary regime: binary masks become brittle.</td></tr>
+<tr><td>Matting v2</td><td><img src="assets/matte_fray_real.png" alt="real fray matting" width="100%"></td><td>Directional matting transfer evidence on real fray.</td></tr>
+<tr><td>Field uneven</td><td><img src="assets/soft_uneven.png" alt="soft uneven map" width="100%"></td><td>Boundaryless field anomaly where residual maps beat binary segmentation.</td></tr>
+<tr><td>krkCMd profiles</td><td><img src="assets/krkcmd_profile.png" alt="krkCMd brightness profiles" width="100%"></td><td>Physical crack-width GT in micrometers over 501-pixel profiles.</td></tr>
+<tr><td>Rebar counting</td><td><img src="assets/rebar_count.png" alt="rebar count failure/success panel" width="100%"></td><td>Instance-count behavior on dense touching bars.</td></tr>
+</tbody></table>
+
+<h2>Experiment 1: zero-shot crack segmentation</h2>
+
+<p>**Data/labels.** CrackSeg9k, crack-only masks; empty-GT images are excluded from crack mIoU and reported separately as non-crack clean rate.</p>
+
+<table>
+<thead><tr><th>Model</th><th>Type</th><th>mIoU</th><th>std</th><th>non-crack clean</th><th>sec/img</th></tr></thead>
+<tbody>
+<tr><td>SAM3</td><td>foundation model</td><td>0.442</td><td>0.011</td><td>67.9%</td><td>0.363</td></tr>
+<tr><td>adaptive</td><td>classical threshold</td><td>0.181</td><td>0.005</td><td>0.0%</td><td>0.003</td></tr>
+<tr><td>frangi</td><td>classical vesselness</td><td>0.115</td><td>0.005</td><td>25.8%</td><td>0.089</td></tr>
+</tbody></table>
+
+<p>**EDA read.** SAM3 wins both segmentation and false-positive avoidance, but the per-source spread shows thin-crack brittleness. This is the empirical reason for keeping SAM3 as the backbone while adding measurement-aware heads and calibration.</p>
+
+<h2>Experiment 2: measurement fidelity</h2>
+
+<p>**Data/labels.** Same crack masks, but the target is geometry derived from GT masks: width, length, and skeleton/EDT statistics. This is not real-mm ground truth.</p>
+
+<table>
+<thead><tr><th>Method</th><th>mIoU</th><th>width MAE</th><th>width rel.err</th><th>GT->pred width</th></tr></thead>
+<tbody>
+<tr><td>adaptive</td><td>0.188</td><td>6.669</td><td>43.5%</td><td>11.300->4.990 px</td></tr>
+<tr><td>frangi</td><td>0.109</td><td>8.873</td><td>61.6%</td><td>11.300->2.440 px</td></tr>
+<tr><td>sam3</td><td>0.431</td><td>5.670</td><td>62.9%</td><td>11.300->8.820 px</td></tr>
+</tbody></table>
+
+<p>**EDA read.** SAM3 has the best mIoU and absolute width MAE, but adaptive has the best relative width error. This mismatch is the strongest evidence that an inspection model needs metric atoms and calibration, not a mask score alone.</p>
+
+<h2>Experiment 3: M2 measurement-aware refiner</h2>
+
+<p>**Model.** A small refiner over frozen SAM3 masks and image features. **Training/evaluation split.** Source-held-out test: CFD, CrackTree200, DeepCrack.</p>
+
+<table>
+<thead><tr><th>Scope</th><th>Raw mIoU</th><th>Refined mIoU</th><th>Raw width err</th><th>Refined width err</th><th>Raw bias</th><th>Refined bias</th></tr></thead>
+<tbody>
+<tr><td>overall</td><td>0.482</td><td>0.487</td><td>0.730</td><td>0.564</td><td>0.680</td><td>0.503</td></tr>
+<tr><td>cfd</td><td>0.404</td><td>0.416</td><td>0.993</td><td>0.775</td><td>0.912</td><td>0.695</td></tr>
+<tr><td>cracktree200</td><td>0.014</td><td>0.018</td><td>1.081</td><td>0.626</td><td>1.081</td><td>0.626</td></tr>
+<tr><td>deepcrack</td><td>0.648</td><td>0.647</td><td>0.401</td><td>0.341</td><td>0.371</td><td>0.288</td></tr>
+</tbody></table>
+
+<p>**EDA read.** The refiner reduces held-out width error by roughly 23% relative while preserving mIoU. The caution is structural: bias direction differs by source, so M2 v2 should be domain- or scale-conditioned.</p>
+
+<h2>Experiment 4: multi-domain defect behavior</h2>
+
+<table>
+<thead><tr><th>Domain</th><th>n</th><th>mIoU</th><th>shape tags</th><th>mean width px</th><th>mean diameter px</th></tr></thead>
+<tbody>
+<tr><td>crack_concrete</td><td>25</td><td>0.367</td><td>{'thin': 22}</td><td>8.000</td><td>-</td></tr>
+<tr><td>mt_blowhole</td><td>30</td><td>0.429</td><td>{'blob': 18}</td><td>-</td><td>11.600</td></tr>
+<tr><td>mt_crack</td><td>30</td><td>0.454</td><td>{'thin': 23, 'blob': 2}</td><td>3.900</td><td>16.800</td></tr>
+<tr><td>mt_break</td><td>30</td><td>0.030</td><td>{'thin': 7, 'blob': 1}</td><td>4.800</td><td>35.200</td></tr>
+<tr><td>mt_fray</td><td>30</td><td>0.025</td><td>{'thin': 20, 'blob': 3}</td><td>5.100</td><td>24.900</td></tr>
+<tr><td>mt_uneven</td><td>28</td><td>0.005</td><td>{'blob': 11, 'thin': 10}</td><td>8.000</td><td>18.000</td></tr>
+</tbody></table>
+
+<p>**EDA read.** Concrete cracks, metal cracks, and blowholes transfer reasonably because they map to concrete visual nouns and stable measurement primitives. Fray, break, and uneven collapse because their labels are textural or boundaryless anomalies.</p>
+
+<h2>Experiment 5: soft inspection and learned fuzzy/field heads</h2>
+
+<table>
+<thead><tr><th>Defect</th><th>n</th><th>SAM3 binary AUC</th><th>residual AUC</th><th>raw gray AUC</th><th>Sa</th><th>Sq</th></tr></thead>
+<tbody>
+<tr><td>Uneven</td><td>25</td><td>0.498</td><td>0.683</td><td>0.563</td><td>11.553</td><td>16.181</td></tr>
+<tr><td>Fray</td><td>25</td><td>0.526</td><td>0.605</td><td>0.563</td><td>10.847</td><td>15.496</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Field model</th><th>val</th><th>test</th><th>Selected config</th></tr></thead>
+<tbody>
+<tr><td>classical residual</td><td>0.664</td><td>0.669</td><td>{'detrend': True, 'smooth': 9.0}</td></tr>
+<tr><td>DRAEM-lite</td><td>0.606</td><td>0.636</td><td>{'ensemble': True}</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Matting metric</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>synthetic alpha MAE, directional matting</td><td>0.0056</td></tr>
+<tr><td>synthetic alpha MAE, binary</td><td>0.0083</td></tr>
+<tr><td>real fray IoU at alpha>=0.5</td><td>0.949</td></tr>
+<tr><td>guided matte IoU</td><td>0.860</td></tr>
+<tr><td>boundary softness</td><td>0.590</td></tr>
+</tbody></table>
+
+<p>**EDA read.** Soft maps recover signal where binary masks are near random. The directional matting v2 result is the important reversal: learned matting now beats the classical guided matte on real fray preservation, while alpha accuracy remains synthetic-only because real alpha GT is unavailable.</p>
+
+<h2>Experiment 6: prompts, confidence, and metadata</h2>
+
+<table>
+<thead><tr><th>Domain</th><th>n</th><th>mean</th><th>best</th><th>spread</th><th>per-prompt mIoU</th></tr></thead>
+<tbody>
+<tr><td>concrete_crack</td><td>60</td><td>0.284</td><td>0.387</td><td>0.387</td><td>{'crack': 0.3861, 'cracks': 0.387, 'fracture': 0.0, 'thin dark crack': 0.3625}</td></tr>
+<tr><td>mt_crack</td><td>57</td><td>0.405</td><td>0.448</td><td>0.069</td><td>{'crack': 0.4482, 'cracks': 0.4034, 'scratch': 0.3905, 'dark line': 0.3791}</td></tr>
+<tr><td>mt_blowhole</td><td>59</td><td>0.252</td><td>0.396</td><td>0.396</td><td>{'hole': 0.3957, 'pit': 0.0, 'blowhole': 0.2299, 'small dark spot': 0.3827}</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Ensemble case</th><th>broken prompt</th><th>single broken</th><th>single best</th><th>ensemble via broken</th></tr></thead>
+<tbody>
+<tr><td>concrete_crack</td><td>fracture</td><td>0.000</td><td>0.367</td><td>0.374</td></tr>
+<tr><td>mt_blowhole</td><td>pit</td><td>0.000</td><td>0.398</td><td>0.351</td></tr>
+</tbody></table>
+
+<p>**Metadata availability.** Learned heads can expose logits directly because they are local PyTorch modules. SAM3 metadata depends on the HuggingFace `Sam3Processor`/`Sam3Model` return schema; `experiments/eda_probe.py` probes tensor attributes, post-processed masks, scores, and low-threshold candidate-score spectra before any confidence-heavy analysis.</p>
+
+<h2>Experiment 7: scale, mm rigor, and real-metric substitutes</h2>
+
+<table>
+<thead><tr><th>Tilt</th><th>detected</th><th>naive mm</th><th>naive err</th><th>homography mm</th><th>homography err</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>True</td><td>60.380</td><td>0.630%</td><td>60.380</td><td>0.630%</td></tr>
+<tr><td>10</td><td>True</td><td>60.540</td><td>0.900%</td><td>57.600</td><td>3.990%</td></tr>
+<tr><td>20</td><td>True</td><td>61.640</td><td>2.730%</td><td>60.250</td><td>0.410%</td></tr>
+<tr><td>30</td><td>True</td><td>63.860</td><td>6.430%</td><td>60.580</td><td>0.960%</td></tr>
+<tr><td>40</td><td>True</td><td>67.310</td><td>12.190%</td><td>60.450</td><td>0.740%</td></tr>
+<tr><td>50</td><td>True</td><td>71.570</td><td>19.290%</td><td>60.420</td><td>0.710%</td></tr>
+</tbody></table>
+
+<p>**EDA read.** The scale failure is geometric, not model-specific. A single marker-derived px/mm can be nearly 20% wrong under tilt; local PlaneScale homography brings the 50-degree case below 1% error.</p>
+
+<p>**Real-metric substitute note.** The coin leave-one-out result from the progress log reports 22 images with 8-60 coins/image, mean relative error 1.74%, median 1.68%, and 100% pass at ±5%/±10%. This validates the segmentation-to-diameter chain on real photos, even though it is known-object consistency rather than an industrial caliper dataset.</p>
+
+<h3>E-mm-1: coin known-object consistency</h3>
+
+<table>
+<thead><tr><th>Metric</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>images</td><td>22</td></tr>
+<tr><td>mean relative error</td><td>1.7%</td></tr>
+<tr><td>median relative error</td><td>1.7%</td></tr>
+<tr><td>mean px coefficient of variation</td><td>2.1%</td></tr>
+<tr><td>pass@5%</td><td>100.0%</td></tr>
+<tr><td>pass@10%</td><td>100.0%</td></tr>
+<tr><td>scope note</td><td>LOO 일관성 검증 — 분할+직경 체인. 절대 마커 체인은 합성 0.38% 별도</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Worst scene</th><th>denom</th><th>n coins</th><th>rel.err</th><th>px CV</th></tr></thead>
+<tbody>
+<tr><td>IMG_4195.JPG</td><td>2e</td><td>8</td><td>3.0%</td><td>3.2%</td></tr>
+<tr><td>IMG_4188.JPG</td><td>20c</td><td>45</td><td>2.8%</td><td>3.4%</td></tr>
+<tr><td>IMG_4194.JPG</td><td>2e</td><td>8</td><td>2.6%</td><td>2.7%</td></tr>
+<tr><td>IMG_4201.JPG</td><td>50c</td><td>25</td><td>2.2%</td><td>2.7%</td></tr>
+<tr><td>IMG_4191.JPG</td><td>10c</td><td>50</td><td>2.2%</td><td>3.6%</td></tr>
+<tr><td>IMG_4196.JPG</td><td>2e</td><td>8</td><td>2.1%</td><td>2.1%</td></tr>
+<tr><td>IMG_4192.JPG</td><td>10c</td><td>50</td><td>2.1%</td><td>3.5%</td></tr>
+<tr><td>IMG_4210.JPG</td><td>20c</td><td>46</td><td>2.1%</td><td>2.5%</td></tr>
+</tbody></table>
+
+<p>**EDA read.** The worst image is still below 3% relative error, and all scenes pass ±5%. The failure surface is not count density itself: several 45-60 coin scenes remain stable. The metric caveat is that this is same-denomination leave-one-out consistency, not an independent absolute-scale marker measurement.</p>
+
+<h3>E-mm-3: krkCMd physical crack-width profiles</h3>
+
+<table>
+<thead><tr><th>Meta</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>profiles</td><td>19098</td></tr>
+<tr><td>groups</td><td>36</td></tr>
+<tr><td>train/test profiles</td><td>14424 / 4674</td></tr>
+<tr><td>unit</td><td>um</td></tr>
+<tr><td>px_to_um</td><td>3.96875</td></tr>
+<tr><td>GT</td><td>MANwidth</td></tr>
+<tr><td>scope</td><td>profile-level physical-width benchmark; full image zip not required</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Method</th><th>test MAE</th><th>test RMSE</th><th>test medAE</th><th>pass@50um</th><th>r</th></tr></thead>
+<tbody>
+<tr><td>DLMwidth(author)</td><td>11.1um</td><td>22.9um</td><td>5.5um</td><td>96.5%</td><td>0.9728</td></tr>
+<tr><td>GaugeProfile-minrun5+linear-cal</td><td>25.9um</td><td>50.6um</td><td>16.0um</td><td>84.6%</td><td>0.8638</td></tr>
+<tr><td>AEDwidth(author)</td><td>26.5um</td><td>40.0um</td><td>23.8um</td><td>91.3%</td><td>0.9299</td></tr>
+<tr><td>GaugeProfile-minrun5</td><td>31.3um</td><td>50.1um</td><td>23.8um</td><td>88.6%</td><td>0.8638</td></tr>
+<tr><td>GaugeProfile-halfdepth+linear-cal</td><td>55.2um</td><td>83.3um</td><td>41.9um</td><td>62.9%</td><td>0.6301</td></tr>
+</tbody></table>
+
+<p>**EDA read.** The author DLM is the strong specialized anchor at 11.1um MAE. A deterministic GaugeProfile valley rule with group-split linear calibration reaches 25.9um MAE, essentially matching the author AED baseline on this split. This is a profile-level physical GT result, not yet a full image prompt-to-mask measurement.</p>
+
+<h3>E-cnt-1: rebar counting</h3>
+
+<table>
+<thead><tr><th>Prompt</th><th>n</th><th>GT mean</th><th>MAE</th><th>mean rel.err</th><th>acc@10%</th><th>exact</th></tr></thead>
+<tbody>
+<tr><td>metal rod</td><td>20</td><td>20.2</td><td>13.200</td><td>80.2%</td><td>0.0%</td><td>0.0%</td></tr>
+<tr><td>circular cross section</td><td>20</td><td>20.2</td><td>20.250</td><td>100.0%</td><td>0.0%</td><td>0.0%</td></tr>
+<tr><td>rebar end</td><td>20</td><td>20.2</td><td>20.150</td><td>99.7%</td><td>0.0%</td><td>0.0%</td></tr>
+<tr><td>pipe</td><td>20</td><td>20.2</td><td>18.100</td><td>91.0%</td><td>0.0%</td><td>0.0%</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Worst rows for best prompt 'metal rod'</th><th>GT</th><th>pred</th><th>abs err</th></tr></thead>
+<tbody>
+<tr><td>000000001255.jpg</td><td>81</td><td>10</td><td>71</td></tr>
+<tr><td>000000001563.jpg</td><td>61</td><td>18</td><td>43</td></tr>
+<tr><td>000000001337.jpg</td><td>48</td><td>18</td><td>30</td></tr>
+<tr><td>000000001468.jpg</td><td>33</td><td>12</td><td>21</td></tr>
+<tr><td>000000001493.jpg</td><td>30</td><td>14</td><td>16</td></tr>
+<tr><td>000000001072.jpg</td><td>20</td><td>8</td><td>12</td></tr>
+<tr><td>000000001477.jpg</td><td>16</td><td>7</td><td>9</td></tr>
+<tr><td>000000001495.jpg</td><td>22</td><td>13</td><td>9</td></tr>
+</tbody></table>
+
+<p>**EDA read.** Prompt wording does not rescue the task: all prompts have 0% acc@10%. The best prompt undercounts dense scenes sharply and can overcount sparse scenes, consistent with a visual-domain failure on touching, rusty, low-contrast bar ends rather than a pure language mismatch.</p>
+
+<h3>E-cnt-2: SAHI-style tiled rebar counting</h3>
+
+<table>
+<thead><tr><th>Method</th><th>n</th><th>MAE</th><th>mean rel.err</th><th>acc@10%</th><th>exact</th><th>pred mean</th></tr></thead>
+<tbody>
+<tr><td>Global SAM3 'metal rod'</td><td>20</td><td>13.200</td><td>80.2%</td><td>0.0%</td><td>0.0%</td><td>-</td></tr>
+<tr><td>SAHI SAM3 tiled</td><td>20</td><td>7.350</td><td>52.9%</td><td>20.0%</td><td>5.0%</td><td>15.0</td></tr>
+</tbody></table>
+
+<table>
+<thead><tr><th>Worst SAHI rows</th><th>GT</th><th>pred</th><th>abs err</th></tr></thead>
+<tbody>
+<tr><td>000000001255.jpg</td><td>81</td><td>40</td><td>41</td></tr>
+<tr><td>000000001563.jpg</td><td>61</td><td>30</td><td>31</td></tr>
+<tr><td>000000001337.jpg</td><td>48</td><td>28</td><td>20</td></tr>
+<tr><td>000000001468.jpg</td><td>33</td><td>20</td><td>13</td></tr>
+<tr><td>000000001493.jpg</td><td>30</td><td>24</td><td>6</td></tr>
+<tr><td>000000000597.jpg</td><td>11</td><td>6</td><td>5</td></tr>
+</tbody></table>
+
+<p>**EDA read.** Tiling materially improves MAE (13.2 to 7.35) and creates nonzero acc@10%, so the global failure is partly a scale/crowding problem. It does not solve dense touching counts: the largest piles are still undercounted by 20-40 bars, pointing to density/centroid supervision.</p>
+
+<h2>Limits and next EDA passes</h2>
+
+<table>
+<thead><tr><th>Limit</th><th>Why it matters</th><th>Next action</th></tr></thead>
+<tbody>
+<tr><td>Raw dataset panel depth</td><td>Raw datasets are not present in this checkout, so only checked-in aggregate artifacts are used.</td><td>Extend the generator with per-sample exports for the most useful failure clusters.</td></tr>
+<tr><td>SAM3 logits not assumed stable</td><td>Processor/model schemas can change.</td><td>Use `eda_probe.py` to record available fields before relying on confidence curves.</td></tr>
+<tr><td>Real alpha GT missing</td><td>Fray alpha accuracy is synthetic-only.</td><td>Collect or synthesize calibrated translucent/fuzzy boundary targets.</td></tr>
+<tr><td>Mask-derived width GT</td><td>M2 evaluates measurement consistency, not physical crack width.</td><td>Proceed with krkCMd/T-LESS/ArUco real-mm tracks.</td></tr>
+<tr><td>Counting zero-shot gap</td><td>Rebar result shows SAM3 concept limits on touching low-contrast instances.</td><td>Evaluate SAHI tiling, density fallback, or small supervised head.</td></tr>
+</tbody></table>
+
+</main></body></html>

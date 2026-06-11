@@ -180,6 +180,50 @@ guided_matte 채택 유지**, 학습 헤드는 방향성 실분포 합성 재설
 
 → "측정의 일반화"는 입증, "분할의 일반화"는 결함 추상도에 의존. 둘의 분리가 다음 fine-tune의 두 축.
 
+## E-mm-3 — krkCMd 물리 크랙 폭 GT (profile-level μm) ⭐⭐
+
+**데이터**: krkCMd table, 19,098개 501px cross-crack brightness profiles, 수동 폭 `MANwidth`
+(0-813.6μm), 6400dpi → **3.96875μm/px**. 전체 이미지 zip은 38GB라 이번 실험은
+profile-level table만 사용. 상세: [docs/progress/2026-06-11_krkcmd-profile-emm3.md](../docs/progress/2026-06-11_krkcmd-profile-emm3.md).
+
+**프로토콜**: series/image group 단위 80/20 split. train 14,424 / test 4,674. 저자 제공
+`DLMwidth`, `AEDwidth`와 고정 profile rule(GaugeProfile)을 모두 `MANwidth` 대비 평가.
+
+| 방법 | test MAE ↓ | RMSE ↓ | medAE ↓ | pass@50μm | r |
+|---|---:|---:|---:|---:|---:|
+| **DLMwidth (저자 DLM)** | **11.1μm** | 22.9 | 5.5 | 96.5% | 0.973 |
+| **GaugeProfile-minrun5 + linear-cal** | **25.9μm** (5-fold 27.8±2.5, worst series 46.7) | 50.6 | 16.0 | 84.6% | 0.864 |
+| AEDwidth (저자 고전 분석법) | 26.5μm | 40.0 | 23.8 | 91.3% | 0.930 |
+| GaugeProfile-minrun5 (무보정) | 31.3μm | 50.1 | 23.8 | 88.6% | 0.864 |
+
+**판정**:
+1. 비교표 (d)의 우리 물리 폭 GT 셀 시작점 확보: profile-level이지만 μm 단위 MAE를 보고.
+2. 저자 DLM은 매우 강한 specialized supervised anchor(11.1μm). 우리 주장은 이를 이기는 것이 아니라
+   promptable/image-level 계측으로 확장하는 방향.
+3. 단순 valley-local rule + group-split 선형 보정만으로 AED와 같은 급(25.9 vs 26.5μm).
+   즉 "폭 계측 자체"는 물리 GT에서 20-30μm대 baseline floor가 있으며, 남은 과제는 이미지에서
+   올바른 profile/mask를 안정적으로 얻는 것.
+4. 한계: full image segmentation이 아니라 table profile 입력. image zip subset 또는 ArUco/캘리퍼
+   실측으로 `prompt → mask/profile → μm` end-to-end 검증이 다음 단계.
+
+## E-cnt-2 — Rebar counting: SAHI-style tiled SAM3 (부분 회복) ⚠️
+
+**데이터**: ROI-1555, E-cnt-1과 같은 deterministic sample n=20. GT=count(labelme polygon instances).
+**목적**: E-cnt-1 실패가 prompt 개념 문제인지, 전역 이미지에서 작은/밀집 객체를 놓치는 scale/crowding
+문제인지 분리. **학습 없음** — tile crop별 SAM3 후 full-image mask로 재배치, IoU/center dedup.
+
+| 방법 | MAE ↓ | 상대오차 ↓ | acc@10% ↑ | exact ↑ |
+|---|---:|---:|---:|---:|
+| Global SAM3 `metal rod` | 13.20 | 80.2% | 0% | 0% |
+| SAHI SAM3 (`tile=640`, threshold 0.40) | 8.35 | 53.9% | 15% | 10% |
+| **SAHI SAM3 (`tile=640`, threshold 0.35)** | **7.35** | **52.9%** | **20%** | 5% |
+
+**판정**:
+1. 타일링은 효과가 있다 — E-cnt-1 실패는 일부 scale/crowding 문제.
+2. 그러나 dense touching rebar는 여전히 크게 undercount (GT 81→40, 61→30, 48→28).
+3. 다음은 SAHI 튜닝보다 **density/centroid fallback 또는 소량 지도 head**가 맞다.
+   논문 표현은 "global zero-shot fails; tiling partially recovers; dense counting remains open"이 정직하다.
+
 ## AUDIT — Leakage 검증 + 물리 베이스라인 (자가 리뷰 검증) ⭐
 
 **목적**: 우리 자신의 결과에 대한 두 비판(W1 strawman, W2 leakage)을 실데이터로 검증.
