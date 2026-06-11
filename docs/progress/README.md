@@ -10,6 +10,7 @@
 | 2026-06-11 | 사업자료 패키지 + 실측 mm GT 체계 | [2026-06-11_biz-package-capture-protocol.md](2026-06-11_biz-package-capture-protocol.md) | 캡처 프로토콜+인쇄보드(검출 0.38%)+캘리퍼 평가기 · 카운팅은 kaggle 토큰 블로커 |
 | 2026-06-11 | mm GT 대체 확보 + E-mm-1/E-cnt-1 | [2026-06-11_metric-substitutes-emm1-ecnt1.md](2026-06-11_metric-substitutes-emm1-ecnt1.md) | 동전 LOO 1.74%(±5% 100%) · rebar zero-shot 능력갭(6프롬프트 실패) · 논문 자료 2종 |
 | 2026-06-12 | 감사 후속 D·N1b·N2·N3 | [2026-06-12_audit-followups-n2-n3.md](2026-06-12_audit-followups-n2-n3.md) | SAM3 로짓 노출 확정 · 분위보정 0.480>신경 0.564 격하 · plane-scale 상한 2.83% · SAHI 8.9 |
+| 2026-06-12 | promptable mm 체인 3대 진전 | [2026-06-12_promptable-mm-chain.md](2026-06-12_promptable-mm-chain.md) | E-mm-2b 부품 2.5%≈상한 · M2v2-a 0.437 합격선 돌파 · E-mm-3b 체인 개통+θ* 전이 −30% |
 | 2026-06-11 | E-mm-3 krkCMd profile-level μm 검증 | [2026-06-11_krkcmd-profile-emm3.md](2026-06-11_krkcmd-profile-emm3.md) | 물리 폭 GT 19,098 profiles · DLM 11.1μm · GaugeProfile+cal 25.9μm ≈ AED 26.5μm |
 | 2026-06-11 | Codex handoff 기록 | [2026-06-11_codex-handoff.md](2026-06-11_codex-handoff.md) | Claude 재개용 상세 인계 · 로컬/Spark 경로 · 새 산출물/검증/다음 작업 |
 | 2026-06-11 | 객관적 연구 감사 + 다음 실험 계획 | [2026-06-11_objective-audit-next-experiments.md](2026-06-11_objective-audit-next-experiments.md) | krkCMd 5-fold 27.8±2.5μm · series holdout worst 46.7μm · 모델/데이터/학습 로드맵 |
