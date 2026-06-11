@@ -331,3 +331,25 @@ train+val 소스에서만 적합. 재현: `experiments/m2_refiner.py`, `experime
 `eda_probe.py`: raw 출력에 **pred_masks (200쿼리 소프트 로짓, −67~+10)** · pred_logits ·
 presence_logits · semantic_seg 노출. post_process는 binary지만 raw에서 sigmoid confidence map
 추출 가능 → M2 v2 입력·측정 불확실성·후보 score 스펙트럼(thr=0: 200개, 0.007~0.867) 활용 확정.
+
+## E-mm-2b — T-LESS × SAM3: promptable 산업부품 계측 실증 ⭐⭐
+
+**프로토콜**: N2와 동일 케이스(6 scenes, visib≥0.95)에서 마스크만 SAM3 zero-shot으로 교체.
+GT mask_visib와 IoU≥0.3 매칭 → 매칭률(분할)·IoU(품질)·chord 측정 rel_err(계측) 분리 보고.
+재현: `experiments/tless_sam3_eval.py`.
+
+| prompt | 매칭률 | IoU 중앙 | 측정 rel_err 중앙 | ±10% |
+|---|---:|---:|---:|---:|
+| **electrical component** | **100%** | **0.938** | **2.5%** | **94%** |
+| plastic part | 100% | 0.937 | 2.5% | 94% |
+| white object | 100% | 0.937 | 2.5% | 91% |
+| industrial part | **0%** | — | — | — |
+| (N2 앵커: 완벽 마스크) | — | 1.0 | 2.83% | 94% |
+
+**판정**:
+1. **promptable 산업부품 mm 계측이 실제로 작동**: 구체 명사 프롬프트에서 분할이 만드는
+   측정 비용 ≈ 0 (2.5% ≈ 상한 2.83%). 감사 우려("텍스처리스에 부자연스러운 프롬프트")는
+   추상 명사에만 해당했음.
+2. "industrial part" 0% — 동의어 붕괴(A5)의 재현. 구체 명사 원칙 + 프롬프트 앙상블의
+   필요성을 제3 도메인에서 재확인.
+3. 비교표 (d) 갱신: 산업부품 promptable 계측 2.5% (CAD 유도 GT, n=53 케이스 × 3 prompts).
