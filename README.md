@@ -135,7 +135,7 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 - [x] SAM 3 integration + classical baselines + cross-source benchmark
 - [x] Regime router (sharp / fuzzy / field) + soft measurement
 - [x] PlaneScale (tilt-robust mm) + prompt-set ensemble
-- [ ] Measurement-aware refinement head (M2) — correcting the systematic width bias
+- [x] Measurement-aware refinement head (M2 v1) — width rel. err −23% on held-out sources; domain-dependent bias sign discovered (v2: domain-conditioned calibration)
 - [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
 - [ ] Counting & spacing validation (fastener datasets)
 - [ ] HuggingFace weights release + paper
