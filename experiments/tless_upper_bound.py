@@ -26,16 +26,31 @@ TLESS = Path("datasets/tless")
 
 
 def load_ply_vertices(path: Path, max_v: int = 3000) -> np.ndarray:
-    """ASCII PLY 정점 (x,y,z) 로드 + 서브샘플."""
-    with open(path, "r", errors="replace") as f:
-        n_v, props, line = 0, 0, f.readline()
-        while line and not line.startswith("end_header"):
-            if line.startswith("element vertex"):
-                n_v = int(line.split()[-1])
-            if n_v and line.startswith("property") and props is not None:
-                props += 1
-            line = f.readline()
-        V = np.loadtxt(f, max_rows=n_v, dtype=np.float32)[:, :3]
+    """PLY 정점 (x,y,z) 로드 (ASCII/binary_little_endian) + 서브샘플."""
+    with open(path, "rb") as f:
+        n_v, fmt, vprops, in_vertex = 0, "ascii", [], False
+        while True:
+            line = f.readline().decode("ascii", errors="replace").strip()
+            if line.startswith("format"):
+                fmt = line.split()[1]
+            elif line.startswith("element vertex"):
+                n_v = int(line.split()[-1]); in_vertex = True
+            elif line.startswith("element"):
+                in_vertex = False
+            elif line.startswith("property") and in_vertex:
+                vprops.append(line.split()[1])  # 타입 (float, uchar, ...)
+            elif line.startswith("end_header"):
+                break
+        if fmt == "ascii":
+            V = np.loadtxt(f, max_rows=n_v, dtype=np.float32)[:, :3]
+        else:
+            dt_map = {"float": "f4", "float32": "f4", "double": "f8",
+                      "uchar": "u1", "uint8": "u1", "int": "i4", "uint": "u4"}
+            endian = "<" if "little" in fmt else ">"
+            rec = np.dtype([(f"p{i}", endian + dt_map.get(t, "f4"))
+                            for i, t in enumerate(vprops)])
+            raw = np.frombuffer(f.read(rec.itemsize * n_v), dtype=rec, count=n_v)
+            V = np.stack([raw["p0"], raw["p1"], raw["p2"]], 1).astype(np.float32)
     if len(V) > max_v:
         idx = np.random.default_rng(0).permutation(len(V))[:max_v]
         V = V[idx]
