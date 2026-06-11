@@ -15,7 +15,7 @@ segmentation backbone (SAM 3).
 > length 212 mm, on a real concrete surface, zero-shot. *(Assumed scale 0.25 mm/px — real-metric
 > capture with ArUco markers is the next data milestone; see [Metrology Rigor](#metrology-rigor).)*
 
-🌐 **Project page**: open `docs/index.html` (or `cd docs && python3 -m http.server 8848`)
+🌐 **Project page**: **https://falcons-eyes.github.io/GaugeAnything/** (live) · local: `cd docs && python3 -m http.server 8848`
 📄 **Design doc**: [DESIGN.md](DESIGN.md) · **Results log**: [experiments/RESULTS.md](experiments/RESULTS.md) · **Rigor audit**: [docs/RIGOR_AUDIT.md](docs/RIGOR_AUDIT.md)
 
 ---
