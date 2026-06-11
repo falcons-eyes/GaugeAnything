@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- GaugeAnything specific ---
+datasets/
+checkpoints/
+*.pt
+*.pth
+*.safetensors
+experiments/results/*.log
+docs/preview_*.jpeg
+docs/.playwright-mcp/
+*.log

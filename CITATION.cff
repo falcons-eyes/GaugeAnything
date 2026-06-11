@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use GaugeAnything in your research, please cite it as below."
+title: "GaugeAnything: Promptable Quantitative Inspection for Industrial Micro-Vision"
+authors:
+  - name: "FalconEyes / Industrial Anything"
+year: 2026
+url: "https://github.com/falcons-eyes/GaugeAnything"
+license: Apache-2.0
+keywords:
+  - industrial inspection
+  - metrology
+  - promptable segmentation
+  - SAM 3
+  - crack width measurement

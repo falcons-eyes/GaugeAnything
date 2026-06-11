@@ -1,1 +1,165 @@
 # GaugeAnything
+
+**Promptable quantitative inspection for industrial micro-vision — masks in, millimeters out.**
+
+Foundation models tell you *what* and *where*. GaugeAnything tells you **how many millimeters,
+how many instances, and which condition grade** — the metrology that actually drives field decisions
+(crack width, defect size, part spacing), emitted as first-class outputs on top of a promptable
+segmentation backbone (SAM 3).
+
+<p align="center">
+  <img src="docs/assets/gauge_demo.png" alt="Prompt 'crack' → SAM 3 → width profile, 1.53 mm mean width" width="90%">
+</p>
+
+> Prompt `"crack"` → SAM 3 segmentation → skeleton + EDT width profile → **mean width 1.53 mm**,
+> length 212 mm, on a real concrete surface, zero-shot. *(Assumed scale 0.25 mm/px — real-metric
+> capture with ArUco markers is the next data milestone; see [Metrology Rigor](#metrology-rigor).)*
+
+🌐 **Project page**: open `docs/index.html` (or `cd docs && python3 -m http.server 8848`)
+📄 **Design doc**: [DESIGN.md](DESIGN.md) · **Results log**: [experiments/RESULTS.md](experiments/RESULTS.md) · **Rigor audit**: [docs/RIGOR_AUDIT.md](docs/RIGOR_AUDIT.md)
+
+---
+
+## Why
+
+Every "Anything" model stops at perception: Segment Anything gives masks, Depth Anything gives
+relative depth, Count Anything counts. **None emits a measurement.** Industrial inspection needs
+"crack width 0.42 mm ± 0.05, condition: Fair" — and as of mid-2026 no foundation model produces
+that output. GaugeAnything fills the gap with a metrology core that is honest about its own rigor.
+
+## What's inside
+
+```
+gaugeanything/          # the package
+├── segmenters.py       #   SAM 3 adapter (+ prompt-set ensemble vs. synonym collapse) + classical fallbacks
+├── geometry.py         #   mask → width profile (skeleton+EDT), equivalent diameter, spacing
+├── scale.py            #   pixel→mm: ArUco / bolt-head specs / PlaneScale homography (tilt-robust)
+├── soft.py             #   soft inspection: illumination-residual (mura), guided matting, Σα measurement
+├── router.py           #   regime router: sharp→binary · fuzzy→matting · field→illumination model
+├── pipeline.py         #   inspect(): image+prompt → Inspection Atoms {mask, count, mm±σ, grade}
+├── selftest.py         #   metrology self-tests (14/14, synthetic GT)
+└── soft_selftest.py    #   soft-measurement math self-tests (11/11)
+experiments/            # benchmarks & studies (all results reproducible, protocols documented)
+docs/                   # project page + rigor audit + per-step progress logs
+paper/                  # paper outline (work in progress)
+data/                   # dataset acquisition guide + download scripts
+```
+
+## Quickstart
+
+```bash
+git clone https://github.com/falcons-eyes/GaugeAnything.git && cd GaugeAnything
+pip install -e .                  # metrology core (CPU)
+pip install -e ".[gpu,bench]"     # + SAM 3 backbone & benchmarks
+
+# verify the metrology core (no model weights needed)
+python -m gaugeanything.selftest        # 14/14: width ±10%, ArUco scale ±5%, e2e ±15%
+python -m gaugeanything.soft_selftest   # 11/11: soft-area / severity / uncertainty math
+
+# measure something (requires SAM 3 access: accept license at hf.co/facebook/sam3, `hf auth login`)
+python - <<'PY'
+import numpy as np
+from PIL import Image
+from gaugeanything import inspect
+img = np.array(Image.open("your_crack_photo.jpg").convert("RGB"))
+res = inspect(img, "crack", segmenter="sam3", marker_size_mm=20.0)  # ArUco 20mm in frame → mm output
+print(res.summary())
+PY
+```
+
+Benchmarks (CrackSeg9k / Magnetic-Tile required — see [data/DATA_ACQUISITION.md](data/DATA_ACQUISITION.md)):
+
+```bash
+python experiments/gauge_bench.py --n 150 --segmenters adaptive frangi sam3 --seeds 3
+python experiments/gauge_multidomain.py --per 30
+python experiments/scale_perspective_eval.py     # CPU-only: tilt error, naive vs homography
+```
+
+## Results (audited)
+
+All numbers measured on NVIDIA GB10 (aarch64, CUDA 13.1) with the protocols described in
+[docs/RIGOR_AUDIT.md](docs/RIGOR_AUDIT.md) — empty-GT excluded, multi-seed, config selection on
+val only, held-out test sources. Deprecated pre-audit numbers are kept in the results log.
+
+**Crack segmentation, zero-shot** (CrackSeg9k, crack-only, 3 seeds):
+
+| Method | crack mIoU (±std) | non-crack clean rate |
+|---|---|---|
+| frangi (classical) | 0.115 ± 0.005 | 0.26 |
+| adaptive (classical) | 0.181 ± 0.006 | 0.00 |
+| **SAM 3 zero-shot** | **0.442 ± 0.011** | **0.68** |
+
+2.44× the best classical baseline — and it also wins detection. *(Supervised U-Nets reach ~0.7+
+on this benchmark; the claim is promptability, not SOTA.)*
+
+**Segmentation ≠ measurement** — every method under-estimates crack width (GT 11.3 px):
+
+| Method | width MAE (px) ↓ | width rel. err ↓ |
+|---|---|---|
+| adaptive | 6.67 | **43.5%** |
+| **SAM 3** | **5.67** | 62.9% |
+
+Best mIoU is not best measurement — the core motivation for measurement-aware refinement.
+
+**Boundary regimes** — binary segmentation collapses to chance on fuzzy/boundaryless defects
+(IoU ≤ 0.03, AUC ≈ 0.50); continuous representations recover signal (val/test protocol):
+
+| Defect | SAM 3 binary | classical soft (test) | learned (test) |
+|---|---|---|---|
+| Uneven (field) | 0.499 | **0.669** | 0.636 (DRAEM-lite) |
+| Fray (fuzzy edge) | 0.526 | 0.644 | — |
+
+**Metrology rigor** — two silent measurement killers, quantified and fixed:
+
+| Failure mode | naive | fixed |
+|---|---|---|
+| Camera tilt 50° (scale error) | 19.3% | **0.7%** (PlaneScale homography) |
+| Prompt synonym collapse ("fracture"/"pit") | mIoU 0.000 | **0.374 / 0.352** (prompt-set ensemble) |
+
+**Honest negative results** (we publish these too): a matting head that wins 20× on synthetic
+fuzzy boundaries **failed to transfer** to real fray (mask IoU 0.48 vs guided filter 0.86) —
+synthetic blob distribution ≠ directional texture. Production keeps the classical guided filter;
+the learned head ships only after real-distribution synthesis passes. Details:
+[docs/progress/](docs/progress/).
+
+## Metrology rigor
+
+This project audits itself before reviewers do ([docs/RIGOR_AUDIT.md](docs/RIGOR_AUDIT.md)):
+no test-set tuning (val/test splits), empty-GT separated from IoU, multi-seed reporting,
+prompt-sensitivity sweeps, checkpoints saved for every trained artifact, and negative results
+documented. Per-step progress logs live in [docs/progress/](docs/progress/).
+
+## Roadmap
+
+- [x] Metrology core (width / diameter / spacing / severity / uncertainty) + self-tests
+- [x] SAM 3 integration + classical baselines + cross-source benchmark
+- [x] Regime router (sharp / fuzzy / field) + soft measurement
+- [x] PlaneScale (tilt-robust mm) + prompt-set ensemble
+- [ ] Measurement-aware refinement head (M2) — correcting the systematic width bias
+- [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
+- [ ] Counting & spacing validation (fastener datasets)
+- [ ] HuggingFace weights release + paper
+
+## License & third-party
+
+- **Code**: [Apache-2.0](LICENSE).
+- **SAM 3 weights**: separate [SAM License](https://github.com/facebookresearch/sam3) (commercial
+  use permitted with restrictions) — gated on HuggingFace, not redistributed here.
+- **Datasets**: each has its own license (CrackSeg9k CC0; Magnetic-Tile unspecified/research;
+  see [data/DATA_ACQUISITION.md](data/DATA_ACQUISITION.md) for the full commercial-use map).
+- Trained checkpoints are not in this repo (gitignored); HF release planned.
+
+## Citation
+
+```bibtex
+@misc{gaugeanything2026,
+  title  = {GaugeAnything: Promptable Quantitative Inspection for Industrial Micro-Vision},
+  author = {FalconEyes / Industrial Anything},
+  year   = {2026},
+  url    = {https://github.com/falcons-eyes/GaugeAnything}
+}
+```
+
+Part of the **Industrial Anything** research program. Contributions welcome — especially real-world
+measurement ground truth (photos with ArUco markers + caliper readings), fastener/counting datasets,
+and regime-router edge cases. Open an issue first for anything substantial.

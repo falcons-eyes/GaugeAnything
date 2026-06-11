@@ -1,0 +1,45 @@
+<mxfile host="app.diagrams.net" type="device">
+  <diagram name="GaugeAnything" id="gauge-arch">
+    <mxGraphModel dx="1300" dy="560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1300" pageHeight="560" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="gIn" value="INPUTS" style="rounded=1;arcSize=8;fillColor=#eaf2fb;strokeColor=#3b82c4;verticalAlign=top;fontColor=#2f6aa8;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="24" y="70" width="210" height="370" as="geometry"/></mxCell>
+        <mxCell id="gSam" value="BACKBONE · SAM 3 (commercial-OK, fine-tunable)" style="rounded=1;arcSize=8;fillColor=#f3edfb;strokeColor=#8a5cd1;verticalAlign=top;fontColor=#6d3fbf;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="264" y="120" width="250" height="180" as="geometry"/></mxCell>
+        <mxCell id="gMet" value="METROLOGY CORE — our contribution" style="rounded=1;arcSize=8;fillColor=#e9f8f1;strokeColor=#1f9d74;verticalAlign=top;fontColor=#16805d;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="556" y="64" width="372" height="430" as="geometry"/></mxCell>
+        <mxCell id="gOut" value="OUTPUT · Inspection Atoms" style="rounded=1;arcSize=8;fillColor=#fdf5e6;strokeColor=#d99320;verticalAlign=top;fontColor=#b5791a;fontStyle=1;fontSize=11;" vertex="1" parent="1"><mxGeometry x="962" y="150" width="314" height="180" as="geometry"/></mxCell>
+
+        <mxCell id="img" value="Image&#10;field photo / video frame" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82c4;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="44" y="108" width="170" height="54" as="geometry"/></mxCell>
+        <mxCell id="prompt" value="Prompt&#10;noun phrase 'crack' · exemplar · box · point" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82c4;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="44" y="178" width="170" height="64" as="geometry"/></mxCell>
+        <mxCell id="scale" value="Scale reference&#10;ArUco · bolt-head spec · LiDAR · known dimension" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82c4;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="44" y="258" width="170" height="64" as="geometry"/></mxCell>
+        <mxCell id="depth" value="Depth Anything (optional)&#10;3D context · plane correction" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#ffffff;strokeColor=#5b6b7a;align=left;spacingLeft=10;fontColor=#5b6b7a;" vertex="1" parent="1"><mxGeometry x="44" y="360" width="170" height="46" as="geometry"/></mxCell>
+
+        <mxCell id="enc" value="Image Encoder + DETR&#10;Promptable Concept Segmentation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#8a5cd1;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="288" y="158" width="202" height="56" as="geometry"/></mxCell>
+        <mxCell id="masks" value="Instance masks + scores&#10;all instances (open-vocab)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf7ff;strokeColor=#8a5cd1;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="288" y="226" width="202" height="50" as="geometry"/></mxCell>
+        <mxCell id="vlm" value="VLM Orchestrator (optional)&#10;complex query → noun phrases" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#ffffff;strokeColor=#5b6b7a;align=left;spacingLeft=10;fontColor=#5b6b7a;" vertex="1" parent="1"><mxGeometry x="288" y="424" width="266" height="44" as="geometry"/></mxCell>
+
+        <mxCell id="count" value="Count&#10;instance enumeration + SAHI (dense)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1f9d74;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="576" y="116" width="150" height="62" as="geometry"/></mxCell>
+        <mxCell id="router" value="Regime router&#10;sharp → binary&#10;fuzzy → matting (α)&#10;field → illumination model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1f9d74;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="576" y="198" width="150" height="76" as="geometry"/></mxCell>
+        <mxCell id="geom" value="Mask Geometry&#10;skeleton + EDT → width, diameter · soft Σα" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1f9d74;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="576" y="294" width="150" height="64" as="geometry"/></mxCell>
+        <mxCell id="resolver" value="Scale Resolver&#10;pixel → mm (ArUco / bolt)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1f9d74;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="576" y="378" width="150" height="56" as="geometry"/></mxCell>
+        <mxCell id="pid" value="Parallel Inspection Decoding&#10;atomic parallel output (LocateAnything PBD)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dff5ec;strokeColor=#16805d;strokeWidth=2;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="758" y="210" width="146" height="80" as="geometry"/></mxCell>
+
+        <mxCell id="atom" value="Inspection Atom × N&#10;{ mask, class, count_id, width 1.53 mm ± σ, length, spacing, condition grade, confidence }" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#d99320;align=left;spacingLeft=10;" vertex="1" parent="1"><mxGeometry x="980" y="188" width="282" height="120" as="geometry"/></mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5b6b7a;" edge="1" parent="1" source="img" target="enc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5b6b7a;" edge="1" parent="1" source="prompt" target="enc"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1f9d74;dashed=1;" edge="1" parent="1" source="scale" target="resolver"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3b" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5b6b7a;dashed=1;" edge="1" parent="1" source="depth" target="geom"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5b6b7a;" edge="1" parent="1" source="masks" target="count"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5b6b7a;" edge="1" parent="1" source="masks" target="router"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1f9d74;" edge="1" parent="1" source="router" target="geom"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1f9d74;" edge="1" parent="1" source="count" target="pid"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1f9d74;" edge="1" parent="1" source="geom" target="pid"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1f9d74;" edge="1" parent="1" source="resolver" target="pid"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#1f9d74;" edge="1" parent="1" source="pid" target="atom"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5b6b7a;dashed=1;" edge="1" parent="1" source="vlm" target="enc"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

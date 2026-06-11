@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 560" font-family="Inter, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#5b6b7a"/>
+    </marker>
+    <marker id="arrG" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#1f9d74"/>
+    </marker>
+    <style>
+      .grp{fill:none;stroke-width:1.5;rx:14}
+      .t{font-size:13.5px;font-weight:700;fill:#1a2430}
+      .s{font-size:11px;fill:#5b6b7a}
+      .lab{font-size:10.5px;font-weight:700;letter-spacing:.08em}
+      .ln{stroke:#5b6b7a;stroke-width:1.6;fill:none}
+      .lnG{stroke:#1f9d74;stroke-width:2;fill:none}
+      .dash{stroke-dasharray:5 4}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1300" height="560" fill="#fbfdff"/>
+
+  <!-- ===== group backgrounds ===== -->
+  <rect x="24" y="70" width="210" height="370" class="grp" stroke="#3b82c4" fill="#eaf2fb"/>
+  <text x="129" y="92" text-anchor="middle" class="lab" fill="#2f6aa8">INPUTS</text>
+
+  <rect x="264" y="120" width="250" height="180" class="grp" stroke="#8a5cd1" fill="#f3edfb"/>
+  <text x="389" y="142" text-anchor="middle" class="lab" fill="#6d3fbf">BACKBONE · SAM 3 (commercial-OK, fine-tunable)</text>
+
+  <rect x="556" y="64" width="372" height="430" class="grp" stroke="#1f9d74" fill="#e9f8f1"/>
+  <text x="742" y="86" text-anchor="middle" class="lab" fill="#16805d">METROLOGY CORE — our contribution</text>
+
+  <rect x="962" y="150" width="314" height="180" class="grp" stroke="#d99320" fill="#fdf5e6"/>
+  <text x="1119" y="172" text-anchor="middle" class="lab" fill="#b5791a">OUTPUT · Inspection Atoms</text>
+
+  <!-- ===== INPUTS ===== -->
+  <rect x="44" y="108" width="170" height="54" class="grp" rx="9" stroke="#3b82c4" fill="#fff"/>
+  <text x="56" y="131" class="t">Image</text><text x="56" y="149" class="s">field photo / video frame</text>
+
+  <rect x="44" y="178" width="170" height="64" class="grp" rx="9" stroke="#3b82c4" fill="#fff"/>
+  <text x="56" y="200" class="t">Prompt</text>
+  <text x="56" y="218" class="s">noun phrase "crack",</text><text x="56" y="234" class="s">exemplar · box · point</text>
+
+  <rect x="44" y="258" width="170" height="64" class="grp" rx="9" stroke="#3b82c4" fill="#fff"/>
+  <text x="56" y="280" class="t">Scale reference</text>
+  <text x="56" y="298" class="s">ArUco · bolt-head spec</text><text x="56" y="314" class="s">LiDAR · known dimension</text>
+
+  <rect x="44" y="360" width="170" height="46" class="grp dash" rx="9" stroke="#5b6b7a" fill="#fff"/>
+  <text x="56" y="382" class="t" fill="#5b6b7a">Depth Anything (opt.)</text>
+  <text x="56" y="398" class="s">3D context · plane correction</text>
+
+  <!-- ===== SAM3 ===== -->
+  <rect x="288" y="158" width="202" height="56" class="grp" rx="9" stroke="#8a5cd1" fill="#fff"/>
+  <text x="300" y="181" class="t">Image Encoder + DETR</text><text x="300" y="199" class="s">Promptable Concept Segmentation</text>
+  <rect x="288" y="226" width="202" height="50" class="grp" rx="9" stroke="#8a5cd1" fill="#faf7ff"/>
+  <text x="300" y="248" class="t">Instance masks + scores</text><text x="300" y="265" class="s">all instances (open-vocab)</text>
+
+  <!-- ===== METROLOGY CORE ===== -->
+  <rect x="576" y="116" width="150" height="62" class="grp" rx="9" stroke="#1f9d74" fill="#fff"/>
+  <text x="588" y="138" class="t">Count</text><text x="588" y="156" class="s">instance enumeration</text><text x="588" y="172" class="s">+ SAHI tiling (dense)</text>
+
+  <rect x="576" y="198" width="150" height="76" class="grp" rx="9" stroke="#1f9d74" fill="#fff"/>
+  <text x="588" y="220" class="t">Regime router</text><text x="588" y="238" class="s">sharp → binary</text>
+  <text x="588" y="254" class="s">fuzzy → matting (α)</text><text x="588" y="270" class="s">field → illumination model</text>
+
+  <rect x="576" y="294" width="150" height="64" class="grp" rx="9" stroke="#1f9d74" fill="#fff"/>
+  <text x="588" y="316" class="t">Mask Geometry</text><text x="588" y="334" class="s">skeleton + EDT → width,</text><text x="588" y="350" class="s">diameter · soft Σα</text>
+
+  <rect x="576" y="378" width="150" height="56" class="grp" rx="9" stroke="#1f9d74" fill="#fff"/>
+  <text x="588" y="400" class="t">Scale Resolver</text><text x="588" y="418" class="s">pixel → mm (ArUco/bolt)</text>
+
+  <rect x="758" y="210" width="146" height="80" class="grp" rx="9" stroke="#16805d" fill="#dff5ec" stroke-width="2"/>
+  <text x="770" y="232" class="t">Parallel</text><text x="770" y="250" class="t">Inspection Decoding</text>
+  <text x="770" y="268" class="s">atomic parallel output</text><text x="770" y="284" class="s">(LocateAnything PBD)</text>
+
+  <!-- ===== OUTPUT ===== -->
+  <rect x="980" y="188" width="282" height="120" class="grp" rx="9" stroke="#d99320" fill="#fff"/>
+  <text x="994" y="212" class="t">Inspection Atom × N</text>
+  <text x="994" y="234" class="s">{ mask, class, count_id,</text>
+  <text x="994" y="252" class="s">&#160;&#160;width <tspan font-weight="700" fill="#16805d">1.53 mm ± σ</tspan>, length,</text>
+  <text x="994" y="270" class="s">&#160;&#160;spacing, condition grade,</text>
+  <text x="994" y="288" class="s">&#160;&#160;confidence }</text>
+
+  <!-- ===== arrows ===== -->
+  <path class="ln" d="M214,135 H252 V186 H286" marker-end="url(#arr)"/>
+  <path class="ln" d="M214,210 H288" marker-end="url(#arr)"/>
+  <path class="lnG dash" d="M214,290 H250 V406 H574" marker-end="url(#arrG)"/>
+  <path class="ln dash" d="M214,383 H250 V330 H574" marker-end="url(#arr)"/>
+  <path class="ln" d="M490,251 H534 V147 H574" marker-end="url(#arr)"/>
+  <path class="ln" d="M490,251 H534 V236 H574" marker-end="url(#arr)"/>
+  <path class="lnG" d="M726,236 H742 V244 H756" marker-end="url(#arrG)"/>
+  <path class="lnG" d="M726,147 H744 V240 H756" marker-end="url(#arrG)"/>
+  <path class="lnG" d="M726,326 H744 V256 H756" marker-end="url(#arrG)"/>
+  <path class="lnG" d="M726,406 H746 V262 H756" marker-end="url(#arrG)"/>
+  <path class="lnG" d="M904,250 H940 V246 H978" marker-end="url(#arrG)"/>
+
+  <!-- optional VLM -->
+  <rect x="288" y="424" width="266" height="44" class="grp dash" rx="9" stroke="#5b6b7a" fill="#fff"/>
+  <text x="300" y="446" class="t" fill="#5b6b7a">VLM Orchestrator (optional)</text>
+  <text x="300" y="462" class="s">complex query → noun phrases</text>
+  <path class="ln dash" d="M421,424 V300" marker-end="url(#arr)"/>
+
+  <text x="650" y="524" text-anchor="middle" class="s" font-style="italic">
+    Stage 0 (compose, zero-training) → Stage 1 (SAM 3 fine-tune: thin-structure + measurement-aware) → Stage 2 (teacher → pseudo-label distillation)
+  </text>
+</svg>
