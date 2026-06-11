@@ -1,0 +1,167 @@
+{
+  "summary": {
+    "n_images": 22,
+    "rel_err_mean": 0.0174,
+    "rel_err_median": 0.0168,
+    "cv_mean": 0.021,
+    "pass@5pct": 1.0,
+    "pass@10pct": 1.0,
+    "note": "LOO 일관성 검증 — 분할+직경 체인. 절대 마커 체인은 합성 0.38% 별도"
+  },
+  "rows": [
+    {
+      "denom": "10c",
+      "file": "IMG_4187.JPG",
+      "n_coins": 50,
+      "rel_err": 0.0168,
+      "cv_px": 0.0196
+    },
+    {
+      "denom": "10c",
+      "file": "IMG_4191.JPG",
+      "n_coins": 50,
+      "rel_err": 0.0218,
+      "cv_px": 0.0357
+    },
+    {
+      "denom": "10c",
+      "file": "IMG_4192.JPG",
+      "n_coins": 50,
+      "rel_err": 0.0211,
+      "cv_px": 0.0349
+    },
+    {
+      "denom": "10c",
+      "file": "IMG_4207.JPG",
+      "n_coins": 35,
+      "rel_err": 0.0201,
+      "cv_px": 0.0242
+    },
+    {
+      "denom": "1e",
+      "file": "IMG_4197.JPG",
+      "n_coins": 24,
+      "rel_err": 0.0131,
+      "cv_px": 0.0157
+    },
+    {
+      "denom": "1e",
+      "file": "IMG_4198.JPG",
+      "n_coins": 24,
+      "rel_err": 0.0103,
+      "cv_px": 0.0129
+    },
+    {
+      "denom": "1e",
+      "file": "IMG_4199.JPG",
+      "n_coins": 24,
+      "rel_err": 0.0128,
+      "cv_px": 0.0147
+    },
+    {
+      "denom": "1e",
+      "file": "IMG_4200.JPG",
+      "n_coins": 24,
+      "rel_err": 0.0169,
+      "cv_px": 0.0204
+    },
+    {
+      "denom": "20c",
+      "file": "IMG_4188.JPG",
+      "n_coins": 45,
+      "rel_err": 0.0278,
+      "cv_px": 0.0339
+    },
+    {
+      "denom": "20c",
+      "file": "IMG_4189.JPG",
+      "n_coins": 45,
+      "rel_err": 0.0124,
+      "cv_px": 0.0144
+    },
+    {
+      "denom": "20c",
+      "file": "IMG_4190.JPG",
+      "n_coins": 45,
+      "rel_err": 0.0099,
+      "cv_px": 0.012
+    },
+    {
+      "denom": "20c",
+      "file": "IMG_4210.JPG",
+      "n_coins": 46,
+      "rel_err": 0.0209,
+      "cv_px": 0.0246
+    },
+    {
+      "denom": "2e",
+      "file": "IMG_4193.JPG",
+      "n_coins": 8,
+      "rel_err": 0.0147,
+      "cv_px": 0.015
+    },
+    {
+      "denom": "2e",
+      "file": "IMG_4194.JPG",
+      "n_coins": 8,
+      "rel_err": 0.0258,
+      "cv_px": 0.0267
+    },
+    {
+      "denom": "2e",
+      "file": "IMG_4195.JPG",
+      "n_coins": 8,
+      "rel_err": 0.0297,
+      "cv_px": 0.0321
+    },
+    {
+      "denom": "2e",
+      "file": "IMG_4196.JPG",
+      "n_coins": 8,
+      "rel_err": 0.0214,
+      "cv_px": 0.0205
+    },
+    {
+      "denom": "50c",
+      "file": "IMG_4201.JPG",
+      "n_coins": 25,
+      "rel_err": 0.0224,
+      "cv_px": 0.0273
+    },
+    {
+      "denom": "50c",
+      "file": "IMG_4202.JPG",
+      "n_coins": 25,
+      "rel_err": 0.0175,
+      "cv_px": 0.0204
+    },
+    {
+      "denom": "5c",
+      "file": "IMG_4184.JPG",
+      "n_coins": 59,
+      "rel_err": 0.0135,
+      "cv_px": 0.0169
+    },
+    {
+      "denom": "5c",
+      "file": "IMG_4185.JPG",
+      "n_coins": 59,
+      "rel_err": 0.0136,
+      "cv_px": 0.0165
+    },
+    {
+      "denom": "5c",
+      "file": "IMG_4186.JPG",
+      "n_coins": 60,
+      "rel_err": 0.0141,
+      "cv_px": 0.0164
+    },
+    {
+      "denom": "5c",
+      "file": "IMG_4203.JPG",
+      "n_coins": 60,
+      "rel_err": 0.0065,
+      "cv_px": 0.0081
+    }
+  ]
+}
