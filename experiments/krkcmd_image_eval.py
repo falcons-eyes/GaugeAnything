@@ -100,6 +100,7 @@ def main():
     ap.add_argument("--stages", type=int, default=3, help="평가할 stage 수 (페이지)")
     ap.add_argument("--downscale", type=int, default=4, help="SAM3 추론 다운스케일 배율")
     ap.add_argument("--skip-sam3", action="store_true")
+    ap.add_argument("--mask-th", type=float, default=0.5, help="SAM3 mask_threshold (M2v2-a θ*)")
     args = ap.parse_args()
 
     rows_all = load_rows(args.series, args.image)
@@ -147,7 +148,7 @@ def main():
         g8 = np.clip(gray / max(gray.max(), 1) * 255, 0, 255).astype(np.uint8)
         small = g8[::ds, ::ds]
         img3 = np.stack([small] * 3, -1)
-        insts = segment_sam3(img3, "crack", threshold=0.3)
+        insts = segment_sam3(img3, "crack", threshold=0.3, mask_threshold=args.mask_th)
         if not insts:
             print("  rung2: SAM3 crack 미검출")
             res["rung2"].append({"stage": stage, "n": 0, "note": "no detection"})
@@ -174,6 +175,7 @@ def main():
     out = Path("experiments/results"); out.mkdir(parents=True, exist_ok=True)
     (out / "krkcmd_image_eval.json").write_text(json.dumps(
         {"series": args.series, "image": args.image, "results": res,
+         "params": {"downscale": args.downscale, "mask_th": args.mask_th},
          "anchors": {"profile_level_cal_MAE": 27.8, "DLM": 11.1}},
         indent=2, ensure_ascii=False))
     print("결과 저장: experiments/results/krkcmd_image_eval.json")
