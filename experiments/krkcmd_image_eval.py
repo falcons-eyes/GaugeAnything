@@ -35,8 +35,9 @@ def load_rows(series: str, image: str):
     with open(KRK / "krkCMd_table.csv") as f:
         for row in csv.DictReader(f):
             if row["Series"] == series and row["Image"] == image:
+                gy, gx = (int(v) for v in row["Gridline"].split("-"))
                 rows.append({
-                    "gridline": int(row["Gridline"]), "stage": int(row["Stage"]),
+                    "gx": gx, "gy": gy, "stage": int(row["Stage"]),
                     "x": np.array([float(row[f"x{i}"]) for i in range(1, N_P + 1)], np.float32),
                     "man": float(row["MANwidth"]), "dlm": float(row["DLMwidth"])})
     return rows
@@ -70,22 +71,14 @@ def match_column(col: np.ndarray, vec: np.ndarray):
     return y0, float(corr[y0])
 
 
-def recover_offset(gray: np.ndarray, rows: list, n_probe: int = 4):
-    """xS(mod 100) 추정: 소수 프로파일로 전 오프셋 스캔."""
-    H, W = gray.shape
-    probes = rows[:: max(1, len(rows) // n_probe)][:n_probe]
-    best = (-1, -1.0)
-    for off in range(0, 100):
-        s = 0.0
-        for r in probes:
-            c = off + 100 * r["gridline"]
-            if c >= W:
-                continue
-            _, score = match_column(gray[:, c], r["x"])
-            s += score
-        if s > best[1]:
-            best = (off, s)
-    return best[0]
+def refine_y(col: np.ndarray, vec: np.ndarray, y_hint: int, win: int = 25):
+    """Gridline y 좌표 주변 ±win에서 최적 상관 위치 미세보정."""
+    lo = max(0, y_hint - win)
+    hi = min(len(col) - N_P, y_hint + win)
+    if hi <= lo:
+        return y_hint, -1.0
+    y0, score = match_column(col[lo: hi + N_P], vec)
+    return lo + y0, score
 
 
 def mask_width_at_col(mask: np.ndarray, c: int, halfwin: int = 2) -> float:
@@ -122,21 +115,20 @@ def main():
             continue
         gray = to_gray(pages[stage - 1])
         H, W = gray.shape
-        off = recover_offset(gray, rows)
-        print(f"[stage {stage}] {H}x{W}, xS(mod100)={off}, profiles={len(rows)}")
+        print(f"[stage {stage}] {H}x{W}, profiles={len(rows)} (Gridline=yyyy-xxxx 직접 좌표)")
 
         # rung1: 위치 복원 → 우리 추출 프로파일 → minrun5
         r1_err, matched = [], 0
         pos = {}
         for r in rows:
-            c = off + 100 * r["gridline"]
+            c = r["gx"]
             if c >= W:
                 continue
-            y0, score = match_column(gray[:, c], r["x"])
-            if score < 0.95:    # 복원 신뢰 게이트
+            y0, score = refine_y(gray[:, c], r["x"], r["gy"])
+            if score < 0.95:    # 위치 신뢰 게이트 (상관 검증)
                 continue
             matched += 1
-            pos[r["gridline"]] = (c, y0)
+            pos[(r["gx"], r["gy"])] = (c, y0)
             prof = gray[y0: y0 + N_P, c]
             w_um = width_min_run(prof)
             r1_err.append(abs(w_um - r["man"]))
@@ -165,8 +157,8 @@ def main():
         # 업스케일 (nearest)
         m_full = np.repeat(np.repeat(m_small, ds, 0), ds, 1)[:H, :W]
         r2_err, r2_n = [], 0
-        for g, (c, y0) in pos.items():
-            man = next(r["man"] for r in rows if r["gridline"] == g)
+        for (gx, gy), (c, y0) in pos.items():
+            man = next(r["man"] for r in rows if r["gx"] == gx and r["gy"] == gy)
             w_px = mask_width_at_col(m_full[y0: y0 + N_P, :], c)
             w_um = w_px * PX_TO_UM
             r2_n += 1
