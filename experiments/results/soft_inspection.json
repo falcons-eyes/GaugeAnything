@@ -1,0 +1,18 @@
+{
+  "Uneven": {
+    "n": 25,
+    "residual_AUC": 0.6832,
+    "raw_gray_AUC": 0.563,
+    "sam3_binary_AUC": 0.4985,
+    "Sa": 11.553,
+    "Sq": 16.181
+  },
+  "Fray": {
+    "n": 25,
+    "residual_AUC": 0.6046,
+    "raw_gray_AUC": 0.5627,
+    "sam3_binary_AUC": 0.526,
+    "Sa": 10.847,
+    "Sq": 15.496
+  }
+}

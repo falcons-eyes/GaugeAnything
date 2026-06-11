@@ -1,0 +1,12 @@
+{
+  "alpha_mae_matting": 0.0056,
+  "alpha_mae_binary": 0.0083,
+  "note": "synthetic holdout — 합성→합성 검증임을 명시 (RIGOR_AUDIT B1)",
+  "real_fray": {
+    "n": 32,
+    "iou_at_0.5_vs_gt": 0.9489,
+    "guided_matte_iou": 0.8604,
+    "boundary_softness": 0.5901,
+    "note": "α GT 없음 → 보존성+softness만. 정량적 α 정확도는 합성 한정."
+  }
+}

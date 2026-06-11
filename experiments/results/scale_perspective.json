@@ -1,0 +1,54 @@
+{
+  "bar_mm": 60.0,
+  "marker_mm": 20.0,
+  "rows": [
+    {
+      "theta": 0,
+      "detected": true,
+      "naive_mm": 60.38,
+      "naive_err_pct": 0.63,
+      "homog_mm": 60.38,
+      "homog_err_pct": 0.63
+    },
+    {
+      "theta": 10,
+      "detected": true,
+      "naive_mm": 60.54,
+      "naive_err_pct": 0.9,
+      "homog_mm": 57.6,
+      "homog_err_pct": 3.99
+    },
+    {
+      "theta": 20,
+      "detected": true,
+      "naive_mm": 61.64,
+      "naive_err_pct": 2.73,
+      "homog_mm": 60.25,
+      "homog_err_pct": 0.41
+    },
+    {
+      "theta": 30,
+      "detected": true,
+      "naive_mm": 63.86,
+      "naive_err_pct": 6.43,
+      "homog_mm": 60.58,
+      "homog_err_pct": 0.96
+    },
+    {
+      "theta": 40,
+      "detected": true,
+      "naive_mm": 67.31,
+      "naive_err_pct": 12.19,
+      "homog_mm": 60.45,
+      "homog_err_pct": 0.74
+    },
+    {
+      "theta": 50,
+      "detected": true,
+      "naive_mm": 71.57,
+      "naive_err_pct": 19.29,
+      "homog_mm": 60.42,
+      "homog_err_pct": 0.71
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "concrete_crack": {
+    "n": 40,
+    "broken_prompt": "fracture",
+    "single_broken": 0.0,
+    "single_best": 0.3675,
+    "ensemble_via_broken": 0.374
+  },
+  "mt_blowhole": {
+    "n": 39,
+    "broken_prompt": "pit",
+    "single_broken": 0.0,
+    "single_best": 0.3977,
+    "ensemble_via_broken": 0.3515
+  }
+}

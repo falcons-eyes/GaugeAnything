@@ -1,0 +1,6 @@
+{
+  "auc": 0.5907,
+  "n": 56,
+  "baseline_classical": 0.683,
+  "baseline_sam3": 0.499
+}

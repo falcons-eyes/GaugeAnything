@@ -1,0 +1,42 @@
+{
+  "in-source imfds_motor [window-split]": {
+    "cnn": [
+      0.5007875903828166,
+      0.05580864438479108
+    ],
+    "physics": 0.636342311210638
+  },
+  "in-source imfds_motor [file-split]": {
+    "cnn": null,
+    "physics": null,
+    "note": "files=3, infeasible"
+  },
+  "in-source mechanical_bearing [window-split]": {
+    "cnn": [
+      0.9937352429027775,
+      0.008859697163484427
+    ],
+    "physics": 0.9953049263265141
+  },
+  "in-source mechanical_bearing [file-split]": {
+    "cnn": [
+      0.9486463303167564,
+      0.07262504883360636
+    ],
+    "physics": 0.9999999948620072
+  },
+  "cross imfds_motor→mechanical_bearing": {
+    "cnn": [
+      0.17507907229076602,
+      0.00029362084641337176
+    ],
+    "physics": 0.17543859519595775
+  },
+  "cross mechanical_bearing→imfds_motor": {
+    "cnn": [
+      0.16666666541611114,
+      0.0
+    ],
+    "physics": 0.26649551785639314
+  }
+}

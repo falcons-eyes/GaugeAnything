@@ -1,0 +1,70 @@
+{
+  "n_per_seed": 150,
+  "seeds": 3,
+  "commercial_only": false,
+  "results": {
+    "adaptive": {
+      "crack_mIoU_mean": 0.1808,
+      "crack_mIoU_std": 0.0055,
+      "noncrack_clean_rate": 0.0,
+      "per_source_lastseed": {
+        "cfd": 0.318,
+        "crack500": 0.082,
+        "deepcrack": 0.279,
+        "cracktree200": 0.049,
+        "volker": 0.26,
+        "h": 0.244,
+        "rissbilder": 0.1,
+        "ceramic": 0.107,
+        "c": 0.282,
+        "a": 0.17,
+        "gaps384": 0.084,
+        "b": 0.171,
+        "d": 0.131
+      },
+      "sec_per_img": 0.003
+    },
+    "frangi": {
+      "crack_mIoU_mean": 0.1147,
+      "crack_mIoU_std": 0.0053,
+      "noncrack_clean_rate": 0.258,
+      "per_source_lastseed": {
+        "cfd": 0.202,
+        "crack500": 0.017,
+        "deepcrack": 0.231,
+        "cracktree200": 0.094,
+        "volker": 0.069,
+        "h": 0.152,
+        "rissbilder": 0.079,
+        "ceramic": 0.141,
+        "c": 0.171,
+        "a": 0.123,
+        "gaps384": 0.016,
+        "b": 0.189,
+        "d": 0.148
+      },
+      "sec_per_img": 0.089
+    },
+    "sam3": {
+      "crack_mIoU_mean": 0.4422,
+      "crack_mIoU_std": 0.0112,
+      "noncrack_clean_rate": 0.679,
+      "per_source_lastseed": {
+        "cfd": 0.512,
+        "crack500": 0.377,
+        "deepcrack": 0.631,
+        "cracktree200": 0.079,
+        "volker": 0.484,
+        "h": 0.498,
+        "rissbilder": 0.311,
+        "ceramic": 0.381,
+        "c": 0.66,
+        "a": 0.49,
+        "gaps384": 0.281,
+        "b": 0.529,
+        "d": 0.722
+      },
+      "sec_per_img": 0.363
+    }
+  }
+}

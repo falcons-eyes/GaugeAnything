@@ -1,0 +1,20 @@
+{
+  "split_seed": 7,
+  "n_val": 48,
+  "n_test": 49,
+  "classical": {
+    "config": {
+      "detrend": true,
+      "smooth": 9.0
+    },
+    "val": 0.6636,
+    "test": 0.6689
+  },
+  "draem": {
+    "config": {
+      "ensemble": true
+    },
+    "val": 0.6058,
+    "test": 0.6364
+  }
+}

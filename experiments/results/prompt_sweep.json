@@ -1,0 +1,38 @@
+{
+  "concrete_crack": {
+    "per_prompt": {
+      "crack": 0.3861,
+      "cracks": 0.387,
+      "fracture": 0.0,
+      "thin dark crack": 0.3625
+    },
+    "mean": 0.2839,
+    "best": 0.387,
+    "spread": 0.387,
+    "n": 60
+  },
+  "mt_crack": {
+    "per_prompt": {
+      "crack": 0.4482,
+      "cracks": 0.4034,
+      "scratch": 0.3905,
+      "dark line": 0.3791
+    },
+    "mean": 0.4053,
+    "best": 0.4482,
+    "spread": 0.0691,
+    "n": 57
+  },
+  "mt_blowhole": {
+    "per_prompt": {
+      "hole": 0.3957,
+      "pit": 0.0,
+      "blowhole": 0.2299,
+      "small dark spot": 0.3827
+    },
+    "mean": 0.2521,
+    "best": 0.3957,
+    "spread": 0.3957,
+    "n": 59
+  }
+}

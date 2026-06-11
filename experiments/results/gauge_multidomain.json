@@ -1,0 +1,66 @@
+{
+  "crack_concrete": {
+    "n": 25,
+    "mIoU": 0.3669,
+    "kind": {
+      "thin": 22
+    },
+    "mean_dia_px": null,
+    "mean_width_px": 8.0,
+    "sec_per_img": 0.69
+  },
+  "mt_blowhole": {
+    "n": 30,
+    "mIoU": 0.4295,
+    "kind": {
+      "blob": 18
+    },
+    "mean_dia_px": 11.6,
+    "mean_width_px": null,
+    "sec_per_img": 0.35
+  },
+  "mt_crack": {
+    "n": 30,
+    "mIoU": 0.4535,
+    "kind": {
+      "thin": 23,
+      "blob": 2
+    },
+    "mean_dia_px": 16.8,
+    "mean_width_px": 3.9,
+    "sec_per_img": 0.35
+  },
+  "mt_break": {
+    "n": 30,
+    "mIoU": 0.03,
+    "kind": {
+      "thin": 7,
+      "blob": 1
+    },
+    "mean_dia_px": 35.2,
+    "mean_width_px": 4.8,
+    "sec_per_img": 0.35
+  },
+  "mt_fray": {
+    "n": 30,
+    "mIoU": 0.0247,
+    "kind": {
+      "thin": 20,
+      "blob": 3
+    },
+    "mean_dia_px": 24.9,
+    "mean_width_px": 5.1,
+    "sec_per_img": 0.35
+  },
+  "mt_uneven": {
+    "n": 28,
+    "mIoU": 0.0054,
+    "kind": {
+      "blob": 11,
+      "thin": 10
+    },
+    "mean_dia_px": 18.0,
+    "mean_width_px": 8.0,
+    "sec_per_img": 0.35
+  }
+}
