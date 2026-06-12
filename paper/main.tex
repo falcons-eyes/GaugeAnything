@@ -120,6 +120,15 @@ all along; the binary mask was discarding it.
   equivalent-width hypothesis rejected by textured backgrounds.
 \end{enumerate}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=.92\linewidth]{figures/gauge_demo.png}
+\caption{\ours{} on a real concrete surface: prompt ``crack'' $\rightarrow$ SAM~3 instances
+$\rightarrow$ skeleton+EDT width profile $\rightarrow$ physical width (assumed scale shown;
+absolute scale comes from markers or known-dimension objects).}
+\label{fig:demo}
+\end{figure}
+
 \section{Related Work}\label{sec:related}
 
 \paragraph{Promptable segmentation.} SAM~\citep{kirillov2023sam}, SAM~2~\citep{ravi2024sam2}
@@ -276,6 +285,14 @@ scaling (each coin measured using the others as reference) yields mean error $1.
 $100\%$ within $5\%$. This validates the segmentation$\rightarrow$diameter chain on real
 imagery; the absolute marker chain is validated synthetically (ArUco $0.38\%$; e2e $5.6\%$).
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=.92\linewidth]{figures/coins_mm.png}
+\caption{Real-photo known-object consistency (E-mm-1): each coin is measured using the other
+same-denomination coins as scale reference; mean leave-one-out error $1.74\%$ over 22 scenes.}
+\label{fig:coins}
+\end{figure}
+
 \subsection{Physical crack width: from profiles to the promptable chain}\label{sec:signal}
 \textbf{Profile level.} On krkCMd's manual widths (group-split test $4{,}674$ profiles),
 a deterministic valley rule with linear calibration attains $25.9$\um{} (5-fold
@@ -312,6 +329,14 @@ Image, promptable & SAM~3 mask geometry ($\theta^\ast$, best) & 144--186 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.92\linewidth]{figures/krkcmd_profile.png}
+\caption{krkCMd cross-crack brightness profiles (501 samples, $3.97$\um/px) with manual
+width GT---the physical ground truth behind Table~\ref{tab:width}.}
+\label{fig:krk}
+\end{figure}
 
 \subsection{Boundary regimes: fuzzy and boundaryless defects}
 Binary segmentation collapses to chance on Magnetic-Tile fray/uneven (AUC ${\approx}0.50$).
