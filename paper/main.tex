@@ -308,9 +308,16 @@ and into physical units).
 table test split; applied at \emph{oracle} positions in the image, $26.2$\um; applied at
 SAM~3-localized, valley-snapped positions, \textbf{$39.9$\um{} MAE / $23.2$\um{} median}
 on the $46$--$66\%$ of stations passing the localization gate (failed stations: $186$\um,
-reported as not-measurable). Width information survives imaging; binary masks were the
-bottleneck, and localization coverage---a classical-vision engineering task---is what
-remains.
+reported as not-measurable). A systematic deterministic-loop study (continuity gating,
+zoom re-acquisition, crack-likeness scoring, Viterbi path selection) then revealed that this
+coverage ceiling is largely an \emph{annotation-matching artifact}: the scenes contain more
+than one genuine crack, and a single-path selector cannot know which one the annotator chose.
+When the instrument reports \emph{all} crack instances---each measured along its own
+centerline, as our Inspection Atoms formulation prescribes---the annotated crack is covered
+at \textbf{$93\%$ recall} with \textbf{$30.5$\um{} MAE ($16.4$\um{} median)} on the matched
+instance. Width information survives imaging; binary masks were the bottleneck; and the
+remaining open items are the $7\%$ unrecovered stations and per-station confidence gating,
+not path selection.
 
 \begin{table}[t]
 \centering\small
@@ -362,9 +369,10 @@ density-based heads remain necessary in this regime; we report this as a boundar
 current promptable counting.
 
 \section{Limitations}
-(1)~\emph{Localization coverage}: the signal-width chain currently measures $46$--$66\%$ of
-stations on scanner imagery; the gate is honest but coverage is an open engineering task
-(ridge tracking, hysteresis linking). (2)~\emph{Field captures}: our physical-unit evidence
+(1)~\emph{Residual localization gaps}: with multi-instance reporting the annotated crack is
+recovered at $93\%$; the remaining $7\%$ of stations and the per-station confidence gate are
+open engineering items, and selecting a \emph{specific} crack among several is delegated to
+point prompts by design. (2)~\emph{Field captures}: our physical-unit evidence
 comes from CAD ground truth, known-dimension objects, and scanner profiles; an
 ArUco+caliper field protocol (released with a printable board and capture checklist) awaits
 real deployments. (3)~\emph{Single image, single depth}: plane scaling degrades on
