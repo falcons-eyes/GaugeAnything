@@ -5,35 +5,36 @@
   ],
   "n_frames": 398,
   "det_rate": 0.799,
-  "n_measured": 318,
-  "square_consensus_m": 0.10677,
-  "rel_err_median_all": 0.1518,
-  "rel_err_p90": 0.1944,
+  "gate_fail": 153,
+  "n_measured": 160,
+  "square_consensus_m": 0.09022,
+  "rel_err_median_all": 0.0106,
+  "rel_err_p90": 0.026,
   "by_speed_mps": {
     "0-0.1": {
       "n": 14,
       "det_rate": 0.714,
-      "rel_err_med": 0.1345
+      "rel_err_med": 0.4599
     },
     "0.1-0.25": {
       "n": 61,
       "det_rate": 0.705,
-      "rel_err_med": 0.1519
+      "rel_err_med": 0.0097
     },
     "0.25-0.5": {
       "n": 243,
       "det_rate": 0.778,
-      "rel_err_med": 0.1465
+      "rel_err_med": 0.0109
     },
     "0.5-1.0": {
       "n": 78,
       "det_rate": 0.949,
-      "rel_err_med": 0.1585
+      "rel_err_med": 0.0102
     },
     "1.0-3.0": {
       "n": 1,
       "det_rate": 1.0,
-      "rel_err_med": 0.1635
+      "rel_err_med": 0.01
     }
   }
 }
