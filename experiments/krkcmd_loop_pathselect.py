@@ -81,6 +81,24 @@ def multi_component_paths(gray: np.ndarray, ds: int = 2, tile: int = 1024,
     return paths
 
 
+def valley_candidates(col: np.ndarray, k: int = 5, min_gap: int = 100) -> list[int]:
+    """열의 국소 최암점 상위 k개 (SAM3-독립 후보 — recall 보강)."""
+    from scipy.ndimage import minimum_filter1d
+    sm = minimum_filter1d(col, size=9)
+    is_min = (col <= sm + 1e-6)
+    idx = np.nonzero(is_min)[0]
+    if not len(idx):
+        return []
+    order = idx[np.argsort(col[idx])]
+    picked = []
+    for y in order:
+        if all(abs(int(y) - q) >= min_gap for q in picked):
+            picked.append(int(y))
+        if len(picked) >= k:
+            break
+    return picked
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--series", default="CMd_0.23_2mths")
@@ -100,7 +118,7 @@ def main():
         rows = [r for r in rows_all if r["stage"] == stage]
         gray = to_gray(pages[stage - 1])
         H, W = gray.shape
-        paths = multi_component_paths(gray)
+        paths = multi_component_paths(gray, min_span=0.05)
         n_paths_log.append(len(paths))
 
         oracle = {}
@@ -116,15 +134,16 @@ def main():
             n_tot += 1
             # 열 c에서 모든 경로의 후보 행 → 크랙다움 점수로 선택
             best_y, best_s = None, -1.0
+            cand_rows = []
             for path in paths:
                 cols = np.array(sorted(path))
                 if not len(cols):
                     continue
                 j = int(np.argmin(np.abs(cols - c)))
-                if abs(int(cols[j]) - c) > args.col_tol:
-                    continue
-                # snap-to-valley 후 프로파일 점수
-                yh = path[int(cols[j])]
+                if abs(int(cols[j]) - c) <= args.col_tol:
+                    cand_rows.append(path[int(cols[j])])
+            cand_rows += valley_candidates(gray[:, c])      # SAM3-독립 후보
+            for yh in cand_rows:
                 lo = max(0, yh - SNAP); hi = min(H, yh + SNAP + 1)
                 yc = lo + int(np.argmin(gray[lo:hi, c]))
                 a = max(0, yc - N_P // 2)
