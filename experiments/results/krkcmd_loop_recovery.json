@@ -1,0 +1,22 @@
+{
+  "first_pass": {
+    "near": 113,
+    "n": 216,
+    "coverage": 0.523,
+    "MAE_um": 40.4,
+    "median_um": 22.9
+  },
+  "after_loop": {
+    "near": 112,
+    "n": 216,
+    "coverage": 0.519,
+    "MAE_um": 39.9,
+    "median_um": 22.7
+  },
+  "loop_log": {
+    "recovered_zoom1": 2,
+    "recovered_zoom2": 0,
+    "fallback_snap": 50,
+    "rejected": 0
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "coverage": 0.486,
+  "MAE_um": 27.3,
+  "median_um": 19.7,
+  "n": 105,
+  "n_paths_per_stage": [
+    3,
+    5,
+    7
+  ],
+  "anchor": {
+    "loop0_coverage": 0.52,
+    "first_pass_MAE": 40.4
+  }
+}
