@@ -9,6 +9,8 @@
 
 **Promptable quantitative inspection for industrial micro-vision — masks in, millimeters out.**
 
+<p align="center"><img src="docs/assets/results_summary.png" width="92%" alt="Results summary: width ladder + part metrology ceiling"></p>
+
 Foundation models tell you *what* and *where*. GaugeAnything tells you **how many millimeters,
 how many instances, and which condition grade** — the metrology that actually drives field decisions
 (crack width, defect size, part spacing), emitted as first-class outputs on top of a promptable
@@ -53,6 +55,17 @@ docs/                   # project page + rigor audit + per-step progress logs
 paper/                  # paper outline (work in progress)
 data/                   # dataset acquisition guide + download scripts
 ```
+
+## Documentation
+
+| Guide | What it covers |
+|---|---|
+| [Results log](experiments/RESULTS.md) | Every audited number, protocol and verdict, in order |
+| [Rigor audit](docs/RIGOR_AUDIT.md) | How we attacked our own results (leakage, metric traps) |
+| [Width bottleneck analysis](docs/WIDTH_BOTTLENECK_ANALYSIS.md) | Physics + method space behind "mask=WHERE, signal=WIDTH" |
+| [Capture protocol](docs/CAPTURE_PROTOCOL.md) | ArUco+caliper field protocol (printable board included) |
+| [Dataset map](paper/DATASETS.md) | All datasets used/found, licenses, traps |
+| [Progress log](docs/progress/) | Per-step research records, including failures |
 
 ## Quickstart
 

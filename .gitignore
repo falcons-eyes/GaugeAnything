@@ -227,3 +227,7 @@ experiments/results/*.log
 docs/preview_*.jpeg
 docs/.playwright-mcp/
 *.log
+paper/main.pdf
+paper/main.aux
+paper/main.log
+paper/main.bbl
