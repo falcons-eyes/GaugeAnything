@@ -174,8 +174,12 @@
           a <b>regime-aware soft representation</b> (matting for fuzzy edges, illumination-field modeling for boundaryless defects)
           recovers signal that binary masks discard. We further validate the measurement chain with real-metric substitutes:
           coin known-object scenes reach <b>1.74% mean error</b>, and krkCMd profile-level crack-width evaluation reaches
-          <b>27.8&nbsp;±&nbsp;2.5&nbsp;μm MAE</b> (group 5-fold; leave-one-series worst 46.7&nbsp;μm) against manual physical GT. All results are measured on an NVIDIA&nbsp;GB10.
+          <b>27.8&nbsp;±&nbsp;2.5&nbsp;μm MAE</b> (group 5-fold; leave-one-series worst 46.7&nbsp;μm) against manual physical GT.
+          Finally, reading width from the raw intensity signal instead of mask geometry — <b>mask for <i>where</i>, signal for <i>how wide</i></b> —
+          reaches <b>23.2&nbsp;μm median</b> physical crack-width error and <b>2.5%</b> promptable part dimensions on T-LESS CAD GT.
+          All results are measured on an NVIDIA&nbsp;GB10.
         </p>
+        <figure class="fig" style="margin-top:1.2rem"><img src="assets/results_summary.png" alt="Results summary: width ladder and part metrology ceiling"></figure>
       </div>
     </div></div>
   </div>
