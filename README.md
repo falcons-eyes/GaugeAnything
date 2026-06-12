@@ -1,5 +1,12 @@
 # GaugeAnything
 
+<p align="center">
+  <a href="https://falcons-eyes.github.io/GaugeAnything/"><img src="https://img.shields.io/badge/Project%20Page-live-1b4d89?logo=googlechrome&logoColor=white" alt="Project Page"></a>
+  <a href="https://falcons-eyes.github.io/GaugeAnything/static/pdfs/gaugeanything.pdf"><img src="https://img.shields.io/badge/Paper-PDF-b31b1b?logo=adobeacrobatreader&logoColor=white" alt="Paper PDF"></a>
+  <a href="https://huggingface.co/James-joobs/GaugeAnything"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Weights-HuggingFace-ffcc4d" alt="HF Weights"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-16805d" alt="License"></a>
+</p>
+
 **Promptable quantitative inspection for industrial micro-vision — masks in, millimeters out.**
 
 Foundation models tell you *what* and *where*. GaugeAnything tells you **how many millimeters,
@@ -15,7 +22,9 @@ segmentation backbone (SAM 3).
 > length 212 mm, on a real concrete surface, zero-shot. *(Assumed scale 0.25 mm/px — real-metric
 > capture with ArUco markers is the next data milestone; see [Metrology Rigor](#metrology-rigor).)*
 
-🌐 **Project page**: **https://falcons-eyes.github.io/GaugeAnything/** (live) · 🤗 **Weights**: [James-joobs/GaugeAnything](https://huggingface.co/James-joobs/GaugeAnything) · local: `cd docs && python3 -m http.server 8848`
+🌐 **Project page**: **https://falcons-eyes.github.io/GaugeAnything/** (live) ·
+📄 **Paper**: [PDF](https://falcons-eyes.github.io/GaugeAnything/static/pdfs/gaugeanything.pdf) (arXiv pending endorsement) ·
+🤗 **Weights**: [James-joobs/GaugeAnything](https://huggingface.co/James-joobs/GaugeAnything) · local: `cd docs && python3 -m http.server 8848`
 📄 **Design doc**: [DESIGN.md](DESIGN.md) · **Results log**: [experiments/RESULTS.md](experiments/RESULTS.md) · **Rigor audit**: [docs/RIGOR_AUDIT.md](docs/RIGOR_AUDIT.md)
 
 ---
@@ -140,7 +149,7 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 - [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
 - [ ] Counting & spacing validation (fastener datasets)
 - [x] HuggingFace weights release — **https://huggingface.co/James-joobs/GaugeAnything** (5 task heads + audited model card)
-- [x] Paper draft v1 (arXiv-ready LaTeX in `paper/` — compile-verified)
+- [x] Paper draft v1 — [PDF on the project page](https://falcons-eyes.github.io/GaugeAnything/static/pdfs/gaugeanything.pdf) (arXiv submission pending endorsement)
 
 ## License & third-party
 
