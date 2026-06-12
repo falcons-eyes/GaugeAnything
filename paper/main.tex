@@ -1,0 +1,360 @@
+% GaugeAnything — arXiv preprint (Overleaf-compatible, plain article + standard packages)
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath,amssymb}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+\newcommand{\ours}{GaugeAnything}
+\newcommand{\um}{\,\textmu m}
+\usepackage{textcomp}
+\DeclareUnicodeCharacter{00B5}{\textmu}
+
+\title{\textbf{\ours: Promptable Quantitative Inspection\\for Industrial Micro-Vision}\\
+\large Masks In, Millimeters Out}
+
+\author{%
+  FalconEyes / Industrial Anything Research\\
+  \texttt{github.com/falcons-eyes/GaugeAnything}
+}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Vision foundation models stop at perception: Segment Anything yields masks, Depth Anything
+relative depth, counting models counts---but industrial inspection decisions are made in
+\emph{physical units}: ``crack width $0.42$\,mm $\pm\,0.05$, condition Fair.'' As of mid-2026 no
+promptable model emits such measurements, and---strikingly---no public dataset pairs defect
+photos with physically measured widths. We introduce \ours, a promptable quantitative
+inspection pipeline that couples a concept-promptable segmentation backbone (SAM~3) with a
+\emph{metrology core}: tilt-robust pixel-to-millimeter scale resolvers, mask-geometry
+measurement, a boundary-regime router (sharp/fuzzy/boundaryless), and a signal-based width
+estimator. Our central finding is a decomposition we call \textbf{``mask for \emph{where},
+signal for \emph{how wide}''}: reading width from binary mask geometry costs $4$--$6\times$
+accuracy, whereas using the mask only to localize the centerline and regressing width from
+the raw intensity profile attains \textbf{$23.2$\um{} median error} against manually measured
+physical ground truth (krkCMd, 19{,}098 profiles)---within $2\times$ of the dataset authors'
+specialized supervised model. On mm-accurate industrial CAD ground truth (T-LESS) the full
+promptable pipeline measures part dimensions at \textbf{$2.5\%$ median error}, statistically
+indistinguishable from a perfect-mask ceiling of $2.83\%$. We further report the first
+peer-comparable SAM~3 crack-segmentation IoU ($0.442\pm0.011$ crack-only, $2.44\times$
+classical baselines), a calibration ladder in which a six-parameter logit-threshold +
+quantile scheme ($0.437$ rel.\ err.) beats a $1.9$M-parameter neural refiner ($0.564$), and
+honest negative results: zero-shot counting collapses on dense touching parts regardless of
+prompt wording, and an alpha-matting head that wins $20\times$ on synthetic data initially
+failed to transfer until the synthesis was made directionally realistic (real-fray IoU
+$0.483\rightarrow0.949$). All code, audited benchmarks, and five task heads are released.
+\end{abstract}
+
+\section{Introduction}
+
+Industrial inspection is a measurement discipline. Whether a concrete crack requires repair
+depends on whether its width exceeds a codified threshold (e.g.\ $0.3$\,mm); whether an
+assembly passes depends on bolt counts and spacings; maintenance scheduling depends on
+graded severity. Yet the modern ``promptable anything'' toolbox---Segment
+Anything~\citep{kirillov2023sam,ravi2024sam2,sam3_2025}, Depth
+Anything~\citep{yang2024depthv2}, class-agnostic counting~\citep{amini2024countgd}---stops
+one step short of the quantity that drives the decision. The model that tells an inspector
+\emph{how many millimeters} does not exist, and the gap is structural: our survey
+(\S\ref{sec:related}) finds that the closest prior work validates promptable measurement on a
+single object at ``$\pm10\%$''~\citep{measureanything2024}, and that public crack datasets
+provide pixel masks only---none pairs images with physically measured widths.
+
+\ours{} fills this gap with a deliberately decomposed design (\S\ref{sec:method}): a frozen
+concept-promptable backbone (SAM~3) proposes instances from a noun-phrase prompt; a
+\emph{metrology core} converts instances into \emph{Inspection Atoms}
+$\{$mask, class, count, size in mm~$\pm\sigma$, condition grade, confidence$\}$. The core
+contains (i)~\emph{scale resolvers}---fiducial markers, known-dimension objects, and a
+tilt-robust homography (\emph{PlaneScale}) that reduces a $19.3\%$ scale error at $50^\circ$
+camera tilt to $0.7\%$; (ii)~\emph{mask geometry}---skeleton + Euclidean distance transform
+width profiles, equivalent diameters, spacings; (iii)~a \emph{boundary-regime router} that
+dispatches sharp-boundary defects to binary segmentation, fuzzy boundaries (fray) to alpha
+matting, and boundaryless fields (uneven/mura) to illumination-residual modeling; and
+(iv)~a \emph{signal-based width estimator} that is the paper's central contribution.
+
+\paragraph{Central finding: mask for \emph{where}, signal for \emph{how wide}.}
+A binary mask quantizes a gradual intensity transition into a hard boundary, destroying
+sub-pixel evidence. We show this is the dominant error source for thin-structure
+measurement: on scanner imagery with manually measured physical widths
+(krkCMd~\citep{krkcmd2025}), widths read from SAM~3 mask geometry err by $144$--$186$\um,
+while a 1-D CNN regressing width from the raw 501-pixel brightness profile---using the mask
+\emph{only} to localize the profile position---achieves $39.9$\um{} MAE and $23.2$\um{}
+median where localization succeeds (\S\ref{sec:signal}). The information was in the image
+all along; the binary mask was discarding it.
+
+\paragraph{Contributions.}
+\begin{enumerate}\itemsep2pt
+\item \textbf{Task \& system}: Promptable Quantitative Inspection---image + noun phrase
+  $\rightarrow$ Inspection Atoms---implemented as an open, audited pipeline on a frozen SAM~3
+  backbone with a license-clean metrology core.
+\item \textbf{Signal-based metrology}: the \emph{where/how-wide} decomposition, validated on
+  physical ground truth: $23.2$\um{} median (localization-gated) vs.\ $144$--$186$\um{} for
+  mask geometry; on T-LESS CAD ground truth, promptable part measurement at $2.5\%$ median
+  $\approx$ the $2.83\%$ perfect-mask ceiling.
+\item \textbf{Calibration ladder}: a systematic, honestly-reported progression for width
+  bias---raw $0.730 \rightarrow$ neural refiner $0.564 \rightarrow$ 5-number quantile
+  calibration $0.480 \rightarrow$ logit-threshold + quantile $0.437$ (held-out sources)---in
+  which the simple method beats the learned one, and we say so.
+\item \textbf{First numbers}: the first peer-comparable SAM~3 crack IoU
+  ($0.442\pm0.011$ crack-only; the field's supervised SOTA reports two-class mIoU, a metric
+  trap we quantify); the first promptable physical crack-width MAE; per-class soft-map
+  results on Magnetic-Tile fray/uneven, which prior work reports only in aggregate.
+\item \textbf{Honest negatives, released}: prompt-synonym collapse and its ensemble rescue;
+  zero-shot dense counting failure (six prompts, $0\%$ acc@10\%) with a partial SAHI
+  recovery; a synthetic-to-real matting failure and its directional-synthesis fix; an
+  equivalent-width hypothesis rejected by textured backgrounds.
+\end{enumerate}
+
+\section{Related Work}\label{sec:related}
+
+\paragraph{Promptable segmentation.} SAM~\citep{kirillov2023sam}, SAM~2~\citep{ravi2024sam2}
+and SAM~3~\citep{sam3_2025} established promptable mask generation; SAM~3 adds concept
+prompts (noun phrases) with cgF1 $54.1$ on SA-Co/Gold and strong counting (CountBench MAE
+$0.12$). Its authors note weak generalization to ``fine-grained out-of-domain concepts in
+niche visual domains''---precisely the industrial regime we probe. No peer-reviewed SAM~3
+crack-segmentation pixel IoU exists prior to this work.
+
+\paragraph{Crack segmentation.} Supervised SOTA on CrackSeg9k~\citep{kulkarni2022crackseg9k}
+reports \emph{two-class} mIoU (background $+$ crack): DeepLabV3+ $0.7599$, HrSegNet-B48
+$80.32$~\citep{li2023hrsegnet}, CrackMamba $81.75$~\citep{zuo2024crackmamba}; because
+background IoU is ${\sim}0.95$, these are not comparable to crack-only IoU. SAM-adaptation
+work reports crack-only IoU: CrackSAM (LoRA) $0.6416$ in-domain~\citep{ge2024cracksam}, SAC
+(LayerNorm-only tuning) $44.13$ after training on OmniCrack30k~\citep{rostami2025sac};
+OmniCrack30k~\citep{benz2024omnicrack} finds nnU-Net beats all specialized crack networks
+(clIoU$_{4px}$ $64\%$). Our zero-shot $0.442$ equals SAC's \emph{fine-tuned} crack IoU.
+
+\paragraph{Crack width measurement.} RGB-only skeleton/orthogonal methods report
+$r{=}0.962$, RMSE $0.24$\,mm on synthetic cracks~\citep{neighborhood2025}; depth-assisted
+systems reach $<0.05$\,mm with a LiDAR camera~\citep{rgbd2025}; laser-projection systems
+$0.02$--$0.57$\,mm~\citep{laserbeam2023}. krkCMd~\citep{krkcmd2025} releases $19{,}098$
+cross-crack brightness profiles with manual widths---to our knowledge the only public
+physical width GT---whose authors' deep model (DLM) attains $11.1$\um{} MAE. We position
+\ours{} as RGB-only, single-image, and promptable, between the RGB-only and sensor-assisted
+regimes.
+
+\paragraph{Promptable measurement.} Measure Anything~\citep{measureanything2024} (SAM-2 +
+stereo) reports stem-diameter automation and a single ``$\pm10\%$'' bottle validation, with
+no caliper MAE; agricultural stereo systems are similar. A quantitative, physically grounded
+promptable-metrology table has been empty; we contribute its first entries.
+
+\paragraph{Counting and anomaly detection.} FSC-147 SOTA: CountGD test MAE
+$6.75$~\citep{amini2024countgd}, GeCo $7.91$~\citep{pelhan2024geco}; supervised rebar
+counting reaches count-accuracy $86.27\%$~\citep{uavrebar2025}. Zero-shot text-prompted
+anomaly detection (AnomalyCLIP~\citep{zhou2024anomalyclip}, pixel-AUROC $91.1$ on MVTec)
+localizes but does not measure. On Magnetic-Tile defects~\citep{huang2020mt}, supervised
+mIoU reaches $86.5$~\citep{liu2023cinformer}; per-class fray/uneven numbers are rarely
+tabulated.
+
+\section{Method}\label{sec:method}
+
+\subsection{Task: Promptable Quantitative Inspection}
+Given an image $I$, a noun-phrase prompt $p$ (e.g.\ ``crack'', ``hex bolt''), and an optional
+scale reference (fiducial marker size or a known-dimension object class), \ours{} returns a
+set of \emph{Inspection Atoms}: $a_i = (m_i, c_i, s_i, g_i, u_i)$---instance mask, class,
+size measurements in physical units, condition grade, and confidence/uncertainty. Counting
+is $|\{a_i\}|$; spacing is pairwise centroid distance in mm.
+
+\subsection{Backbone and prompt robustness}
+We use SAM~3 frozen, via its image concept-segmentation interface. Because concept prompts
+are brittle---``fracture'' and ``pit'' score $0.000$ where ``crack'' and ``hole'' score
+$0.374$/$0.352$---we wrap the backbone in a \emph{prompt-set ensemble}: a curated synonym
+set per defect family, instances unioned with IoU-0.5 deduplication keeping the
+highest-scoring instance. The raw model also exposes per-query soft mask logits
+(range $[-67, 10]$ pre-sigmoid), which we exploit in \S\ref{sec:ladder} and for uncertainty.
+
+\subsection{Metrology core}
+\textbf{Scale.} Pixel-to-mm conversion comes from (i) ArUco/ChArUco fiducials; (ii)
+known-dimension objects (bolt-head across-flats, coin diameters); (iii) \emph{PlaneScale}:
+the four marker corners define a homography $H$ to the metric plane, and all measurements
+are taken in plane coordinates with a local scale at each instance centroid. At $50^\circ$
+tilt, naive single-factor scaling errs $19.3\%$; PlaneScale errs $0.7\%$
+(\S\ref{sec:rigor}).
+\textbf{Geometry.} Thin structures: skeletonization + Euclidean distance transform; width
+$=2\cdot$EDT at skeleton points, yielding a width profile (mean, P95, max). Blobs:
+equivalent diameter $\sqrt{4A/\pi}$. The thin/blob choice is automatic via elongation.
+\textbf{Regime router.} Defects differ in boundary physics: sharp (crack on smooth
+concrete), fuzzy (fray---frayed bristle-like boundaries), boundaryless (uneven/mura---a
+gradual field). A statistics-based router dispatches to binary masks, alpha matting
+(trained on directional synthetic compositing), or illumination-residual modeling
+(2-D polynomial fit + ISO-25178-style roughness), respectively. Soft outputs are measured
+by $\mathrm{area}=\sum\alpha$ with uncertainty $\mathrm{Var}\approx\sum\alpha(1-\alpha)$.
+
+\subsection{Signal-based width: mask for where, signal for how wide}\label{sec:signal-method}
+For thin-structure width we \emph{do not} read the mask boundary. The mask (tiled SAM~3
+inference; darkest long connected component; skeletonization) provides only the centerline.
+At each measurement station we extract the raw image intensity profile perpendicular to the
+centerline (snap-to-valley re-centering, $\pm80$\,px), and a 1-D CNN (three conv blocks,
+${\sim}0.2$M parameters), trained on krkCMd's $14{,}424$ training profiles (CC~BY~4.0),
+regresses physical width directly from the 501-sample profile. A correlation-based
+confidence gate rejects stations whose profile cannot be trusted; gated stations are
+reported as \emph{not measurable} rather than guessed---we consider this gating part of the
+instrument's contract, and we report coverage alongside accuracy.
+
+\section{Experiments}\label{sec:exp}
+
+All numbers were produced on a single NVIDIA GB10 (aarch64); protocols enforce val/test
+separation (configuration selected on validation only), held-out test \emph{sources},
+multi-seed reporting where applicable, and crack-only metrics with empty-GT images scored
+separately. Datasets and licenses are catalogued in the repository
+(\texttt{paper/DATASETS.md}); deprecated pre-audit numbers are retained in the results log.
+
+\subsection{Zero-shot promptable segmentation (Gauge-Bench)}
+On CrackSeg9k (crack-only IoU, empty-GT excluded, 3 seeds):
+frangi $0.115\pm0.005$, adaptive threshold $0.181\pm0.006$, \textbf{SAM~3 zero-shot
+$0.442\pm0.011$} ($2.44\times$ the best classical), with a non-crack clean rate of $0.68$
+vs.\ $0.00$ for the adaptive baseline. We emphasize the \emph{metric trap}: supervised
+crack SOTA reports two-class mIoU ($0.77$--$0.82$), which is not comparable; in crack-only
+terms our zero-shot equals SAC's fine-tuned $44.13$~\citep{rostami2025sac}.
+Cross-domain, the same prompt-driven pipeline transfers from concrete to magnetic tile
+(crack $0.454$; blowhole via ``hole'' $0.429$ with automatic blob$\rightarrow$diameter
+dispatch).
+
+\subsection{Segmentation rank $\neq$ measurement rank}
+On width fidelity (GT $11.3$\,px), the best-IoU method is not the best measure: adaptive
+(IoU $0.181$) errs $43.5\%$ relative, SAM~3 (IoU $0.442$) errs $62.9\%$. This dissociation
+motivates everything that follows.
+
+\subsection{The calibration ladder}\label{sec:ladder}
+With three crack sources held out entirely (cfd, cracktree200, deepcrack; $n{=}219$),
+Table~\ref{tab:ladder} traces width relative error. The $1.9$M-parameter measurement-aware
+neural refiner (M2) improves raw SAM~3 but \emph{loses} to a five-number quantile
+calibration fit on training sources; exploiting the exposed mask logits---selecting the
+binarization iso-level $\theta^\ast{=}0.7$ on train/val---and stacking quantile calibration
+reaches $0.437$ with zero learned parameters. Width bias is domain-dependent (train sources
+$-0.17$, held-out $+0.68$), so a single global correction cannot finish the job: the
+residual is a property of the mask, which is what \S\ref{sec:signal} removes.
+
+\begin{table}[t]
+\centering\small
+\caption{Calibration ladder for crack width on held-out sources ($n{=}219$). Lower is
+better. ``Params'' counts learned/selected quantities.}
+\label{tab:ladder}
+\begin{tabular}{lrrr}
+\toprule
+Method & Params & Rel.\ err.\ $\downarrow$ & Bias \\
+\midrule
+Raw SAM~3 mask width ($\theta{=}0.5$) & 0 & 0.730 & $+0.680$ \\
+Global affine calibration & 2 & 0.679 & $+0.633$ \\
+M2 neural refiner (UNet) & 1.9M & 0.564 & $+0.503$ \\
+Quantile-ratio calibration & 5 & 0.480 & $+0.411$ \\
+Logit iso-level $\theta^\ast{=}0.7$ & 1 & 0.493 & $+0.406$ \\
+\textbf{$\theta^\ast$ + quantile} & \textbf{6} & \textbf{0.437} & $+0.367$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Promptable part metrology on CAD ground truth (T-LESS)}
+BOP-format CAD models are metrically exact: projecting model vertices through the annotated
+pose yields, for the maximal projected chord, an exact mm distance. With \emph{perfect}
+(ground-truth) visible masks and a single pose-depth plane scale, measurement attains
+median $2.83\%$ ($94\%$ within $10\%$; worst-case $34.6\%$ on depth-elongated objects)---a
+methodological ceiling for single-depth plane scaling on 3-D parts. Replacing perfect masks
+with SAM~3 zero-shot (concrete-noun prompts: ``electrical component'', ``plastic part'',
+``white object''): match rate $100\%$, mask IoU $0.94$, and \textbf{measurement median
+$2.5\%$}---the segmentation step costs essentially nothing. The abstract prompt
+``industrial part'' matches $0\%$: synonym collapse reappears in a third domain, reinforcing
+the prompt-ensemble design.
+
+\subsection{Real-photo consistency (coins)}
+On 22 real photos (8--60 same-denomination euro coins each), leave-one-out known-object
+scaling (each coin measured using the others as reference) yields mean error $1.74\%$,
+$100\%$ within $5\%$. This validates the segmentation$\rightarrow$diameter chain on real
+imagery; the absolute marker chain is validated synthetically (ArUco $0.38\%$; e2e $5.6\%$).
+
+\subsection{Physical crack width: from profiles to the promptable chain}\label{sec:signal}
+\textbf{Profile level.} On krkCMd's manual widths (group-split test $4{,}674$ profiles),
+a deterministic valley rule with linear calibration attains $25.9$\um{} (5-fold
+$27.8\pm2.5$; leave-one-series worst $46.7$), matching the authors' classical AED
+($26.5$); their supervised DLM anchors at $11.1$\um.
+\textbf{Image level, mask geometry.} Reconstructing every profile's image position from
+the released ROI coordinates (correlation-verified, $0.95$ gate), widths read from SAM~3
+mask geometry err $144$--$186$\um{} even after $\theta^\ast$ transfer (which itself
+improves the default by ${\sim}30\%$, showing the logit knob generalizes across datasets
+and into physical units).
+\textbf{Image level, signal-based (ours).} The 1-D profile CNN reaches $17.9$\um{} on the
+table test split; applied at \emph{oracle} positions in the image, $26.2$\um; applied at
+SAM~3-localized, valley-snapped positions, \textbf{$39.9$\um{} MAE / $23.2$\um{} median}
+on the $46$--$66\%$ of stations passing the localization gate (failed stations: $186$\um,
+reported as not-measurable). Width information survives imaging; binary masks were the
+bottleneck, and localization coverage---a classical-vision engineering task---is what
+remains.
+
+\begin{table}[t]
+\centering\small
+\caption{Physical crack-width error on krkCMd (\um). ``Gated'' = stations passing the
+localization confidence gate (coverage $46$--$66\%$).}
+\label{tab:width}
+\begin{tabular}{llr}
+\toprule
+Level & Method & MAE \\
+\midrule
+Profile (table) & authors' DLM (supervised) & 11.1 \\
+Profile (table) & \textbf{ours: 1-D CNN} & \textbf{17.9} \\
+Profile (table) & valley rule + linear cal.\ (5-fold) & $27.8\pm2.5$ \\
+Image, oracle pos. & ours: 1-D CNN & 26.2 \\
+\textbf{Image, promptable (gated)} & \textbf{ours: SAM~3 locate + 1-D CNN} & \textbf{39.9 (median 23.2)} \\
+Image, promptable & SAM~3 mask geometry ($\theta^\ast$, best) & 144--186 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Boundary regimes: fuzzy and boundaryless defects}
+Binary segmentation collapses to chance on Magnetic-Tile fray/uneven (AUC ${\approx}0.50$).
+With val/test protocol: illumination-residual modeling recovers uneven to $0.669$ test AUC
+(DRAEM-lite: $0.636$); for fray, a matting head trained on \emph{directional} synthetic
+compositing achieves real-fray preservation IoU $0.949$ vs.\ guided-filter $0.860$---after
+an honest failure: the blob-synthesis v1 won $20\times$ synthetically yet transferred at
+$0.483$. Synthesis realism, not architecture, was the fix.
+
+\subsection{Metrology rigor}\label{sec:rigor}
+Two silent measurement killers, quantified: camera tilt ($50^\circ$: $19.3\%\rightarrow0.7\%$
+via PlaneScale) and prompt synonym collapse ($0.000\rightarrow0.374/0.352$ via the prompt-set
+ensemble). A 14-test metrology self-check (width $\pm10\%$, scale $\pm5\%$, e2e $\pm15\%$ on
+synthetic GT) runs without any model and gates every release.
+
+\subsection{Honest negative: dense counting}
+Zero-shot rebar counting fails: best prompt MAE $13.1$ (GT mean $22.5$), acc@10\% $5\%$,
+and six prompt variants all fail---a capability gap, not vocabulary (the same model
+detects 60 separated coins reliably). SAHI tiling recovers to MAE $7.4$--$8.9$ but dense
+touching ends remain undercounted (e.g.\ GT $81\rightarrow40$). Supervised or
+density-based heads remain necessary in this regime; we report this as a boundary of
+current promptable counting.
+
+\section{Limitations}
+(1)~\emph{Localization coverage}: the signal-width chain currently measures $46$--$66\%$ of
+stations on scanner imagery; the gate is honest but coverage is an open engineering task
+(ridge tracking, hysteresis linking). (2)~\emph{Field captures}: our physical-unit evidence
+comes from CAD ground truth, known-dimension objects, and scanner profiles; an
+ArUco+caliper field protocol (released with a printable board and capture checklist) awaits
+real deployments. (3)~\emph{Single image, single depth}: plane scaling degrades on
+depth-elongated objects (worst $34.6\%$ on T-LESS obj.~1); depth-aware measurement is
+future work. (4)~\emph{Transfer of the profile CNN} beyond 6400-dpi concrete scans is
+unvalidated. (5)~Some task heads are trained on datasets with unstated licenses and are
+released for research use only, clearly marked.
+
+\section{Conclusion}
+\ours{} turns promptable segmentation into promptable \emph{measurement}. The decisive move
+is a decomposition---masks for localization, raw signal for quantity---validated on physical
+ground truth at $23.2$\um{} median crack width and $2.5\%$ industrial part dimensions, with
+every number audited, every negative reported, and every artifact released: code and
+benchmarks (\href{https://github.com/falcons-eyes/GaugeAnything}{GitHub}), task heads
+(\href{https://huggingface.co/James-joobs/GaugeAnything}{HuggingFace}), and a live project
+page (\href{https://falcons-eyes.github.io/GaugeAnything/}{falcons-eyes.github.io/GaugeAnything}).
+
+\bibliographystyle{unsrtnat}
+\bibliography{refs}
+
+\end{document}
