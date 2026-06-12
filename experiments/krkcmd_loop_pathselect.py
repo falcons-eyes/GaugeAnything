@@ -130,10 +130,10 @@ def main():
             if sc >= 0.95:
                 oracle[c] = (y0 + 250, r["man"])
 
-        for c, (yo, man) in oracle.items():
-            n_tot += 1
-            # 열 c에서 모든 경로의 후보 행 → 크랙다움 점수로 선택
-            best_y, best_s = None, -1.0
+        # ---- 후보 수집 (열별) ----
+        col_list = sorted(oracle)
+        node_y, node_s = [], []          # 열별 후보 행/점수
+        for c in col_list:
             cand_rows = []
             for path in paths:
                 cols = np.array(sorted(path))
@@ -142,22 +142,58 @@ def main():
                 j = int(np.argmin(np.abs(cols - c)))
                 if abs(int(cols[j]) - c) <= args.col_tol:
                     cand_rows.append(path[int(cols[j])])
-            cand_rows += valley_candidates(gray[:, c])      # SAM3-독립 후보
+            cand_rows += valley_candidates(gray[:, c])
+            ys_c, ss_c = [], []
+            seen = set()
             for yh in cand_rows:
                 lo = max(0, yh - SNAP); hi = min(H, yh + SNAP + 1)
                 yc = lo + int(np.argmin(gray[lo:hi, c]))
+                if yc in seen:
+                    continue
+                seen.add(yc)
                 a = max(0, yc - N_P // 2)
                 p = gray[a: a + N_P, c]
                 if len(p) != N_P:
                     continue
-                s = crackness(p)
-                if s > best_s:
-                    best_s, best_y = s, yc
-            if best_y is None:
+                ys_c.append(yc); ss_c.append(crackness(p))
+            node_y.append(ys_c); node_s.append(ss_c)
+
+        # ---- Viterbi: 노드=log crackness, 전이=-λ|Δy|/Δc ----
+        LAM = 8.0
+        dp, bk = [], []
+        for i, (ys_c, ss_c) in enumerate(zip(node_y, node_s)):
+            sc = [np.log(max(v, 1e-6)) for v in ss_c]
+            if i == 0 or not dp or not dp[-1]:
+                dp.append(sc); bk.append([-1] * len(sc)); continue
+            dc = max(col_list[i] - col_list[i - 1], 1) / 100.0
+            row_dp, row_bk = [], []
+            for yj, sj in zip(ys_c, sc):
+                best_v, best_k = -1e18, -1
+                for k, (yk, vk) in enumerate(zip(node_y[i - 1], dp[i - 1])):
+                    v = vk - LAM * abs(yj - yk) / (dc * 1000.0)
+                    if v > best_v:
+                        best_v, best_k = v, k
+                row_dp.append(best_v + sj); row_bk.append(best_k)
+            dp.append(row_dp); bk.append(row_bk)
+        # 역추적
+        chosen = [None] * len(col_list)
+        last = max(range(len(dp) - 1, -1, -1), key=lambda i: 0 if not dp[i] else 1)
+        if dp and dp[-1]:
+            k = int(np.argmax(dp[-1]))
+            for i in range(len(col_list) - 1, -1, -1):
+                if not dp[i]:
+                    continue
+                chosen[i] = node_y[i][k] if k < len(node_y[i]) else None
+                k = bk[i][k] if k < len(bk[i]) and bk[i][k] >= 0 else (int(np.argmax(dp[i-1])) if i > 0 and dp[i-1] else 0)
+
+        for (c, ych) in zip(col_list, chosen):
+            yo, man = oracle[c]
+            n_tot += 1
+            if ych is None:
                 continue
-            if abs(best_y - yo) <= 80:
+            if abs(ych - yo) <= 80:
                 near += 1
-                a = max(0, best_y - N_P // 2)
+                a = max(0, ych - N_P // 2)
                 p = gray[a: a + N_P, c]
                 errs.append(abs(float(predict_cnn([p])[0]) - man))
         print(f"[stage {stage}] paths={len(paths)} oracle n={len(oracle)}")
@@ -165,7 +201,7 @@ def main():
     cov = near / max(n_tot, 1)
     mae = float(np.mean(errs)) if errs else float("nan")
     med = float(np.median(errs)) if errs else float("nan")
-    print(f"\nE-loop-1: 커버리지 {cov*100:.0f}% (E-loop-0: 52%) · gated MAE {mae:.1f}μm "
+    print(f"\nE-loop-1c(Viterbi): 커버리지 {cov*100:.0f}% (E-loop-0: 52%) · gated MAE {mae:.1f}μm "
           f"중앙 {med:.1f}μm (n={len(errs)})")
     out = Path("experiments/results"); out.mkdir(parents=True, exist_ok=True)
     (out / "krkcmd_loop_pathselect.json").write_text(json.dumps(
