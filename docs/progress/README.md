@@ -13,6 +13,7 @@
 | 2026-06-12 | promptable mm 체인 3대 진전 | [2026-06-12_promptable-mm-chain.md](2026-06-12_promptable-mm-chain.md) | E-mm-2b 부품 2.5%≈상한 · M2v2-a 0.437 합격선 돌파 · E-mm-3b 체인 개통+θ* 전이 −30% |
 | 2026-06-12 | 폭 병목 해체 — mask=WHERE signal=WIDTH | [2026-06-12_width-bottleneck-resolved.md](2026-06-12_width-bottleneck-resolved.md) | 물리적 불가 아님 확정 · 1D CNN 신호폭 23~40μm(조건부, mask 대비 4~6×) · 잔여=위치 커버리지 |
 | 2026-06-12 | SpatialClaw 검토 → E-loop 사다리 → 멀티-인스턴스 | [2026-06-12_agentic-loop-ladder.md](2026-06-12_agentic-loop-ladder.md) | recall 93%/30.5μm — 커버리지 천장은 문제정의 오류 · VLM 에이전트 현 단계 불필요 판정 |
+| 2026-06-12 | 실행 진위 검증 감사 + E-dyn 설계 | [../VERIFICATION_AUDIT.md](../VERIFICATION_AUDIT.md) · [../DYNAMIC_METROLOGY_DESIGN.md](../DYNAMIC_METROLOGY_DESIGN.md) | 결정적 재현 3건 전부 일치 · ad-hoc 1건 정식화 · 동적 환경 5개 데이터 실증 검증 |
 | 2026-06-11 | E-mm-3 krkCMd profile-level μm 검증 | [2026-06-11_krkcmd-profile-emm3.md](2026-06-11_krkcmd-profile-emm3.md) | 물리 폭 GT 19,098 profiles · DLM 11.1μm · GaugeProfile+cal 25.9μm ≈ AED 26.5μm |
 | 2026-06-11 | Codex handoff 기록 | [2026-06-11_codex-handoff.md](2026-06-11_codex-handoff.md) | Claude 재개용 상세 인계 · 로컬/Spark 경로 · 새 산출물/검증/다음 작업 |
 | 2026-06-11 | 객관적 연구 감사 + 다음 실험 계획 | [2026-06-11_objective-audit-next-experiments.md](2026-06-11_objective-audit-next-experiments.md) | krkCMd 5-fold 27.8±2.5μm · series holdout worst 46.7μm · 모델/데이터/학습 로드맵 |
