@@ -1,9 +1,12 @@
 % GaugeAnything — arXiv preprint (Overleaf-compatible, plain article + standard packages)
 \documentclass[11pt]{article}
 
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{lmodern}
+\fi
 \usepackage[margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -17,9 +20,8 @@
 \captionsetup{font=small,labelfont=bf}
 
 \newcommand{\ours}{GaugeAnything}
-\newcommand{\um}{\,\textmu m}
 \usepackage{textcomp}
-\DeclareUnicodeCharacter{00B5}{\textmu}
+\newcommand{\um}{\,\textmu m}
 
 \title{\textbf{\ours: Promptable Quantitative Inspection\\for Industrial Micro-Vision}\\
 \large Masks In, Millimeters Out}
