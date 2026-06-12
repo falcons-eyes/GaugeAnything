@@ -58,3 +58,11 @@
 ## 다음
 사용자 지시에 따라 #2 프로젝트 페이지 갱신 → #3 HF 공개·논문 진행.
 위치 커버리지 엔지니어링(능선 추적)은 별도 트랙으로.
+
+## 후속 (같은 날) — 로드맵 #2·#3·논문 완료
+- 페이지 갱신 (E-mm-2b/3c 반영) → Pages 배포
+- **HF 가중치 공개** (사용자 승인): https://huggingface.co/James-joobs/GaugeAnything — 5 heads
+  (profile_width_cnn=CC BY 클린, 나머지 research 표기) + 감사 수치 모델카드
+- **arXiv 논문 초안 v1**: `paper/main.tex` + `refs.bib` (Overleaf 호환, tectonic 컴파일 검증
+  — 11쪽, 인용 21건, figure 3종). 서사: "mask=WHERE, signal=WIDTH" 중심, 감사 수치 전체 +
+  정직한 부정 결과 섹션 포함.

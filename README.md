@@ -140,7 +140,7 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 - [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
 - [ ] Counting & spacing validation (fastener datasets)
 - [x] HuggingFace weights release — **https://huggingface.co/James-joobs/GaugeAnything** (5 task heads + audited model card)
-- [ ] Paper draft (arXiv)
+- [x] Paper draft v1 (arXiv-ready LaTeX in `paper/` — compile-verified)
 
 ## License & third-party
 

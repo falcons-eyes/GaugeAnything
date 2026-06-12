@@ -1,3 +1,5 @@
+> ⚠️ LEGACY: 이 아웃라인은 피벗 이전 센서 트랙용. **현행 논문은 `main.tex`/`refs.bib`** (vision GaugeAnything).
+
 # Paper Outline — *Industrial Anything: A Promptable Multimodal Foundation Model for Machine Health*
 
 > Step 4 산출물. LocateAnything 스타일 공개(논문 + 프로젝트 페이지 + HF + GitHub)를 위한 논문 골격 + Abstract 초안.
