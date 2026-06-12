@@ -90,8 +90,14 @@ def main():
             dimg = cv2.imread(str(SEQ / depth[k][1]), cv2.IMREAD_UNCHANGED)
             if dimg is not None and abs(d_ts[k] - t) < 0.05:
                 pts = corners.reshape(-1, 2)
-                z = dimg[np.clip(pts[:, 1].astype(int), 0, dimg.shape[0] - 1),
-                         np.clip(pts[:, 0].astype(int), 0, dimg.shape[1] - 1)].astype(float) / DEPTH_FACTOR
+                # 체커보드 검은 칸 = Kinect IR 흡수 → depth 홀. 3x3 중앙값 + 유효범위 필터.
+                z = np.zeros(len(pts))
+                Hd, Wd = dimg.shape[:2]
+                for i, (px, py) in enumerate(pts):
+                    x0, y0 = int(px), int(py)
+                    patch = dimg[max(0, y0-1):y0+2, max(0, x0-1):x0+2].astype(float) / DEPTH_FACTOR
+                    good = patch[(patch > 0.3) & (patch < 8.0)]
+                    z[i] = np.median(good) if len(good) >= 3 else np.nan
                 X = np.stack([(pts[:, 0] - CX) / FX * z, (pts[:, 1] - CY) / FY * z, z], 1)
                 nx, ny = size
                 G = X.reshape(ny, nx, 3) if len(X) == nx * ny else None
@@ -99,8 +105,8 @@ def main():
                     dists = []
                     for a, b in ((G[:, 1:], G[:, :-1]), (G[1:, :], G[:-1, :])):
                         d3 = np.linalg.norm(a - b, axis=-1).ravel()
-                        dists.extend(d3[(d3 > 0.005) & np.isfinite(d3)])
-                    valid = [d for d in dists if 0.01 < d < 0.5]
+                        dists.extend(d3[np.isfinite(d3) & (d3 > 0.005)])
+                    valid = [d for d in dists if 0.02 < d < 0.3]
                     if len(valid) >= 10:
                         row["square_m"] = float(np.median(valid))
         rows.append(row)
