@@ -1,0 +1,24 @@
+{
+  "recall": 0.926,
+  "MAE_um": 29.8,
+  "median_um": 15.7,
+  "n": 200,
+  "table_cnn_MAE": 18.5,
+  "per_stage": [
+    {
+      "stage": 1,
+      "recall": 0.848,
+      "n_paths": 3
+    },
+    {
+      "stage": 2,
+      "recall": 0.97,
+      "n_paths": 5
+    },
+    {
+      "stage": 3,
+      "recall": 0.971,
+      "n_paths": 7
+    }
+  ]
+}
