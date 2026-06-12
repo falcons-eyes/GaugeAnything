@@ -3,6 +3,7 @@
 inspect(image, prompt, ...) -> InspectionResult {atoms, count, scale, spacing}
 """
 from .geometry import GeometryMetrics, measure, pairwise_spacing
+from .instances import ThinInstance, measure_thin_instances, width_minrun
 from .pipeline import InspectionAtom, InspectionResult, inspect
 from .router import SoftAtom, classify_regime, inspect_soft
 from .scale import BOLT_HEAD_AF_MM, ScaleResult, from_aruco, from_bolt_head, resolve
@@ -10,6 +11,7 @@ from .segmenters import SEGMENTERS, Instance, get_segmenter
 from .soft import guided_matte, illumination_residual, mura_severity, severity_score
 
 __all__ = [
+    "ThinInstance", "measure_thin_instances", "width_minrun",
     "inspect", "InspectionResult", "InspectionAtom",
     "inspect_soft", "SoftAtom", "classify_regime",
     "guided_matte", "illumination_residual", "mura_severity", "severity_score",
