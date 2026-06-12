@@ -178,7 +178,7 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 ```bibtex
 @misc{gaugeanything2026,
   title  = {GaugeAnything: Promptable Quantitative Inspection for Industrial Micro-Vision},
-  author = {FalconEyes / Industrial Anything},
+  author = {Joo, Hyunwoo},
   year   = {2026},
   url    = {https://github.com/falcons-eyes/GaugeAnything}
 }
