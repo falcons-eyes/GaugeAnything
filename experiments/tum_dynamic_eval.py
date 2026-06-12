@@ -88,7 +88,7 @@ def main():
                 (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.01))
             k = int(np.argmin(np.abs(d_ts - t)))
             dimg = cv2.imread(str(SEQ / depth[k][1]), cv2.IMREAD_UNCHANGED)
-            if dimg is not None and abs(d_ts[k] - t) < 0.05:
+            if dimg is not None and abs(d_ts[k] - t) < 0.02:
                 pts = corners.reshape(-1, 2)
                 # 체커보드 검은 칸 = Kinect IR 흡수 → depth 홀. 3x3 중앙값 + 유효범위 필터.
                 z = np.zeros(len(pts))
@@ -102,16 +102,23 @@ def main():
                 nx, ny = size
                 G = X.reshape(ny, nx, 3) if len(X) == nx * ny else None
                 if G is not None:
-                    dists = []
-                    for a, b in ((G[:, 1:], G[:, :-1]), (G[1:, :], G[:-1, :])):
-                        d3 = np.linalg.norm(a - b, axis=-1).ravel()
-                        dists.extend(d3[np.isfinite(d3) & (d3 > 0.005)])
-                    valid = [d for d in dists if 0.02 < d < 0.3]
-                    if len(valid) >= 10:
-                        row["square_m"] = float(np.median(valid))
+                    dx = np.linalg.norm(G[:, 1:] - G[:, :-1], axis=-1).ravel()
+                    dy = np.linalg.norm(G[1:, :] - G[:-1, :], axis=-1).ravel()
+                    dx = dx[np.isfinite(dx) & (dx > 0.02) & (dx < 0.3)]
+                    dy = dy[np.isfinite(dy) & (dy > 0.02) & (dy < 0.3)]
+                    if len(dx) >= 8 and len(dy) >= 8:
+                        dxm, dym = float(np.median(dx)), float(np.median(dy))
+                        mad = float(np.median(np.abs(np.concatenate([dx, dy])
+                                                     - 0.5 * (dxm + dym))))
+                        # 프레임 게이트: 등방성(<5%) + 산포(MAD<10%) — 동기/블러 오염 차단
+                        if abs(dxm - dym) / max(dxm, dym) < 0.05 and mad < 0.1 * dxm:
+                            row["square_m"] = 0.5 * (dxm + dym)
+                        else:
+                            row["gate_fail"] = True
         rows.append(row)
 
     det = [r for r in rows if r["detected"]]
+    gfail = len([r for r in rows if r.get("gate_fail")])
     meas = [r for r in rows if "square_m" in r]
     if not meas:
         print("측정 가능 프레임 없음 — 보드 크기 후보 확인 필요")
@@ -136,6 +143,7 @@ def main():
 
     spd_stats = bin_stats("speed", [0, 0.1, 0.25, 0.5, 1.0, 3.0])
     res = {"board_size": size, "n_frames": len(rows), "det_rate": round(len(det) / len(rows), 3),
+           "gate_fail": gfail,
            "n_measured": len(meas), "square_consensus_m": round(gt, 5),
            "rel_err_median_all": round(float(np.median([r["rel_err"] for r in meas])), 4),
            "rel_err_p90": round(float(np.percentile([r["rel_err"] for r in meas], 90)), 4),
