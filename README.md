@@ -5,6 +5,7 @@
   <a href="https://falcons-eyes.github.io/GaugeAnything/static/pdfs/gaugeanything.pdf"><img src="https://img.shields.io/badge/Paper-PDF-b31b1b?logo=adobeacrobatreader&logoColor=white" alt="Paper PDF"></a>
   <a href="https://huggingface.co/James-joobs/GaugeAnything"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Weights-HuggingFace-ffcc4d" alt="HF Weights"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache--2.0-16805d" alt="License"></a>
+  <a href="https://github.com/falcons-eyes/GaugeAnything/actions/workflows/gaugebench.yml"><img src="https://github.com/falcons-eyes/GaugeAnything/actions/workflows/gaugebench.yml/badge.svg" alt="GaugeBench gate"></a>
 </p>
 
 **Promptable quantitative inspection for industrial micro-vision — masks in, millimeters out.**

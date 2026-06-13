@@ -1,0 +1,42 @@
+name: GaugeBench release gate
+
+# 결과 JSON이 바뀌어도 공식 수치가 핀(benchmark/expected_v1.json)에서 드리프트하지
+# 않는지 자동 검증한다. 핀을 의도적으로 바꾸려면 expected_v1.json을 함께 수정해야 한다.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'experiments/results/**'
+      - 'benchmark/**'
+  pull_request:
+    paths:
+      - 'experiments/results/**'
+      - 'benchmark/**'
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install minimal deps
+        run: pip install numpy
+      - name: Verify pinned benchmark metrics
+        run: python benchmark/collect_results.py --check
+      - name: Validate result JSON files
+        run: |
+          python - <<'PY'
+          import json, glob, sys
+          bad = []
+          for f in glob.glob("experiments/results/*.json"):
+              try:
+                  json.load(open(f))
+              except Exception as e:
+                  bad.append(f"{f}: {e}")
+          if bad:
+              print("\n".join(bad)); sys.exit(1)
+          print(f"all {len(glob.glob('experiments/results/*.json'))} result JSONs valid")
+          PY
