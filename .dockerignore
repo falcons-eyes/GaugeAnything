@@ -1,0 +1,18 @@
+.venv
+.git
+datasets
+checkpoints
+paper/*.pdf
+paper/figures
+docs/assets
+docs/static
+*.png
+*.jpg
+__pycache__
+**/__pycache__
+*.pyc
+.claude
+ADT jsons
+GaugeAnything
+experiments/results
+.github

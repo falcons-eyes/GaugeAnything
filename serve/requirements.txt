@@ -1,0 +1,16 @@
+# GaugeAnything demo server deps (torch는 cu130 인덱스로 별도 설치)
+# uv pip install --python .venv/bin/python -r serve/requirements.txt
+numpy
+scipy
+scikit-image
+scikit-learn
+opencv-contrib-python>=4.8
+pillow
+transformers>=5.10
+einops
+safetensors
+timm
+huggingface_hub
+fastapi
+uvicorn[standard]
+python-multipart

@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# GaugeAnything demo inference server 실행 (OMEN / RTX 5090).
+# 사용: bin/serve [port]   (기본 8000)
+set -euo pipefail
+cd "$(dirname "$0")/.."
+PORT="${1:-8000}"
+VENV=".venv/bin/python"
+[ -x "$VENV" ] || { echo "venv 없음: uv venv --python 3.12 .venv 후 serve/requirements.txt 설치"; exit 1; }
+exec "$VENV" -m uvicorn serve.app:app --host 0.0.0.0 --port "$PORT"
