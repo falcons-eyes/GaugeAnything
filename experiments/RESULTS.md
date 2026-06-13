@@ -194,8 +194,13 @@ zero-shot SAHI(MAE 8.9)를 이기는지 검증. `image → tiny FCN(0.11M) → d
 
 **판정**: owned density head가 SAHI를 이김(7.0<8.9, acc 0.19 vs 0.075) — counting
 negative→**partial** 전진. 단 목표 <5 미달이고 **dense-bin undercount(−29)는 그대로**가
-진짜 문제. 다음(v1.1): 고해상도+sharp sigma+count-weighted loss로 dense-regime 공략.
-결과: `experiments/results/rebar_density_head.json`,
+진짜 문제.
+
+**v1.1 (고해상도 1536×960 + sharp sigma 1.5 + count-weighted loss)**: dense-bin MAE
+30.9→24.7, bias −29.3→−19.1 (undercount **35% 감소**), 전체 bias −2.1→+0.5. 단 overall
+MAE 7.0→7.8 소폭 악화 — count-weight가 dense에 capacity를 몰며 bulk 희생. 단일 tiny head로는
+bulk/dense 동시 해결 불가. 다음(Count v2): multi-scale/SAHI-density 하이브리드.
+결과: `rebar_density_head.json`(v1), `rebar_density_head_v11.json`(v1.1),
 상세: `docs/progress/2026-06-13_count-v1-density-head.md`.
 
 ## 학습형 Soft 방법 (#1 DRAEM, #2 Matting) — regime별 학습 헤드 ⭐⭐

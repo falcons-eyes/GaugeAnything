@@ -285,7 +285,7 @@ def main() -> int:
     args.out.write_text(json.dumps(result, indent=2, ensure_ascii=False), encoding="utf-8")
     print("test:", json.dumps(test_eval, ensure_ascii=False), flush=True)
     print(f"wrote {args.out}", flush=True)
-    print(f"saved {CKPT}", flush=True)
+    print(f"saved {args.save}", flush=True)
     return 0
 
 

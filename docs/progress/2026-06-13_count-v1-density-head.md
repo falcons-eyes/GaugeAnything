@@ -43,14 +43,24 @@ result: `experiments/results/rebar_density_head.json` (stratified, primary)
    회귀하고, /8 density map(128×80)이 GT~75 밀집 막대를 분해 못 함. LR/split 문제가
    아니라 표현 capacity + count imbalance 문제.
 
-## 5. 다음 (Count v1.1)
+## 5. Count v1.1 — dense-regime 공략 (실행 완료)
 
-dense-regime 직접 공략:
-- 고해상도 입력(density map이 밀집 막대를 분해하도록)
-- sharp Gaussian sigma (밀집 영역 peak 분리)
-- count-weighted loss (dense 이미지가 bulk에 묻히지 않도록 sqrt(gt) 가중)
+v1의 dense undercount를 직접 공략: 고해상도(1536×960) + sharp sigma(1.5) +
+count-weighted loss(sqrt(gt) 가중). result: `rebar_density_head_v11.json`.
 
-성공 기준: dense-bin MAE 30→15 이하, overall MAE <5 접근.
+| 버전 | overall MAE | bias | acc@10% | dense-bin MAE | dense-bin bias |
+|---|---:|---:|---:|---:|---:|
+| v1 (stratified) | 7.0 | −2.1 | 0.19 | 30.9 | −29.3 |
+| **v1.1 (hi-res+weighted)** | 7.8 | +0.5 | 0.14 | **24.7** | **−19.1** |
+
+**판정**: dense-regime는 **공략 가능**하다 — dense-bin undercount를 −29.3→−19.1로 **35%
+감소**, 전체 bias도 −2.1→+0.5로 거의 제거. 단 overall MAE는 7.0→7.8로 소폭 악화:
+count-weight가 dense에 capacity를 몰면서 bulk(쉬운 케이스)를 희생했다. 단일 tiny head +
+global loss로는 bulk/dense를 동시에 못 잡는 트레이드오프가 드러남.
+
+**다음 방향(Count v2)**: 단일 head의 한계가 명확하므로 — (a) multi-scale/SAHI-density
+하이브리드(밀집 영역만 고해상 타일), (b) 더 큰 backbone, (c) 밀도-적응 커널. 목표
+dense-bin MAE <15, overall <5는 여전히 미달 — counting은 partial로 유지.
 
 ## 6. 재현
 
