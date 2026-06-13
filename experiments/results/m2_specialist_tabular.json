@@ -1,0 +1,128 @@
+{
+  "protocol": {
+    "task": "predict crack mask-derived width from SAM3 mask + grayscale image statistics",
+    "data": "datasets/m2_cache train/val/test; test sources are held out from m2_refiner.py",
+    "selection": "model family selected on train-source validation only; test labels not used",
+    "feature_count": 19,
+    "feature_names": [
+      "area",
+      "area_sqrt",
+      "bbox_fill",
+      "bbox_h",
+      "bbox_w",
+      "bg_mean",
+      "components",
+      "contrast",
+      "fg_mean",
+      "fg_std",
+      "grad_global_mean",
+      "grad_mask_mean",
+      "largest_frac",
+      "raw_width",
+      "raw_width_log",
+      "skel_len",
+      "skel_width",
+      "width_over_bbox_h",
+      "width_over_skel_width"
+    ],
+    "old_success_bar": {
+      "raw_relerr": 0.7302,
+      "m2_neural_v1_relerr": 0.564,
+      "quantile_5bin_relerr": 0.4804
+    }
+  },
+  "n": {
+    "train": 1192,
+    "val": 149,
+    "test": 219
+  },
+  "validation": {
+    "ridge_logwidth": {
+      "relerr": 0.4301,
+      "bias": 0.192,
+      "mae_px": 3.003
+    },
+    "hgb_logwidth": {
+      "relerr": 0.4051,
+      "bias": 0.2033,
+      "mae_px": 2.802
+    },
+    "extra_trees_logwidth": {
+      "relerr": 0.3879,
+      "bias": 0.1828,
+      "mae_px": 2.66
+    },
+    "quantile_ratio_5bin": {
+      "relerr": 0.4429,
+      "bias": -0.1373,
+      "mae_px": 3.826
+    }
+  },
+  "selected_by_val": "extra_trees_logwidth",
+  "selected_checkpoint_model": "extra_trees_logwidth_refit_trainval",
+  "test": {
+    "raw_sam3_mask_width": {
+      "relerr": 0.7302,
+      "bias": 0.68,
+      "mae_px": 2.112
+    },
+    "quantile_ratio_5bin": {
+      "relerr": 0.4804,
+      "bias": 0.4106,
+      "mae_px": 1.477
+    },
+    "m2_neural_refiner_v1": {
+      "relerr": 0.564,
+      "bias": 0.5033,
+      "note": "from experiments/results/m2_refiner.json; not recomputed here"
+    },
+    "ridge_logwidth": {
+      "relerr": 0.6,
+      "bias": 0.5825,
+      "mae_px": 2.003
+    },
+    "ridge_logwidth_refit_trainval": {
+      "relerr": 0.5906,
+      "bias": 0.5713,
+      "mae_px": 1.909
+    },
+    "hgb_logwidth": {
+      "relerr": 0.515,
+      "bias": 0.4902,
+      "mae_px": 1.694
+    },
+    "hgb_logwidth_refit_trainval": {
+      "relerr": 0.4732,
+      "bias": 0.4395,
+      "mae_px": 1.504
+    },
+    "extra_trees_logwidth": {
+      "relerr": 0.4899,
+      "bias": 0.4717,
+      "mae_px": 1.511
+    },
+    "extra_trees_logwidth_refit_trainval": {
+      "relerr": 0.4724,
+      "bias": 0.4557,
+      "mae_px": 1.433
+    }
+  },
+  "selected_test_per_source": {
+    "cfd": {
+      "relerr": 0.5497,
+      "bias": 0.5432,
+      "mae_px": 1.379
+    },
+    "cracktree200": {
+      "relerr": 0.7201,
+      "bias": 0.7201,
+      "mae_px": 1.44
+    },
+    "deepcrack": {
+      "relerr": 0.348,
+      "bias": 0.318,
+      "mae_px": 1.485
+    }
+  },
+  "interpretation": "This is a tiny owned measurement head. It is publishable only if it beats the 5-bin calibration on held-out sources and reduces per-source worst-case bias."
+}

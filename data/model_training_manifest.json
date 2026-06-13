@@ -1,0 +1,184 @@
+{
+  "version": "2026-06-12-owned-model-v0",
+  "objective": "Train GaugeAnything-owned measurement specialists from accumulated physical-quantity datasets, while keeping foundation backbones optional and frozen.",
+  "principles": [
+    "Do not claim a new foundation model; claim a measurement specialist unless scale and data justify more.",
+    "Every learned head must beat the strongest simple baseline on held-out sources.",
+    "Report coverage/gating and uncertainty, not only successful measurements.",
+    "Separate WHERE quality (mask/localization) from HOW-MUCH quality (physical quantity regression).",
+    "Prefer license-clean physical GT for headline training; keep unclear datasets in research-only buckets."
+  ],
+  "external_backbone_options": [
+    {
+      "name": "SAM family",
+      "role": "promptable masks / candidate regions",
+      "use": "frozen teacher or pseudo-label generator; optional LoRA only after owned heads beat calibration baselines",
+      "risk": "gated or separate licenses; masks are not measurement-ready for thin/fuzzy/field regimes"
+    },
+    {
+      "name": "DINOv2 / self-supervised ViT features",
+      "role": "license/weight-permitting visual encoder for small measurement heads",
+      "use": "frozen feature extractor for Base/Mid models",
+      "risk": "features are generic; must prove measurement transfer"
+    },
+    {
+      "name": "Depth Anything / metric depth families",
+      "role": "depth prior for dynamic/object dimensions",
+      "use": "depth token or teacher signal for ADT/TUM/ARKit scenes",
+      "risk": "metric depth error can dominate measurement unless scale gates are explicit"
+    },
+    {
+      "name": "open-world counting models",
+      "role": "comparison baseline for rebar/log/fish count heads",
+      "use": "benchmark reference, not necessarily training dependency",
+      "risk": "counting output alone lacks spacing/diameter/physical measurement grammar"
+    }
+  ],
+  "owned_model_families": [
+    {
+      "id": "gaugehead_tiny",
+      "approx_params": "1e3-2e6",
+      "description": "Task heads over frozen masks, profiles, image statistics, or small CNNs.",
+      "first_targets": ["crack width calibration", "profile width CNN", "fuzzy alpha", "uneven severity", "dense count/density"],
+      "release_rule": "Can ship per-head if it beats calibration/classical baselines and license is clean."
+    },
+    {
+      "id": "gaugespecialist_base",
+      "approx_params": "25M-90M",
+      "description": "Frozen encoder plus prompt/regime/scale tokens and multi-task measurement heads.",
+      "first_targets": ["mask/logit refinement", "document/card scale", "CAD dimension", "dynamic RGB-D object dimensions"],
+      "release_rule": "Must improve at least three physical-quantity families without hurting per-domain worst case."
+    },
+    {
+      "id": "gaugespecialist_mid",
+      "approx_params": "100M-300M",
+      "description": "LoRA/adapters on a vision encoder with text/regime tokens; trained on real + synthetic physical GT.",
+      "first_targets": ["thin cracks", "fuzzy defects", "dense count", "known-object scale", "dynamic scenes"],
+      "release_rule": "Requires held-out dataset-family generalization, not just random splits."
+    },
+    {
+      "id": "gaugespecialist_large",
+      "approx_params": "300M+",
+      "description": "Prompt-conditioned physical measurement model distilled from SAM/depth/count teachers plus real GT.",
+      "first_targets": ["unified mask+scale+quantity+uncertainty output grammar"],
+      "release_rule": "Only justified after Base/Mid show scaling law; otherwise it is compute theater."
+    }
+  ],
+  "training_atoms": [
+    {
+      "id": "m2_crack_mask_width",
+      "status": "ready_on_spark",
+      "dataset": "CrackSeg9k M2 cache",
+      "spark_paths": ["datasets/m2_cache/train.npz", "datasets/m2_cache/val.npz", "datasets/m2_cache/test.npz"],
+      "task": "SAM mask/image -> crack width from mask-derived GT",
+      "unit": "px relative error",
+      "current_baselines": {
+        "raw_sam3_relerr": 0.7302,
+        "m2_neural_v1_relerr": 0.564,
+        "quantile_5bin_relerr": 0.4804,
+        "gaugehead_tiny_refit_relerr": 0.4724,
+        "gaugehead_tiny_bias": 0.4557,
+        "gaugehead_tiny_worst_source_relerr": 0.7201
+      },
+      "next_model": "GaugeHead-Tiny now narrowly beats quantile calibration; next target is reducing CrackTree200 worst-source error and calibrated uncertainty.",
+      "license_note": "research-only until CrackSeg9k subset licenses are separated"
+    },
+    {
+      "id": "krkcmd_profile_width",
+      "status": "ready_on_spark",
+      "dataset": "krkCMd table/profile data",
+      "spark_paths": ["datasets/krkcmd/krkCMd_table.csv", "checkpoints/profile_width_cnn.pt"],
+      "task": "1-D brightness profile -> crack width",
+      "unit": "um MAE",
+      "current_baselines": {
+        "dlm_author_um": 11.1,
+        "gaugeprofile_cal_5fold_um": "27.8±2.5",
+        "profile_width_cnn_table_um": "17.9-18.6",
+        "end_to_end_localization_gated_um": "39.9 MAE / 23.2 median"
+      },
+      "next_model": "scale-normalized profile CNN + uncertainty + image-level localization gate",
+      "license_note": "CC BY 4.0; cleanest headline training atom"
+    },
+    {
+      "id": "soft_regime_heads",
+      "status": "checkpoint_ready",
+      "dataset": "Magnetic Tile + synthetic directional fray/uneven",
+      "spark_paths": ["checkpoints/matte_fray_directional.pt", "checkpoints/draem_uneven.pt"],
+      "task": "fuzzy alpha / field severity",
+      "unit": "IoU, alpha MAE, AUC",
+      "current_baselines": {
+        "fray_real_iou": 0.949,
+        "uneven_learned_auc": 0.636,
+        "uneven_classical_auc": 0.669
+      },
+      "next_model": "regime router with uncertainty; do not overclaim learned field head before beating classical residual",
+      "license_note": "research-only until MT license is clarified"
+    },
+    {
+      "id": "rebar_dense_count",
+      "status": "ready_on_spark",
+      "dataset": "ROI-1555 Rebar",
+      "spark_paths": ["experiments/results/rebar_sahi_eval.json"],
+      "task": "image -> count / density / spacing",
+      "unit": "count MAE, rel error",
+      "current_baselines": {
+        "global_sam3_mae": 13.12,
+        "sahi_sam3_mae": 8.9,
+        "sahi_relerr": 0.4491
+      },
+      "next_model": "density/centroid head trained from instance masks; target MAE < 5 on held-out scenes",
+      "license_note": "internal/research unless license confirmed"
+    },
+    {
+      "id": "smartdoc_document_scale",
+      "status": "ready_on_spark",
+      "dataset": "SmartDoc15-CH1",
+      "spark_paths": ["datasets/smartdoc/frames.tar.gz", "experiments/results/smartdoc_scale_eval.json"],
+      "task": "document quad -> plane scale",
+      "unit": "relative error",
+      "current_baselines": {
+        "naive_height_median": 0.1025,
+        "naive_width_median": 0.1143,
+        "gt_homography_upper_bound": 0.0
+      },
+      "next_model": "detected/SAM document quad model; replace GT quad",
+      "license_note": "check SmartDoc redistribution terms before release"
+    },
+    {
+      "id": "tless_cad_dimension",
+      "status": "ready_on_spark",
+      "dataset": "T-LESS BOP",
+      "spark_paths": ["experiments/results/tless_sam3_eval.json", "experiments/results/tless_upper_bound.json"],
+      "task": "mask + CAD pose/depth -> object dimension",
+      "unit": "relative error",
+      "current_baselines": {
+        "perfect_mask_median": 0.0283,
+        "sam3_mask_median": 0.025
+      },
+      "next_model": "BOP-family expansion and geometry-mode classifier",
+      "license_note": "CC BY 4.0"
+    },
+    {
+      "id": "dynamic_object_dimension",
+      "status": "partial",
+      "dataset": "TUM RGB-D / ADT ATEK EFM",
+      "spark_paths": ["experiments/results/tum_dynamic_eval.json", "experiments/results/adt_atek_depth_upper.json"],
+      "task": "RGB-D/video -> stable scale or object dimensions",
+      "unit": "relative error",
+      "current_baselines": {
+        "tum_gated_median": 0.0106,
+        "adt_oracle_depth_median": 0.087,
+        "adt_roi_only_median": 3.16
+      },
+      "next_model": "replace oracle object gate with prompt/segmentation gate",
+      "license_note": "ADT access-controlled; cite limitations"
+    }
+  ],
+  "benchmark_rules": [
+    "Primary splits must be source/dataset-family held out, not random image splits.",
+    "Each model row must include simple baseline, previous neural baseline, new model, coverage, and worst-domain.",
+    "A learned model that loses to a calibration or classical baseline is kept as negative/reproducibility, not headline.",
+    "Report units as physical units where possible; mark px-derived GT separately.",
+    "Save checkpoints and result JSONs for every trained artifact."
+  ]
+}
