@@ -418,9 +418,14 @@ synthetic GT) runs without any model and gates every release.
 Zero-shot rebar counting fails: best prompt MAE $13.1$ (GT mean $22.5$), acc@10\% $5\%$,
 and six prompt variants all fail---a capability gap, not vocabulary (the same model
 detects 60 separated coins reliably). SAHI tiling recovers to MAE $7.4$--$8.9$ but dense
-touching ends remain undercounted (e.g.\ GT $81\rightarrow40$). Supervised or
-density-based heads remain necessary in this regime; we report this as a boundary of
-current promptable counting.
+touching ends remain undercounted (e.g.\ GT $81\rightarrow40$). Counting here is a
+representation problem, not a prompt one: a small owned density head ($0.11$M parameters,
+ROI-1555, count-stratified holdout) brings MAE to $\mathbf{7.0}$, below the zero-shot SAHI
+bar, and is excellent mid-range (GT $61\rightarrow60.8$). It does not close the regime: the
+density head still under-counts the densest images (GT$\,{\geq}\,40$ MAE ${\sim}25$--$31$)
+and over-counts near-empty ones (GT $1\rightarrow10$), a regression-to-mean floor we leave
+open. Promptable detection sets the gate; an owned density regressor is the honest path past
+it, but dense crowding remains unsolved.
 
 \section{Limitations}
 (1)~\emph{Residual localization gaps}: with multi-instance reporting the annotated crack is

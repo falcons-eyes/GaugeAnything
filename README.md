@@ -59,19 +59,36 @@ data/                   # dataset acquisition guide + download scripts
 
 ## Documentation
 
+**Start here** — the entry points:
+
+| | Guide | What it covers |
+|---|---|---|
+| 📍 | [**Status dashboard**](STATUS.md) | One-screen view: every track's current best, baseline, target, status |
+| 📊 | [**GaugeBench v1.0**](benchmark/README.md) | The promptable physical-measurement benchmark: 5 tracks, fixed splits, pinned numbers, submission guide |
+| 🧠 | [**Model registry**](MODELS.md) | Every trained head: version, metric, deploy/HF status, how to load — single source of truth |
+| 🚀 | [**Demo server**](serve/README.md) | FastAPI + Docker inference server (SAM 3 + metrology core) — `/inspect`, `/count_rebar`; RTX 5090 warm ~0.2s |
+| 🗺️ | [**Research position & roadmap**](docs/RESEARCH_POSITION_AND_ROADMAP.md) | Cold self-assessment + benchmark→data→model roadmap (H1–H3) |
+
+**Results & rigor:**
+
 | Guide | What it covers |
 |---|---|
-| [**GaugeBench v1.0**](benchmark/README.md) | The promptable physical-measurement benchmark: 5 tracks, fixed splits, pinned numbers, submission guide |
-| [**Demo server**](serve/README.md) | FastAPI + Docker inference server (SAM 3 + metrology core) — `/inspect`, `/count_rebar`, live demo UI; RTX 5090 warm latency ~0.2s |
 | [Results log](experiments/RESULTS.md) | Every audited number, protocol and verdict, in order |
 | [Rigor audit](docs/RIGOR_AUDIT.md) | How we attacked our own results (leakage, metric traps) |
-| [Physical coverage matrix](docs/PHYSICAL_COVERAGE_MATRIX.md) | Dataset/quantity coverage across cracks, defects, parts, counts, known objects, dynamic scenes, and next adapters |
-| [Owned model roadmap](docs/MODEL_RESEARCH_ROADMAP.md) | GaugeHead/GaugeSpecialist training plan, baseline ladder, and first tiny specialist result |
+| [Physical coverage matrix](docs/PHYSICAL_COVERAGE_MATRIX.md) | Dataset/quantity coverage across cracks, defects, parts, counts, known objects, dynamic scenes |
+| [Progress log](docs/progress/) | Per-step research records, including failures |
+
+**Method deep-dives:**
+
+| Guide | What it covers |
+|---|---|
+| [Model registry](MODELS.md) | Every trained head: version, metric, deploy/HF status |
+| [Dataset registry](DATASETS.md) | Datasets → model/experiment → Spark location → license → GaugeBench track |
+| [Owned model roadmap](docs/MODEL_RESEARCH_ROADMAP.md) | GaugeHead/GaugeSpecialist training plan, baseline ladder, tiny specialist results |
 | [Width bottleneck analysis](docs/WIDTH_BOTTLENECK_ANALYSIS.md) | Physics + method space behind "mask=WHERE, signal=WIDTH" |
 | [Dynamic metrology design](docs/DYNAMIC_METROLOGY_DESIGN.md) | TUM/ADT dynamic RGB-D evidence and next uncontrolled-scene experiments |
 | [Capture protocol](docs/CAPTURE_PROTOCOL.md) | ArUco+caliper field protocol (printable board included) |
-| [Dataset map](paper/DATASETS.md) | All datasets used/found, licenses, traps |
-| [Progress log](docs/progress/) | Per-step research records, including failures |
+| [Dataset map (licenses)](paper/DATASETS.md) | All datasets used/found, licenses, traps |
 
 ## Quickstart
 
