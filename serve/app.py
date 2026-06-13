@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from fastapi import FastAPI, File, Form, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from PIL import Image
 
@@ -37,6 +38,15 @@ from gaugeanything.scale import resolve
 from gaugeanything.segmenters import get_segmenter
 
 app = FastAPI(title="GaugeAnything", version="1.0")
+
+# 데모 사이트(다른 origin)에서 브라우저로 호출하려면 CORS 허용 필요.
+# 데모 컨텍스트이므로 permissive — production은 allow_origins를 특정 도메인으로 제한.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # 색상 팔레트 (인스턴스 오버레이)
 _PALETTE = [
