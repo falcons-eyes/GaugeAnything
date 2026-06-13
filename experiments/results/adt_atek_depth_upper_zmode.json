@@ -1,0 +1,1398 @@
+{
+  "summary": {
+    "dataset": "Aria Digital Twin ATEK efm",
+    "sequences": [
+      "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "Apartment_release_multiuser_clean_seq119_M1292"
+    ],
+    "shards": [
+      "Apartment_release_golden_skeleton_seq100_10s_sample_M1292_efm_shards-0000.tar",
+      "Apartment_release_multiuser_clean_seq119_M1292_efm_shards-0000.tar",
+      "Apartment_release_multiuser_clean_seq119_M1292_efm_shards-0001.tar"
+    ],
+    "protocol": "volume depth fusion: Fisheye624 RGB-depth rays + GT object/world/device/camera poses; points are fused in object coordinates and robust 2-98 percentile extents are compared to GT dimensions.",
+    "depth_mode": "z",
+    "gate_mode": "volume",
+    "filter": {
+      "include_other": false,
+      "volume_tolerance_m": 0.02,
+      "min_bbox_px": 3,
+      "min_points_per_frame": 5,
+      "min_views": 3,
+      "min_points": 100,
+      "extent_percentiles": [
+        2.0,
+        98.0
+      ]
+    },
+    "n_frames": 480,
+    "n_object_candidates": 20546,
+    "n_projected_candidates": 20539,
+    "n_frame_observations": 6234,
+    "n_instances_fit": 127,
+    "axis_median_rel_error_median": 0.09815005223976285,
+    "axis_median_rel_error_p90": 0.28826808361444406,
+    "axis_mean_rel_error_median": 0.1382455306055513,
+    "pass_axis_median_rel_10pct": 0.5118110236220472,
+    "pass_axis_median_rel_25pct": 0.84251968503937,
+    "top_categories": [
+      [
+        "box",
+        21
+      ],
+      [
+        "books",
+        14
+      ],
+      [
+        "shelves",
+        12
+      ],
+      [
+        "cup",
+        9
+      ],
+      [
+        "bottle",
+        9
+      ],
+      [
+        "door",
+        9
+      ],
+      [
+        "chair",
+        9
+      ],
+      [
+        "table",
+        7
+      ],
+      [
+        "display",
+        4
+      ],
+      [
+        "bed",
+        4
+      ],
+      [
+        "bin",
+        4
+      ],
+      [
+        "vase",
+        4
+      ],
+      [
+        "picture",
+        3
+      ],
+      [
+        "refrigerator",
+        2
+      ],
+      [
+        "tray",
+        2
+      ],
+      [
+        "electronic_device",
+        2
+      ]
+    ],
+    "by_sequence": {
+      "Apartment_release_golden_skeleton_seq100_10s_sample_M1292": {
+        "n": 23,
+        "axis_median_rel_error_median": 0.11047079266383396,
+        "axis_median_rel_error_p90": 0.2927550564003677,
+        "speed_mps_median": 0.11084147108525902
+      },
+      "Apartment_release_multiuser_clean_seq119_M1292": {
+        "n": 104,
+        "axis_median_rel_error_median": 0.09566850351413078,
+        "axis_median_rel_error_p90": 0.2828035660406057,
+        "speed_mps_median": 0.6416643106875484
+      }
+    },
+    "by_speed_bin": {
+      "0.00-0.10": {
+        "n": 7,
+        "axis_median_rel_error_median": 0.11047079266383396,
+        "axis_median_rel_error_p90": 0.4226993865183216,
+        "speed_mps_median": 0.07594457853887843
+      },
+      "0.10-0.25": {
+        "n": 18,
+        "axis_median_rel_error_median": 0.10276686454564327,
+        "axis_median_rel_error_p90": 0.26807348661147656,
+        "speed_mps_median": 0.1243035183938647
+      },
+      "0.25-0.50": {
+        "n": 7,
+        "axis_median_rel_error_median": 0.06127221704225764,
+        "axis_median_rel_error_p90": 0.10160745053682521,
+        "speed_mps_median": 0.47685749181413134
+      },
+      "0.50+": {
+        "n": 95,
+        "axis_median_rel_error_median": 0.11076041277072746,
+        "axis_median_rel_error_p90": 0.29846442970030695,
+        "speed_mps_median": 0.6569060369849599
+      }
+    },
+    "note": "volume mode is an oracle-volume upper bound, not a promptable SAM3 result. roi mode is a negative control without object-volume filtering."
+  },
+  "best_examples": [
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5800173716710691,
+      "category": "shelves",
+      "n_views": 24,
+      "n_points": 2886,
+      "speed_mps_median": 0.6644676437105173,
+      "speed_mps_p90": 0.8180048033351002,
+      "pred_dim_m": [
+        0.49065124504627566,
+        1.6228342913913454,
+        0.3539462608386406
+      ],
+      "gt_dim_m": [
+        0.4880690574645996,
+        1.622859001159668,
+        0.33122488856315613
+      ],
+      "axis_rel_errors": [
+        0.005290619313360885,
+        1.5226072200312338e-05,
+        0.06859802225022743
+      ],
+      "axis_median_rel_error": 0.005290619313360885,
+      "axis_mean_rel_error": 0.024634622545262875
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6317024575036344,
+      "category": "bin",
+      "n_views": 61,
+      "n_points": 7608,
+      "speed_mps_median": 0.7025722165307232,
+      "speed_mps_p90": 0.8676583989273421,
+      "pred_dim_m": [
+        0.3134215086780012,
+        0.5495207395910437,
+        0.3891814489540212
+      ],
+      "gt_dim_m": [
+        0.28648295998573303,
+        0.5534073114395142,
+        0.38476815819740295
+      ],
+      "axis_rel_errors": [
+        0.09403194065577145,
+        0.007022986086614437,
+        0.011469999953462923
+      ],
+      "axis_median_rel_error": 0.011469999953462923,
+      "axis_mean_rel_error": 0.03750830889861627
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4508384915897847,
+      "category": "tray",
+      "n_views": 46,
+      "n_points": 1725,
+      "speed_mps_median": 0.7550562467435259,
+      "speed_mps_p90": 0.8740762223694861,
+      "pred_dim_m": [
+        0.31015105665784126,
+        0.05386818115448997,
+        0.38931485151359324
+      ],
+      "gt_dim_m": [
+        0.306001216173172,
+        0.05401446297764778,
+        0.37300044298171997
+      ],
+      "axis_rel_errors": [
+        0.01356151631214691,
+        0.002708197306679603,
+        0.04373830873083657
+      ],
+      "axis_median_rel_error": 0.01356151631214691,
+      "axis_mean_rel_error": 0.02000267411655436
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5583699781749687,
+      "category": "shelves",
+      "n_views": 12,
+      "n_points": 1619,
+      "speed_mps_median": 0.9170527062730149,
+      "speed_mps_p90": 1.4116383646353872,
+      "pred_dim_m": [
+        0.590347560958612,
+        1.458370735730877,
+        0.3101121015379959
+      ],
+      "gt_dim_m": [
+        0.5587247610092163,
+        1.4789319038391113,
+        0.3118380606174469
+      ],
+      "axis_rel_errors": [
+        0.05659817168703219,
+        0.013902714556944917,
+        0.005534792885876598
+      ],
+      "axis_median_rel_error": 0.013902714556944917,
+      "axis_mean_rel_error": 0.025345226376617902
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4403316256411466,
+      "category": "chair",
+      "n_views": 102,
+      "n_points": 40147,
+      "speed_mps_median": 0.5467264233059129,
+      "speed_mps_p90": 0.7157078352909867,
+      "pred_dim_m": [
+        0.41800095422106276,
+        0.8210394360249709,
+        0.4839171878877922
+      ],
+      "gt_dim_m": [
+        0.41700032353401184,
+        0.9000114798545837,
+        0.49294593930244446
+      ],
+      "axis_rel_errors": [
+        0.002399592111993419,
+        0.08774559613658763,
+        0.018315905852533485
+      ],
+      "axis_median_rel_error": 0.018315905852533485,
+      "axis_mean_rel_error": 0.03615369803370484
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6898756613475100,
+      "category": "box",
+      "n_views": 8,
+      "n_points": 191,
+      "speed_mps_median": 0.507108203023449,
+      "speed_mps_p90": 0.5121547900894006,
+      "pred_dim_m": [
+        0.1636911322191095,
+        0.11798759396824794,
+        0.1782679590863056
+      ],
+      "gt_dim_m": [
+        0.18035125732421875,
+        0.1202545166015625,
+        0.1800079494714737
+      ],
+      "axis_rel_errors": [
+        0.09237598535373238,
+        0.01885103942353799,
+        0.009666186356085509
+      ],
+      "axis_median_rel_error": 0.01885103942353799,
+      "axis_mean_rel_error": 0.04029773704445196
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4377414492307750,
+      "category": "shelves",
+      "n_views": 67,
+      "n_points": 8748,
+      "speed_mps_median": 0.7200411363587966,
+      "speed_mps_p90": 0.8725346667643251,
+      "pred_dim_m": [
+        0.8987058082154953,
+        1.8644724827978265,
+        0.3905767206730133
+      ],
+      "gt_dim_m": [
+        0.9000242352485657,
+        1.9364515542984009,
+        0.39901766180992126
+      ],
+      "axis_rel_errors": [
+        0.0014648794792801018,
+        0.037170602766075,
+        0.02115430454536859
+      ],
+      "axis_median_rel_error": 0.02115430454536859,
+      "axis_mean_rel_error": 0.01992992893024123
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 7379153972126671,
+      "category": "vase",
+      "n_views": 122,
+      "n_points": 33853,
+      "speed_mps_median": 0.13003070943390305,
+      "speed_mps_p90": 0.2500770419031959,
+      "pred_dim_m": [
+        0.09753490352096952,
+        0.16834133253708844,
+        0.12461132205203079
+      ],
+      "gt_dim_m": [
+        0.09938701242208481,
+        0.16480354964733124,
+        0.13389812409877777
+      ],
+      "axis_rel_errors": [
+        0.018635321215307275,
+        0.02146666681226117,
+        0.06935722295777666
+      ],
+      "axis_median_rel_error": 0.02146666681226117,
+      "axis_mean_rel_error": 0.036486403661781706
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5652114744864847,
+      "category": "shelves",
+      "n_views": 40,
+      "n_points": 22290,
+      "speed_mps_median": 0.5633502411702853,
+      "speed_mps_p90": 0.7637367205583451,
+      "pred_dim_m": [
+        0.7557502446914143,
+        1.1091129223640281,
+        0.2792959533394423
+      ],
+      "gt_dim_m": [
+        0.7729960083961487,
+        1.1199489831924438,
+        0.35734227299690247
+      ],
+      "axis_rel_errors": [
+        0.02231028817408358,
+        0.009675495036860726,
+        0.21840774393388576
+      ],
+      "axis_median_rel_error": 0.02231028817408358,
+      "axis_mean_rel_error": 0.0834645090482767
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4233561046743320,
+      "category": "display",
+      "n_views": 14,
+      "n_points": 771,
+      "speed_mps_median": 0.7410084107403401,
+      "speed_mps_p90": 1.1079576817991712,
+      "pred_dim_m": [
+        0.2623960919987956,
+        0.18360849805524437,
+        0.14071495467989123
+      ],
+      "gt_dim_m": [
+        0.2603606879711151,
+        0.1792048215866089,
+        0.14938339591026306
+      ],
+      "axis_rel_errors": [
+        0.007817631930310074,
+        0.024573426259667963,
+        0.05802814414246614
+      ],
+      "axis_median_rel_error": 0.024573426259667963,
+      "axis_mean_rel_error": 0.030139734110814723
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4717015544976522,
+      "category": "chair",
+      "n_views": 160,
+      "n_points": 118999,
+      "speed_mps_median": 0.47685749181413134,
+      "speed_mps_p90": 0.7613053636824195,
+      "pred_dim_m": [
+        0.7210591374392804,
+        0.7080000985043899,
+        0.7339261867818674
+      ],
+      "gt_dim_m": [
+        0.740062415599823,
+        0.8116012811660767,
+        0.7401788234710693
+      ],
+      "axis_rel_errors": [
+        0.025677939806118072,
+        0.12765034391374622,
+        0.008447467680688573
+      ],
+      "axis_median_rel_error": 0.025677939806118072,
+      "axis_mean_rel_error": 0.053925250466850955
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 4382154278474428,
+      "category": "bed",
+      "n_views": 42,
+      "n_points": 11937,
+      "speed_mps_median": 0.05356972491633033,
+      "speed_mps_p90": 0.15967671678959547,
+      "pred_dim_m": [
+        1.6325712458656092,
+        0.9825311927341267,
+        1.7770596798363432
+      ],
+      "gt_dim_m": [
+        1.677031397819519,
+        0.9999987483024597,
+        2.114081382751465
+      ],
+      "axis_rel_errors": [
+        0.026511222158223786,
+        0.01746757743245672,
+        0.1594175634225064
+      ],
+      "axis_median_rel_error": 0.026511222158223786,
+      "axis_mean_rel_error": 0.0677987876710623
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5328954527141022,
+      "category": "chair",
+      "n_views": 100,
+      "n_points": 17705,
+      "speed_mps_median": 0.5633502411702853,
+      "speed_mps_p90": 0.8425825249953478,
+      "pred_dim_m": [
+        0.5103904502994097,
+        0.6398608134853981,
+        0.5093871950995476
+      ],
+      "gt_dim_m": [
+        0.49401938915252686,
+        0.6491177082061768,
+        0.4940043091773987
+      ],
+      "axis_rel_errors": [
+        0.033138499229689734,
+        0.014260733613876987,
+        0.03113917355855457
+      ],
+      "axis_median_rel_error": 0.03113917355855457,
+      "axis_mean_rel_error": 0.026179468800707095
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4349905901758424,
+      "category": "chair",
+      "n_views": 84,
+      "n_points": 9719,
+      "speed_mps_median": 0.5819094519663721,
+      "speed_mps_p90": 0.7992424301484793,
+      "pred_dim_m": [
+        0.7109360339864579,
+        0.7301439692323335,
+        0.7449412907570319
+      ],
+      "gt_dim_m": [
+        0.7339577078819275,
+        0.8090174198150635,
+        0.7358889579772949
+      ],
+      "axis_rel_errors": [
+        0.031366485627497664,
+        0.09749289527135273,
+        0.01230122110354622
+      ],
+      "axis_median_rel_error": 0.031366485627497664,
+      "axis_mean_rel_error": 0.047053534000798876
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 5583699781749687,
+      "category": "shelves",
+      "n_views": 62,
+      "n_points": 18748,
+      "speed_mps_median": 0.07594457853887843,
+      "speed_mps_p90": 0.1895468618363348,
+      "pred_dim_m": [
+        0.576429225015255,
+        1.4739930190483126,
+        0.3344463666357945
+      ],
+      "gt_dim_m": [
+        0.5587247610092163,
+        1.4789319038391113,
+        0.3118380606174469
+      ],
+      "axis_rel_errors": [
+        0.0316872729500288,
+        0.0033394943864406778,
+        0.07250014951216228
+      ],
+      "axis_median_rel_error": 0.0316872729500288,
+      "axis_mean_rel_error": 0.03584230561621059
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4541398132583473,
+      "category": "cabinet",
+      "n_views": 20,
+      "n_points": 9033,
+      "speed_mps_median": 0.7584464517178204,
+      "speed_mps_p90": 1.0383987369773668,
+      "pred_dim_m": [
+        1.4436871487184173,
+        0.5552055239152194,
+        0.3563675578116815
+      ],
+      "gt_dim_m": [
+        1.4918780326843262,
+        0.5380358099937439,
+        0.3801722526550293
+      ],
+      "axis_rel_errors": [
+        0.032302160706260505,
+        0.031911842302234726,
+        0.06261555039091274
+      ],
+      "axis_median_rel_error": 0.032302160706260505,
+      "axis_mean_rel_error": 0.042276517799802654
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4295130363941833,
+      "category": "night stand",
+      "n_views": 66,
+      "n_points": 3501,
+      "speed_mps_median": 0.6336763909630327,
+      "speed_mps_p90": 0.7992424301484793,
+      "pred_dim_m": [
+        0.4391204711968726,
+        0.7282365064014356,
+        0.43386877354646103
+      ],
+      "gt_dim_m": [
+        0.4199514389038086,
+        0.7399997711181641,
+        0.4199514389038086
+      ],
+      "axis_rel_errors": [
+        0.04564583072533472,
+        0.015896308587979458,
+        0.033140342795301744
+      ],
+      "axis_median_rel_error": 0.033140342795301744,
+      "axis_mean_rel_error": 0.03156082736953864
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5675754345880748,
+      "category": "bottle",
+      "n_views": 60,
+      "n_points": 3389,
+      "speed_mps_median": 0.5774070378621763,
+      "speed_mps_p90": 0.70827470020854,
+      "pred_dim_m": [
+        0.0835938717078196,
+        0.1933437810389162,
+        0.05706578470044353
+      ],
+      "gt_dim_m": [
+        0.07805243134498596,
+        0.18671178817749023,
+        0.05893385037779808
+      ],
+      "axis_rel_errors": [
+        0.07099638367882324,
+        0.03551994722005189,
+        0.03169766891827415
+      ],
+      "axis_median_rel_error": 0.03551994722005189,
+      "axis_mean_rel_error": 0.04607133327238309
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4934880203206237,
+      "category": "table",
+      "n_views": 160,
+      "n_points": 193275,
+      "speed_mps_median": 0.4832548054808222,
+      "speed_mps_p90": 0.7613053636824195,
+      "pred_dim_m": [
+        0.45835415896037607,
+        0.4942910208485496,
+        0.4785516353173478
+      ],
+      "gt_dim_m": [
+        0.4908484220504761,
+        0.5130040049552917,
+        0.4899139404296875
+      ],
+      "axis_rel_errors": [
+        0.06620019873825424,
+        0.03647726708950936,
+        0.023192451111667088
+      ],
+      "axis_median_rel_error": 0.03647726708950936,
+      "axis_mean_rel_error": 0.04195663897981023
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4671332369591132,
+      "category": "table",
+      "n_views": 105,
+      "n_points": 208824,
+      "speed_mps_median": 0.5861325247193314,
+      "speed_mps_p90": 0.8576280493545446,
+      "pred_dim_m": [
+        1.2271975606566532,
+        0.824741383993866,
+        0.7598460569546512
+      ],
+      "gt_dim_m": [
+        1.2600001096725464,
+        0.9000219106674194,
+        0.7900000214576721
+      ],
+      "axis_rel_errors": [
+        0.02603376679420928,
+        0.08364299333304952,
+        0.038169574283532494
+      ],
+      "axis_median_rel_error": 0.038169574283532494,
+      "axis_mean_rel_error": 0.04928211147026376
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5689896711124403,
+      "category": "bottle",
+      "n_views": 19,
+      "n_points": 259,
+      "speed_mps_median": 0.6567837564281233,
+      "speed_mps_p90": 0.8771355275872011,
+      "pred_dim_m": [
+        0.11110297198063077,
+        0.1395729482301291,
+        0.2392321979127761
+      ],
+      "gt_dim_m": [
+        0.10684224963188171,
+        0.10679934173822403,
+        0.23999597132205963
+      ],
+      "axis_rel_errors": [
+        0.039878628196515,
+        0.30687086604181985,
+        0.0031824426263330177
+      ],
+      "axis_median_rel_error": 0.039878628196515,
+      "axis_mean_rel_error": 0.11664397895488927
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6219594724780839,
+      "category": "clock",
+      "n_views": 8,
+      "n_points": 102,
+      "speed_mps_median": 0.7506098086908295,
+      "speed_mps_p90": 1.2230081827189192,
+      "pred_dim_m": [
+        0.08305514765716414,
+        0.09399816621220591,
+        0.0534120343954243
+      ],
+      "gt_dim_m": [
+        0.08996357768774033,
+        0.09792232513427734,
+        0.0522635318338871
+      ],
+      "axis_rel_errors": [
+        0.07679141057012037,
+        0.040074200818765005,
+        0.021975219072212126
+      ],
+      "axis_median_rel_error": 0.040074200818765005,
+      "axis_mean_rel_error": 0.04628027682036583
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4666210076742595,
+      "category": "table",
+      "n_views": 124,
+      "n_points": 294032,
+      "speed_mps_median": 0.5750331541603668,
+      "speed_mps_p90": 0.7996858175797422,
+      "pred_dim_m": [
+        0.7832067662579204,
+        0.7121817245853548,
+        1.7508642024212313
+      ],
+      "gt_dim_m": [
+        0.8160843253135681,
+        0.7520073056221008,
+        1.8076220750808716
+      ],
+      "axis_rel_errors": [
+        0.040286963045166935,
+        0.05295903475804692,
+        0.031399192033600816
+      ],
+      "axis_median_rel_error": 0.040286963045166935,
+      "axis_mean_rel_error": 0.041548396612271554
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4819105864795764,
+      "category": "table",
+      "n_views": 13,
+      "n_points": 2607,
+      "speed_mps_median": 0.8395065129864248,
+      "speed_mps_p90": 1.3906794555335573,
+      "pred_dim_m": [
+        0.7663814433876417,
+        0.7855091410287937,
+        0.5131814823240329
+      ],
+      "gt_dim_m": [
+        1.2030022144317627,
+        0.7839760780334473,
+        0.492191344499588
+      ],
+      "axis_rel_errors": [
+        0.36294261623646185,
+        0.0019554971615868416,
+        0.04264629611840419
+      ],
+      "axis_median_rel_error": 0.04264629611840419,
+      "axis_mean_rel_error": 0.1358481365054843
+    }
+  ],
+  "worst_examples": [
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 6230984856972407,
+      "category": "bed",
+      "n_views": 41,
+      "n_points": 3755,
+      "speed_mps_median": 0.05356972491633033,
+      "speed_mps_p90": 0.13848058277574582,
+      "pred_dim_m": [
+        0.566986853783007,
+        0.3163083703872678,
+        0.4886239384568559
+      ],
+      "gt_dim_m": [
+        1.5577137470245361,
+        0.2895486354827881,
+        2.035460948944092
+      ],
+      "axis_rel_errors": [
+        0.6360134492835826,
+        0.0924187912675223,
+        0.7599443316707537
+      ],
+      "axis_median_rel_error": 0.6360134492835826,
+      "axis_mean_rel_error": 0.49612552407395283
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 4377414492307750,
+      "category": "shelves",
+      "n_views": 40,
+      "n_points": 2580,
+      "speed_mps_median": 0.10628924930969905,
+      "speed_mps_p90": 0.19425736030871096,
+      "pred_dim_m": [
+        0.4880961971358665,
+        0.7954891852277656,
+        0.14424947784781456
+      ],
+      "gt_dim_m": [
+        0.9000242352485657,
+        1.9364515542984009,
+        0.39901766180992126
+      ],
+      "axis_rel_errors": [
+        0.4576854955454997,
+        0.589202640540119,
+        0.6384884889718736
+      ],
+      "axis_median_rel_error": 0.589202640540119,
+      "axis_mean_rel_error": 0.5617922083524974
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4429298500441326,
+      "category": "picture",
+      "n_views": 15,
+      "n_points": 161,
+      "speed_mps_median": 0.6569060369849599,
+      "speed_mps_p90": 0.7973427861344923,
+      "pred_dim_m": [
+        0.2356290358920885,
+        0.5555999242432521,
+        0.05796426091211862
+      ],
+      "gt_dim_m": [
+        0.5669921636581421,
+        0.5669592022895813,
+        0.022677188739180565
+      ],
+      "axis_rel_errors": [
+        0.5844227645548963,
+        0.020035441704546672,
+        1.5560602585615357
+      ],
+      "axis_median_rel_error": 0.5844227645548963,
+      "axis_mean_rel_error": 0.7201728216069929
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4382154278474428,
+      "category": "bed",
+      "n_views": 31,
+      "n_points": 2615,
+      "speed_mps_median": 0.6200725516085931,
+      "speed_mps_p90": 0.7687417307824992,
+      "pred_dim_m": [
+        1.3709970069643251,
+        0.48519686600702566,
+        0.6475152307111582
+      ],
+      "gt_dim_m": [
+        1.677031397819519,
+        0.9999987483024597,
+        2.114081382751465
+      ],
+      "axis_rel_errors": [
+        0.18248578485358155,
+        0.5148025266724905,
+        0.6937131957198257
+      ],
+      "axis_median_rel_error": 0.5148025266724905,
+      "axis_mean_rel_error": 0.463667169081966
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5573229446099662,
+      "category": "candle",
+      "n_views": 13,
+      "n_points": 126,
+      "speed_mps_median": 0.6569060369849599,
+      "speed_mps_p90": 0.8149028897756451,
+      "pred_dim_m": [
+        0.09452662685900184,
+        0.026056888896254626,
+        0.11294594819798348
+      ],
+      "gt_dim_m": [
+        0.07661276310682297,
+        0.050193071365356445,
+        0.07672394067049026
+      ],
+      "axis_rel_errors": [
+        0.2338234913574538,
+        0.4808668171233043,
+        0.4721082782108063
+      ],
+      "axis_median_rel_error": 0.4721082782108063,
+      "axis_mean_rel_error": 0.39559952889718814
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4466392793450825,
+      "category": "door",
+      "n_views": 9,
+      "n_points": 134,
+      "speed_mps_median": 0.7629807661480262,
+      "speed_mps_p90": 0.8893727484580614,
+      "pred_dim_m": [
+        0.0338108267797792,
+        0.358478033411756,
+        0.44479194982970105
+      ],
+      "gt_dim_m": [
+        0.05753040313720703,
+        1.0121368169784546,
+        0.4509456157684326
+      ],
+      "axis_rel_errors": [
+        0.41229636964055105,
+        0.6458205774176606,
+        0.01364613763512354
+      ],
+      "axis_median_rel_error": 0.41229636964055105,
+      "axis_mean_rel_error": 0.35725436156444507
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4524674690944733,
+      "category": "door",
+      "n_views": 7,
+      "n_points": 103,
+      "speed_mps_median": 0.7582317864038891,
+      "speed_mps_p90": 0.7671324099220492,
+      "pred_dim_m": [
+        0.03537167044945644,
+        0.26269204839221394,
+        0.4735931489714912
+      ],
+      "gt_dim_m": [
+        0.0572655126452446,
+        1.0115710496902466,
+        0.45687031745910645
+      ],
+      "axis_rel_errors": [
+        0.38232159609604494,
+        0.7403128050445364,
+        0.03660301593981659
+      ],
+      "axis_median_rel_error": 0.38232159609604494,
+      "axis_mean_rel_error": 0.3864124723601326
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5716872031759193,
+      "category": "candle",
+      "n_views": 6,
+      "n_points": 168,
+      "speed_mps_median": 0.6077363026273239,
+      "speed_mps_p90": 0.6625331264384426,
+      "pred_dim_m": [
+        0.08042617582351802,
+        0.02565008127104665,
+        0.10584971551551069
+      ],
+      "gt_dim_m": [
+        0.07661276310682297,
+        0.050193071365356445,
+        0.07672394067049026
+      ],
+      "axis_rel_errors": [
+        0.049775162284356224,
+        0.488971673314447,
+        0.37961781668786004
+      ],
+      "axis_median_rel_error": 0.37961781668786004,
+      "axis_mean_rel_error": 0.3061215507622211
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5409897245802278,
+      "category": "books",
+      "n_views": 18,
+      "n_points": 452,
+      "speed_mps_median": 0.6600860397731138,
+      "speed_mps_p90": 0.7716961201026332,
+      "pred_dim_m": [
+        0.13928669922583353,
+        0.3120162727326914,
+        0.06666531790616381
+      ],
+      "gt_dim_m": [
+        0.21914884448051453,
+        0.2861592769622803,
+        0.031215516850352287
+      ],
+      "axis_rel_errors": [
+        0.3644196502335739,
+        0.09035875420463627,
+        1.1356467754725468
+      ],
+      "axis_median_rel_error": 0.3644196502335739,
+      "axis_mean_rel_error": 0.5301417266369189
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5466552840060336,
+      "category": "vase",
+      "n_views": 25,
+      "n_points": 187,
+      "speed_mps_median": 0.6015443249116186,
+      "speed_mps_p90": 0.749692612642899,
+      "pred_dim_m": [
+        0.1175199237902065,
+        0.23666104855744946,
+        0.11347685533640368
+      ],
+      "gt_dim_m": [
+        0.08262628316879272,
+        0.20509584248065948,
+        0.08321496844291687
+      ],
+      "axis_rel_errors": [
+        0.4223067925024711,
+        0.1539046608405364,
+        0.363659176464696
+      ],
+      "axis_median_rel_error": 0.363659176464696,
+      "axis_mean_rel_error": 0.3132902099359012
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6355547087849242,
+      "category": "box",
+      "n_views": 21,
+      "n_points": 230,
+      "speed_mps_median": 0.7200411363587966,
+      "speed_mps_p90": 0.8740762223694861,
+      "pred_dim_m": [
+        0.10372644996691349,
+        0.10979043363226412,
+        0.12949811287128074
+      ],
+      "gt_dim_m": [
+        0.07756152749061584,
+        0.08001169562339783,
+        0.10478939861059189
+      ],
+      "axis_rel_errors": [
+        0.3373440844040022,
+        0.37217981417404306,
+        0.23579402676514022
+      ],
+      "axis_median_rel_error": 0.3373440844040022,
+      "axis_mean_rel_error": 0.31510597511439514
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5781799481879742,
+      "category": "books",
+      "n_views": 20,
+      "n_points": 419,
+      "speed_mps_median": 0.6380369282023755,
+      "speed_mps_p90": 0.7697265272225439,
+      "pred_dim_m": [
+        0.15151535016726758,
+        0.3096182076280928,
+        0.06627507918703754
+      ],
+      "gt_dim_m": [
+        0.21914884448051453,
+        0.2861592769622803,
+        0.031215516850352287
+      ],
+      "axis_rel_errors": [
+        0.3086189866689465,
+        0.08197857820595736,
+        1.1231453416184451
+      ],
+      "axis_median_rel_error": 0.3086189866689465,
+      "axis_mean_rel_error": 0.5045809688311164
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 8381635401876722,
+      "category": "cup",
+      "n_views": 86,
+      "n_points": 1042,
+      "speed_mps_median": 0.13003070943390305,
+      "speed_mps_p90": 0.28894579464714293,
+      "pred_dim_m": [
+        0.11074808537055224,
+        0.13961776483362276,
+        0.12550512928557928
+      ],
+      "gt_dim_m": [
+        0.1309882253408432,
+        0.10774461179971695,
+        0.09235518425703049
+      ],
+      "axis_rel_errors": [
+        0.15451877386401938,
+        0.2958213176650894,
+        0.35893973137761637
+      ],
+      "axis_median_rel_error": 0.2958213176650894,
+      "axis_mean_rel_error": 0.2697599409689084
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6295672500506081,
+      "category": "box",
+      "n_views": 25,
+      "n_points": 1738,
+      "speed_mps_median": 0.5530983278173768,
+      "speed_mps_p90": 0.6379682280606106,
+      "pred_dim_m": [
+        0.13024939528002338,
+        0.12451587355455633,
+        0.13394696178232235
+      ],
+      "gt_dim_m": [
+        0.10150100290775299,
+        0.10006231814622879,
+        0.10150146484375
+      ],
+      "axis_rel_errors": [
+        0.28323259424734704,
+        0.2443832589665939,
+        0.3196554551061752
+      ],
+      "axis_median_rel_error": 0.28323259424734704,
+      "axis_mean_rel_error": 0.2824237694400387
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4243547695770937,
+      "category": "box",
+      "n_views": 39,
+      "n_points": 3027,
+      "speed_mps_median": 0.5767458359601785,
+      "speed_mps_p90": 0.7766041233510019,
+      "pred_dim_m": [
+        0.1577371200472616,
+        0.1905993216348677,
+        0.11673617730337596
+      ],
+      "gt_dim_m": [
+        0.12305883318185806,
+        0.19601936638355255,
+        0.0820385292172432
+      ],
+      "axis_rel_errors": [
+        0.28180250022487596,
+        0.02765055743563321,
+        0.4229433220852998
+      ],
+      "axis_median_rel_error": 0.28180250022487596,
+      "axis_mean_rel_error": 0.2441321265819363
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 6243788802362822,
+      "category": "box",
+      "n_views": 49,
+      "n_points": 1118,
+      "speed_mps_median": 0.07368047514600111,
+      "speed_mps_p90": 0.18599279331485957,
+      "pred_dim_m": [
+        0.22017785768942383,
+        0.09030219329727468,
+        0.11202996014049749
+      ],
+      "gt_dim_m": [
+        0.3060108423233032,
+        0.05400657281279564,
+        0.14807239174842834
+      ],
+      "axis_rel_errors": [
+        0.2804900113414807,
+        0.6720593178591702,
+        0.24341088289548357
+      ],
+      "axis_median_rel_error": 0.2804900113414807,
+      "axis_mean_rel_error": 0.3986534040320448
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 5731851743546867,
+      "category": "bottle",
+      "n_views": 13,
+      "n_points": 163,
+      "speed_mps_median": 0.5632287931738476,
+      "speed_mps_p90": 0.6741498053143314,
+      "pred_dim_m": [
+        0.14080232039139154,
+        0.13620605928622107,
+        0.22741480432294944
+      ],
+      "gt_dim_m": [
+        0.10684224963188171,
+        0.10679934173822403,
+        0.23999597132205963
+      ],
+      "axis_rel_errors": [
+        0.3178524495367434,
+        0.2753454943577824,
+        0.052422409133806025
+      ],
+      "axis_median_rel_error": 0.2753454943577824,
+      "axis_mean_rel_error": 0.2152067843427773
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6230984856972407,
+      "category": "bed",
+      "n_views": 16,
+      "n_points": 375,
+      "speed_mps_median": 0.5961673493212922,
+      "speed_mps_p90": 0.7736657129827227,
+      "pred_dim_m": [
+        1.3063644202264784,
+        0.21256710916879487,
+        0.2343099939194081
+      ],
+      "gt_dim_m": [
+        1.5577137470245361,
+        0.2895486354827881,
+        2.035460948944092
+      ],
+      "axis_rel_errors": [
+        0.1613578407959564,
+        0.2658673427544759,
+        0.8848860283755589
+      ],
+      "axis_median_rel_error": 0.2658673427544759,
+      "axis_mean_rel_error": 0.4373704039753304
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4106656782769564,
+      "category": "door",
+      "n_views": 7,
+      "n_points": 116,
+      "speed_mps_median": 0.742650591703153,
+      "speed_mps_p90": 0.8691978245674257,
+      "pred_dim_m": [
+        0.07443102568132504,
+        1.5044754968957483,
+        0.36231758300033906
+      ],
+      "gt_dim_m": [
+        0.038492001593112946,
+        2.043133020401001,
+        0.3878439962863922
+      ],
+      "axis_rel_errors": [
+        0.9336751169272102,
+        0.2636429043663205,
+        0.06581618777258036
+      ],
+      "axis_median_rel_error": 0.2636429043663205,
+      "axis_mean_rel_error": 0.4210447363553704
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 5756908124331676,
+      "category": "electronic_device",
+      "n_views": 20,
+      "n_points": 354,
+      "speed_mps_median": 0.17760218136910189,
+      "speed_mps_p90": 0.22308474346782622,
+      "pred_dim_m": [
+        0.1290572078576824,
+        0.1147883267252168,
+        0.1259447594570171
+      ],
+      "gt_dim_m": [
+        0.10077831894159317,
+        0.09137877076864243,
+        0.10105187445878983
+      ],
+      "axis_rel_errors": [
+        0.28060488816526574,
+        0.256181559017071,
+        0.24633768677273674
+      ],
+      "axis_median_rel_error": 0.256181559017071,
+      "axis_mean_rel_error": 0.26104137798502447
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 8381635401876722,
+      "category": "cup",
+      "n_views": 30,
+      "n_points": 192,
+      "speed_mps_median": 0.7346148395726693,
+      "speed_mps_p90": 0.8740762223694861,
+      "pred_dim_m": [
+        0.1425851193212751,
+        0.13389011684230812,
+        0.12541784730256084
+      ],
+      "gt_dim_m": [
+        0.1309882253408432,
+        0.10774461179971695,
+        0.09235518425703049
+      ],
+      "axis_rel_errors": [
+        0.08853386592768726,
+        0.24266183343991454,
+        0.35799466279569975
+      ],
+      "axis_median_rel_error": 0.24266183343991454,
+      "axis_mean_rel_error": 0.22973012072110052
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 6260912350647035,
+      "category": "box",
+      "n_views": 19,
+      "n_points": 604,
+      "speed_mps_median": 0.5545931976882568,
+      "speed_mps_p90": 0.7707113236625885,
+      "pred_dim_m": [
+        0.2915988962758593,
+        0.18751241856490836,
+        0.2811761720414263
+      ],
+      "gt_dim_m": [
+        0.4393243193626404,
+        0.24742086231708527,
+        0.34917861223220825
+      ],
+      "axis_rel_errors": [
+        0.33625596529938767,
+        0.24213173938178464,
+        0.1947497292461872
+      ],
+      "axis_median_rel_error": 0.24213173938178464,
+      "axis_mean_rel_error": 0.2577124779757865
+    },
+    {
+      "sequence": "Apartment_release_golden_skeleton_seq100_10s_sample_M1292",
+      "instance_id": 5644037805710268,
+      "category": "bottle",
+      "n_views": 96,
+      "n_points": 1676,
+      "speed_mps_median": 0.11084147108525902,
+      "speed_mps_p90": 0.28558591446906245,
+      "pred_dim_m": [
+        0.09868079229417726,
+        0.1762287278663368,
+        0.08631179602176098
+      ],
+      "gt_dim_m": [
+        0.07004246115684509,
+        0.18296658992767334,
+        0.07031264901161194
+      ],
+      "axis_rel_errors": [
+        0.4088710000238677,
+        0.036825641577514265,
+        0.22754294191798727
+      ],
+      "axis_median_rel_error": 0.22754294191798727,
+      "axis_mean_rel_error": 0.22441319450645644
+    },
+    {
+      "sequence": "Apartment_release_multiuser_clean_seq119_M1292",
+      "instance_id": 4461910773902408,
+      "category": "box",
+      "n_views": 4,
+      "n_points": 186,
+      "speed_mps_median": 1.2135980866484108,
+      "speed_mps_p90": 1.4325972737372168,
+      "pred_dim_m": [
+        0.1662421681558318,
+        0.08408447630432073,
+        0.14893946250262385
+      ],
+      "gt_dim_m": [
+        0.13944588601589203,
+        0.04995846375823021,
+        0.12155107408761978
+      ],
+      "axis_rel_errors": [
+        0.19216258654547833,
+        0.6830877088463025,
+        0.22532411680098544
+      ],
+      "axis_median_rel_error": 0.22532411680098544,
+      "axis_mean_rel_error": 0.36685813739758877
+    }
+  ]
+}
