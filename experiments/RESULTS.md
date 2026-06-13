@@ -176,6 +176,28 @@ per-frame 품질 게이트가 다음 단계. coverage atom `document_card_scale`
 (caveat 병기). 결과: `experiments/results/smartdoc_detected_quad_eval.json`,
 상세: `docs/progress/2026-06-13_gaugebench-v1-p2-1b.md`.
 
+## Count v1 — ROI-1555 rebar density head ⭐
+
+**목적**: 카운팅은 prompt 문제가 아니라 표현 문제(dense undercount). owned density head가
+zero-shot SAHI(MAE 8.9)를 이기는지 검증. `image → tiny FCN(0.11M) → density map → count=sum`.
+
+**프로토콜**: ROI-1555 labelme 1260장, GT=#shapes. count-bin stratified split
+(밀도 분포 정합; scene 메타 없음), cosine LR. 학습 함정 2건 해결: zero-collapse(출력 ReLU
+제거+count L1 주신호), split 분포 이동(block→stratified).
+
+| split | test MAE ↓ | acc@10% | dense-bin MAE (GT≥40) | dense-bin bias |
+|---|---:|---:|---:|---:|
+| **stratified (primary)** | **7.0** | 0.19 | 30.9 | −29.3 |
+| block (density-shift stress) | 12.0 | 0.19 | 29.8 | −28.2 |
+
+앵커: SAHI-SAM3 zero-shot 8.9 · target <5.
+
+**판정**: owned density head가 SAHI를 이김(7.0<8.9, acc 0.19 vs 0.075) — counting
+negative→**partial** 전진. 단 목표 <5 미달이고 **dense-bin undercount(−29)는 그대로**가
+진짜 문제. 다음(v1.1): 고해상도+sharp sigma+count-weighted loss로 dense-regime 공략.
+결과: `experiments/results/rebar_density_head.json`,
+상세: `docs/progress/2026-06-13_count-v1-density-head.md`.
+
 ## 학습형 Soft 방법 (#1 DRAEM, #2 Matting) — regime별 학습 헤드 ⭐⭐
 
 고전 PoC로 방향을 확정한 뒤, regime별 **학습형 헤드**를 자체 학습(license-clean)으로 검증.

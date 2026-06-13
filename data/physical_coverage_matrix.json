@@ -134,12 +134,12 @@
         "RebarDSC candidate"
       ],
       "gt_mechanism": "instance masks / boxes",
-      "status": "negative",
-      "headline": "Global SAM3 MAE 13.2; SAHI tiled improves to MAE 7.35 but dense touching bars remain open.",
+      "status": "partial",
+      "headline": "Owned density head (Count v1, 0.11M) beats zero-shot SAHI on a fair stratified split: MAE 7.0 vs 8.9, acc@10% 0.19 vs 0.075. Dense bars (GT>=40) still undercount by ~29 (MAE 30.9) — the open structural problem.",
       "asset": "rebar_sahi_count.png",
-      "result_json": "experiments/results/rebar_sahi_eval.json",
-      "caveat": "Prompt tuning is insufficient; density/centroid fallback or supervision is needed.",
-      "next_step": "Train a small centroid/density head and evaluate dense bins separately."
+      "result_json": "experiments/results/rebar_density_head.json",
+      "caveat": "Target MAE<5 not met; dense-regime undercount persists. Block-split density shift inflates MAE to 12.0. ROI-1555 labeled images have no scene metadata, so count-stratified split is used (near-duplicate-frame leakage possible).",
+      "next_step": "Count v1.1: high-res + sharp sigma + count-weighted loss for the dense bin; compare against CountGD/GeCo external counters on the same split."
     },
     {
       "id": "dynamic_handheld_scale",

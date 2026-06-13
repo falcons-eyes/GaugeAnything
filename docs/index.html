@@ -560,9 +560,9 @@
       </div>
       <div class="column is-half">
         <div class="rcard" style="border-top:3px solid #e0394b">
-          <div class="h" style="color:#e0394b">Counting gap</div>
-          <div class="tt">Rebar zero-shot fails honestly</div>
-          <p>On ROI-1555, the best zero-shot prompt reaches MAE <b>13.2</b> bars with <b class="bad">0%</b> acc@10% — and six prompts all fail, so it is not wording. SAHI tiling recovers to MAE <b>7.4-8.9</b>, but dense touching ends still undercount: density or supervision is the remaining fix.</p>
+          <div class="h" style="color:#b5791a">Counting — owned head beats SAHI</div>
+          <div class="tt">Rebar density head (Count v1)</div>
+          <p>Zero-shot SAM&nbsp;3 fails (MAE 13.2, 0% acc@10%); SAHI tiling reaches 8.9. A tiny owned <b>density head (0.11M)</b> beats it on a fair split: <b class="good">MAE 7.0</b>, acc@10% 0.19. But dense bars (GT≥40) still undercount by ~29 — the open structural problem, next attacked with high-res + count-weighted training.</p>
         </div>
       </div>
       <div class="column is-half">

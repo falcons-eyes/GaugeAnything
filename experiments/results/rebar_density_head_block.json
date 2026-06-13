@@ -1,0 +1,215 @@
+{
+  "protocol": {
+    "task": "rebar count via density-map regression head over ROI-1555",
+    "data": "ROI-1555 labelme (1260 labeled), GT count = #polygon shapes",
+    "split": "block",
+    "split_note": "stratified = count-bin stratified (밀도 분포 정합, scene 메타 없음); block = id-정렬 contiguous (보수적이나 test 블록이 고밀도로 쏠림). 둘 다 연속 프레임이면 near-duplicate 누수 가능 — 한계.",
+    "gt_mean_per_split": {
+      "train": 18.56,
+      "val": 26.16,
+      "test": 29.8
+    },
+    "lr_schedule": "cosine annealing",
+    "selection": "min val MAE epoch; test labels unused for selection",
+    "density": "normalized Gaussian (sum=1) per centroid, stride 8, sigma 2.0",
+    "params_M": 0.112,
+    "selected_epoch": 57
+  },
+  "anchors": {
+    "sahi_sam3_zeroshot_MAE": 8.9,
+    "sahi_sam3_note": "E-cnt-2, n=40 random sample; dense touching bars undercount (GT 81->40)",
+    "target_MAE": 5.0
+  },
+  "val": {
+    "n": 189,
+    "MAE": 8.76,
+    "RMSE": 11.982,
+    "bias": -1.166,
+    "acc@10pct": 0.201,
+    "gt_mean": 26.16,
+    "pred_mean": 25.0,
+    "dense_bin": {
+      "n": 31,
+      "MAE": 19.271,
+      "bias": -18.97,
+      "gt_mean": 59.1
+    }
+  },
+  "test": {
+    "n": 189,
+    "MAE": 11.973,
+    "RMSE": 25.609,
+    "bias": -2.272,
+    "acc@10pct": 0.18,
+    "gt_mean": 29.8,
+    "pred_mean": 27.53,
+    "dense_bin": {
+      "n": 32,
+      "MAE": 32.643,
+      "bias": -29.09,
+      "gt_mean": 73.09
+    }
+  },
+  "test_rows": [
+    {
+      "gt": 17,
+      "pred": 25.9
+    },
+    {
+      "gt": 31,
+      "pred": 26.1
+    },
+    {
+      "gt": 23,
+      "pred": 20.4
+    },
+    {
+      "gt": 19,
+      "pred": 26.7
+    },
+    {
+      "gt": 17,
+      "pred": 26.7
+    },
+    {
+      "gt": 14,
+      "pred": 16.3
+    },
+    {
+      "gt": 20,
+      "pred": 17.4
+    },
+    {
+      "gt": 19,
+      "pred": 22.9
+    },
+    {
+      "gt": 27,
+      "pred": 23.2
+    },
+    {
+      "gt": 26,
+      "pred": 24.2
+    },
+    {
+      "gt": 19,
+      "pred": 27.9
+    },
+    {
+      "gt": 21,
+      "pred": 20.2
+    },
+    {
+      "gt": 15,
+      "pred": 13.0
+    },
+    {
+      "gt": 72,
+      "pred": 45.2
+    },
+    {
+      "gt": 30,
+      "pred": 24.7
+    },
+    {
+      "gt": 30,
+      "pred": 20.3
+    },
+    {
+      "gt": 16,
+      "pred": 17.9
+    },
+    {
+      "gt": 17,
+      "pred": 20.5
+    },
+    {
+      "gt": 29,
+      "pred": 26.7
+    },
+    {
+      "gt": 32,
+      "pred": 19.9
+    },
+    {
+      "gt": 17,
+      "pred": 19.0
+    },
+    {
+      "gt": 14,
+      "pred": 29.3
+    },
+    {
+      "gt": 28,
+      "pred": 23.2
+    },
+    {
+      "gt": 32,
+      "pred": 23.3
+    },
+    {
+      "gt": 14,
+      "pred": 7.9
+    },
+    {
+      "gt": 16,
+      "pred": 14.9
+    },
+    {
+      "gt": 18,
+      "pred": 20.9
+    },
+    {
+      "gt": 16,
+      "pred": 18.7
+    },
+    {
+      "gt": 8,
+      "pred": 16.1
+    },
+    {
+      "gt": 10,
+      "pred": 18.7
+    },
+    {
+      "gt": 37,
+      "pred": 30.3
+    },
+    {
+      "gt": 20,
+      "pred": 15.7
+    },
+    {
+      "gt": 12,
+      "pred": 7.1
+    },
+    {
+      "gt": 20,
+      "pred": 27.3
+    },
+    {
+      "gt": 13,
+      "pred": 17.7
+    },
+    {
+      "gt": 25,
+      "pred": 22.7
+    },
+    {
+      "gt": 14,
+      "pred": 19.6
+    },
+    {
+      "gt": 20,
+      "pred": 23.7
+    },
+    {
+      "gt": 15,
+      "pred": 20.5
+    },
+    {
+      "gt": 27,
+      "pred": 24.6
+    }
+  ]
+}
