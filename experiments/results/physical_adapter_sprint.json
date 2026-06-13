@@ -1,0 +1,176 @@
+{
+  "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+  "adapters": [
+    {
+      "adapter_id": "smartdoc_midv_known_quad_scale",
+      "priority": 1,
+      "datasets": [
+        "SmartDoc15-CH1",
+        "MIDV-500"
+      ],
+      "local_paths": [
+        "smartdoc",
+        "smartdoc/repo",
+        "midv500",
+        "midv_500"
+      ],
+      "ready_patterns": [
+        "smartdoc/metadata.csv.gz",
+        "smartdoc/frames.tar.gz",
+        "smartdoc/frames/metadata.csv.gz",
+        "smartdoc/**/metadata.csv.gz",
+        "midv500/**/*.json",
+        "midv_500/**/*.json"
+      ],
+      "target_quantity": "known document/card edge length",
+      "unit": "mm, relative %",
+      "protocol": "quad GT -> PlaneScale homography -> A4/ID-1 edge error under perspective",
+      "command": "DATA_ROOT=./datasets bash data/scripts/download_metric.sh smartdoc",
+      "blocker": "Need dataset layout/quad parser and MIDV download path validation.",
+      "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+      "available_paths": [
+        "/home/hwoo_joo/github/GaugeAnything/datasets/smartdoc",
+        "/home/hwoo_joo/github/GaugeAnything/datasets/smartdoc/repo"
+      ],
+      "ready_evidence": [
+        "/home/hwoo_joo/github/GaugeAnything/datasets/smartdoc/frames.tar.gz"
+      ],
+      "ready": true,
+      "recommended_next_action": "Implement/evaluate adapter now."
+    },
+    {
+      "adapter_id": "timberseg_log_count",
+      "priority": 2,
+      "datasets": [
+        "TimberSeg 1.0"
+      ],
+      "local_paths": [
+        "timberseg",
+        "timberseg1",
+        "timberseg_1_0"
+      ],
+      "ready_patterns": [
+        "timberseg/**/*.json",
+        "timberseg/**/*.png",
+        "timberseg/**/*.jpg"
+      ],
+      "target_quantity": "log count and diameter distribution",
+      "unit": "count, px diameter",
+      "protocol": "SAM3 global vs tiled instance count; optional diameter distribution if masks are clean",
+      "command": "Add TimberSeg downloader, then run a tiled count eval analogous to rebar_sahi_eval.py.",
+      "blocker": "Need direct download URL/license check in downloader.",
+      "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+      "available_paths": [],
+      "ready_evidence": [],
+      "ready": false,
+      "recommended_next_action": "Acquire data first: Add TimberSeg downloader, then run a tiled count eval analogous to rebar_sahi_eval.py."
+    },
+    {
+      "adapter_id": "deepfish_tray_length",
+      "priority": 3,
+      "datasets": [
+        "DeepFish tray",
+        "AutoFish"
+      ],
+      "local_paths": [
+        "deepfish_tray",
+        "deepfish",
+        "autofish"
+      ],
+      "ready_patterns": [
+        "deepfish_tray/**/*.csv",
+        "deepfish/**/*.csv",
+        "autofish/**/*.csv"
+      ],
+      "target_quantity": "fish length",
+      "unit": "mm or cm",
+      "protocol": "fish gate -> major-axis length -> tray/homography or label length comparison",
+      "command": "DATA_ROOT=./datasets bash data/scripts/download_metric.sh deepfish",
+      "blocker": "Need Zenodo record selection and label schema parser.",
+      "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+      "available_paths": [],
+      "ready_evidence": [],
+      "ready": false,
+      "recommended_next_action": "Acquire data first: DATA_ROOT=./datasets bash data/scripts/download_metric.sh deepfish"
+    },
+    {
+      "adapter_id": "bop_family_cad_dimensions",
+      "priority": 4,
+      "datasets": [
+        "HB",
+        "YCB-V",
+        "ITODD"
+      ],
+      "local_paths": [
+        "hb",
+        "ycbv",
+        "itodd"
+      ],
+      "ready_patterns": [
+        "hb/**/scene_gt.json",
+        "ycbv/**/scene_gt.json",
+        "itodd/**/scene_gt.json"
+      ],
+      "target_quantity": "CAD object dimensions",
+      "unit": "mm, relative %",
+      "protocol": "Reuse T-LESS CAD+pose adapter over additional BOP families with category holdout",
+      "command": "Extend data/scripts/download_metric.sh with hb/ycbv; reuse tless_upper_bound.py.",
+      "blocker": "Need per-dataset BOP camera/pose/model path normalization.",
+      "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+      "available_paths": [],
+      "ready_evidence": [],
+      "ready": false,
+      "recommended_next_action": "Acquire data first: Extend data/scripts/download_metric.sh with hb/ycbv; reuse tless_upper_bound.py."
+    },
+    {
+      "adapter_id": "kitti_round_sign_diameter",
+      "priority": 5,
+      "datasets": [
+        "KITTI object/sign candidate"
+      ],
+      "local_paths": [
+        "kitti",
+        "kitti_object"
+      ],
+      "ready_patterns": [
+        "kitti/**/label_2/*.txt",
+        "kitti_object/**/label_2/*.txt"
+      ],
+      "target_quantity": "traffic sign diameter",
+      "unit": "mm, relative %",
+      "protocol": "round sign prompt -> 2D/3D extent -> snap to standard sign diameters",
+      "command": "Add KITTI adapter after sign-category extraction is validated.",
+      "blocker": "Need robust sign filtering; KITTI object labels do not directly isolate all sign subclasses.",
+      "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+      "available_paths": [],
+      "ready_evidence": [],
+      "ready": false,
+      "recommended_next_action": "Acquire data first: Add KITTI adapter after sign-category extraction is validated."
+    },
+    {
+      "adapter_id": "arkitscenes_furniture_dimensions",
+      "priority": 6,
+      "datasets": [
+        "ARKitScenes 3DOD"
+      ],
+      "local_paths": [
+        "arkitscenes",
+        "arkit_scenes"
+      ],
+      "ready_patterns": [
+        "arkitscenes/**/*.json",
+        "arkit_scenes/**/*.json"
+      ],
+      "target_quantity": "furniture dimensions",
+      "unit": "m, relative %",
+      "protocol": "prompt chair/table/sofa -> RGB-D fusion -> 3DOD box dimensions",
+      "command": "Add ARKitScenes downloader/adapter; compare to ADT dynamic object result.",
+      "blocker": "Need sample download path and 3DOD/depth frame parser.",
+      "data_root": "/home/hwoo_joo/github/GaugeAnything/datasets",
+      "available_paths": [],
+      "ready_evidence": [],
+      "ready": false,
+      "recommended_next_action": "Acquire data first: Add ARKitScenes downloader/adapter; compare to ADT dynamic object result."
+    }
+  ]
+}

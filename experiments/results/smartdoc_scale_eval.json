@@ -1,0 +1,259 @@
+{
+  "summary": {
+    "dataset": "SmartDoc15-CH1",
+    "protocol": "Known A4 quadrilateral scale smoke test. Naive global mm/px is compared against GT A4 dimensions; GT homography is a 0-error upper bound by construction.",
+    "n_frames": 5000,
+    "a4_width_mm": 210.0,
+    "a4_height_mm": 297.0,
+    "naive_height_rel_error_median": 0.10254031346894239,
+    "naive_height_rel_error_p90": 0.1490330408188276,
+    "naive_width_rel_error_median": 0.11425617776062122,
+    "naive_width_rel_error_p90": 0.17513375755808305,
+    "perspective_ratio_median": 1.186580144378305,
+    "perspective_ratio_p90": 1.2243313978435328,
+    "plane_homography_upper_bound_error": 0.0,
+    "note": "This uses GT quadrilaterals, not a detected document mask. Next step: replace GT quad with detector/SAM3/document prompt."
+  },
+  "sample_rows": [
+    {
+      "width_px": 520.7972075865492,
+      "height_px": 686.4528287580138,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06802363774204002,
+      "naive_width_rel_error": 0.07298858693930259,
+      "top_bottom_ratio": 1.1693256943649952,
+      "left_right_ratio": 1.0122347825584703
+    },
+    {
+      "width_px": 523.7378483274941,
+      "height_px": 691.1545202145044,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.0669089185290213,
+      "naive_width_rel_error": 0.07170673887863364,
+      "top_bottom_ratio": 1.1708642731211842,
+      "left_right_ratio": 1.012308189065561
+    },
+    {
+      "width_px": 516.5965590568695,
+      "height_px": 683.1190051883256,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06500841025002874,
+      "naive_width_rel_error": 0.06952833689917234,
+      "top_bottom_ratio": 1.1407265141183398,
+      "left_right_ratio": 1.0127410858597725
+    },
+    {
+      "width_px": 509.8422671688642,
+      "height_px": 673.2623141985807,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.0662914960191383,
+      "naive_width_rel_error": 0.07099806388878846,
+      "top_bottom_ratio": 1.1679371481185972,
+      "left_right_ratio": 1.0137011003018217
+    },
+    {
+      "width_px": 510.57346066941585,
+      "height_px": 673.6813481540175,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06704836057268672,
+      "naive_width_rel_error": 0.07186691971927286,
+      "top_bottom_ratio": 1.1677677599227678,
+      "left_right_ratio": 1.0126654304768945
+    },
+    {
+      "width_px": 509.85605248707816,
+      "height_px": 672.9512913837673,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06674806918188912,
+      "naive_width_rel_error": 0.07152202634435073,
+      "top_bottom_ratio": 1.1653581007068559,
+      "left_right_ratio": 1.0124935957579564
+    },
+    {
+      "width_px": 509.1890049896949,
+      "height_px": 670.5637168377673,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.068840927918235,
+      "naive_width_rel_error": 0.0739303626869353,
+      "top_bottom_ratio": 1.162962203443638,
+      "left_right_ratio": 1.0124720531508187
+    },
+    {
+      "width_px": 508.4377805008844,
+      "height_px": 670.1779226809176,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06800163987351478,
+      "naive_width_rel_error": 0.07296326129188263,
+      "top_bottom_ratio": 1.1633321256291196,
+      "left_right_ratio": 1.01148501143277
+    },
+    {
+      "width_px": 506.9147382114107,
+      "height_px": 668.142071636514,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06804112919934312,
+      "naive_width_rel_error": 0.07300872531090152,
+      "top_bottom_ratio": 1.166519030921412,
+      "left_right_ratio": 1.0124787005701472
+    },
+    {
+      "width_px": 507.3726671123119,
+      "height_px": 667.2725035501728,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.07009409162827043,
+      "naive_width_rel_error": 0.07537761723764658,
+      "top_bottom_ratio": 1.1650593862454557,
+      "left_right_ratio": 1.012645881903416
+    },
+    {
+      "width_px": 507.3562505771219,
+      "height_px": 669.2710115119046,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06727880696580396,
+      "naive_width_rel_error": 0.07213174469311877,
+      "top_bottom_ratio": 1.1650967371823118,
+      "left_right_ratio": 1.0132199421194747
+    },
+    {
+      "width_px": 507.3053505026512,
+      "height_px": 667.7752435405138,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06926999065420435,
+      "naive_width_rel_error": 0.07442544020138966,
+      "top_bottom_ratio": 1.165093973165665,
+      "left_right_ratio": 1.0129600191960042
+    },
+    {
+      "width_px": 507.37833124322583,
+      "height_px": 668.0667013652162,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06899769695080951,
+      "naive_width_rel_error": 0.07411119900007788,
+      "top_bottom_ratio": 1.1652163561721867,
+      "left_right_ratio": 1.0122100601875916
+    },
+    {
+      "width_px": 507.00295128365406,
+      "height_px": 668.4109950177601,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06782823716418923,
+      "naive_width_rel_error": 0.07276366853019142,
+      "top_bottom_ratio": 1.166540275018613,
+      "left_right_ratio": 1.0149429021472265
+    },
+    {
+      "width_px": 507.7593446795828,
+      "height_px": 668.7915987198364,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06868686210355801,
+      "naive_width_rel_error": 0.07375270390655178,
+      "top_bottom_ratio": 1.1663520822204512,
+      "left_right_ratio": 1.0140377822317002
+    },
+    {
+      "width_px": 507.7265526022919,
+      "height_px": 669.2598526349989,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.0679746119416766,
+      "naive_width_rel_error": 0.0729321462833617,
+      "top_bottom_ratio": 1.1664134587782284,
+      "left_right_ratio": 1.0144833591889149
+    },
+    {
+      "width_px": 508.0671805460187,
+      "height_px": 668.0650543543297,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.07026226365597536,
+      "naive_width_rel_error": 0.07557213277398557,
+      "top_bottom_ratio": 1.1676969932310082,
+      "left_right_ratio": 1.0135613928991845
+    },
+    {
+      "width_px": 508.13012131365224,
+      "height_px": 667.9816243284172,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.07049352200754194,
+      "naive_width_rel_error": 0.0758397318110073,
+      "top_bottom_ratio": 1.167740395678134,
+      "left_right_ratio": 1.0136962836684622
+    },
+    {
+      "width_px": 507.7418830438937,
+      "height_px": 668.4822643181056,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06908560613115901,
+      "naive_width_rel_error": 0.07421263070607614,
+      "top_bottom_ratio": 1.1665176398550925,
+      "left_right_ratio": 1.0142040046642493
+    },
+    {
+      "width_px": 507.75575218736185,
+      "height_px": 668.0650819219518,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06969197727670443,
+      "naive_width_rel_error": 0.07491279831457824,
+      "top_bottom_ratio": 1.1665830516198359,
+      "left_right_ratio": 1.0133270730035289
+    },
+    {
+      "width_px": 508.1831203905233,
+      "height_px": 667.5305511487202,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.07121807109745526,
+      "naive_width_rel_error": 0.07667900169161017,
+      "top_bottom_ratio": 1.1677387599065467,
+      "left_right_ratio": 1.014571546237515
+    },
+    {
+      "width_px": 508.64849097338106,
+      "height_px": 669.4456062167142,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.06940571625955808,
+      "naive_width_rel_error": 0.07458214333811275,
+      "top_bottom_ratio": 1.1662754042847554,
+      "left_right_ratio": 1.0154485724776363
+    },
+    {
+      "width_px": 508.9699223894036,
+      "height_px": 669.2056180048089,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.07032681366123718,
+      "naive_width_rel_error": 0.07564681298188013,
+      "top_bottom_ratio": 1.1648987061854714,
+      "left_right_ratio": 1.014054431378379
+    },
+    {
+      "width_px": 508.22882593388204,
+      "height_px": 667.9227379840418,
+      "model_w_mm": 210.0,
+      "model_h_mm": 297.0,
+      "naive_height_rel_error": 0.07075596952381698,
+      "naive_width_rel_error": 0.07614358252864813,
+      "top_bottom_ratio": 1.1679812675177004,
+      "left_right_ratio": 1.0132492871939864
+    }
+  ]
+}

@@ -24,7 +24,16 @@ coins() {  # MIT (kaa) + HF coins-1apki
 smartdoc() {  # A4 quad GT — GitHub 가공판 (zenodo 원본은 대용량 비디오)
   local d="$DATA_ROOT/smartdoc"; mkdir -p "$d"
   [ -d "$d/repo" ] || git clone -q --depth 1 https://github.com/jchazalon/smartdoc15-ch1-dataset "$d/repo"
-  log "smartdoc repo OK (데이터 링크는 repo README 참조)"
+  local base="https://github.com/jchazalon/smartdoc15-ch1-dataset/releases/download/v2.0.0"
+  for f in sha256.chksum frames.tar.gz; do
+    [ -f "$d/$f" ] && { log "skip smartdoc $f"; continue; }
+    log "↓ smartdoc $f"; wget -q -c "$base/$f" -O "$d/$f"
+  done
+  if [ "${SMARTDOC_MODELS:-0}" = "1" ]; then
+    [ -f "$d/models.tar.gz" ] || { log "↓ smartdoc models.tar.gz"; wget -q -c "$base/models.tar.gz" -O "$d/models.tar.gz"; }
+  fi
+  ( cd "$d" && sha256sum -c sha256.chksum --ignore-missing >/dev/null 2>&1 ) || log "smartdoc sha256 check skipped/failed (inspect manually)"
+  log "smartdoc OK (frames.tar.gz ready; set SMARTDOC_MODELS=1 for models)"
 }
 
 rebar() {  # ROI-1555 (HF 비gated)
