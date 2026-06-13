@@ -55,11 +55,19 @@ promptable pipeline measures part dimensions at \textbf{$2.5\%$ median error}, s
 indistinguishable from a perfect-mask ceiling of $2.83\%$. We further report the first
 peer-comparable SAM~3 crack-segmentation IoU ($0.442\pm0.011$ crack-only, $2.44\times$
 classical baselines), a calibration ladder in which a six-parameter logit-threshold +
-quantile scheme ($0.437$ rel.\ err.) beats a $1.9$M-parameter neural refiner ($0.564$), and
-honest negative results: zero-shot counting collapses on dense touching parts regardless of
-prompt wording, and an alpha-matting head that wins $20\times$ on synthetic data initially
-failed to transfer until the synthesis was made directionally realistic (real-fray IoU
-$0.483\rightarrow0.949$). All code, audited benchmarks, and five task heads are released.
+quantile scheme ($0.437$ rel.\ err.) beats a $1.9$M-parameter neural refiner ($0.564$),
+and a per-source conformal audit of the ladder: $90\%$ intervals transfer to held-out
+sources only in their non-adaptive form---the efficient adaptive variants (normalized
+conformal, CQR) collapse to $21\%$/$11\%$ coverage on the worst source, whose failure no
+feature-based difficulty signal detects (a concept shift, not a covariate shift). Beyond
+static scenes, gated handheld RGB-D measurement holds $1.06\%$ median error (TUM) and
+oracle-gated egocentric multiview fusion $8.7\%$ median 3-D dimension error (Aria Digital
+Twin, 229 objects), while an ROI-only control collapses to $316\%$---localization, again,
+is the binding constraint. We also report honest negative results: zero-shot counting
+collapses on dense touching parts regardless of prompt wording, and an alpha-matting head
+that wins $20\times$ on synthetic data initially failed to transfer until the synthesis was
+made directionally realistic (real-fray IoU $0.483\rightarrow0.949$). All code, audited
+benchmarks, and task heads are released.
 \end{abstract}
 
 \section{Introduction}
@@ -107,18 +115,23 @@ all along; the binary mask was discarding it.
   physical ground truth: $23.2$\um{} median (localization-gated) vs.\ $144$--$186$\um{} for
   mask geometry; on T-LESS CAD ground truth, promptable part measurement at $2.5\%$ median
   $\approx$ the $2.83\%$ perfect-mask ceiling.
-\item \textbf{Calibration ladder}: a systematic, honestly-reported progression for width
-  bias---raw $0.730 \rightarrow$ neural refiner $0.564 \rightarrow$ 5-number quantile
-  calibration $0.480 \rightarrow$ logit-threshold + quantile $0.437$ (held-out sources)---in
-  which the simple method beats the learned one, and we say so.
+\item \textbf{Calibration ladder with an uncertainty audit}: a systematic, honestly-reported
+  progression for width bias---raw $0.730 \rightarrow$ neural refiner $0.564 \rightarrow$
+  5-number quantile calibration $0.480 \rightarrow$ a tiny learned head $0.472
+  \rightarrow$ logit-threshold + quantile $0.437$ (held-out sources)---in which the simple
+  method beats the large learned one, and we say so; plus a per-source conformal coverage
+  audit ($90\%$ target) showing that only non-adaptive intervals survive source shift.
 \item \textbf{First numbers}: the first peer-comparable SAM~3 crack IoU
   ($0.442\pm0.011$ crack-only; the field's supervised SOTA reports two-class mIoU, a metric
   trap we quantify); the first promptable physical crack-width MAE; per-class soft-map
-  results on Magnetic-Tile fray/uneven, which prior work reports only in aggregate.
+  results on Magnetic-Tile fray/uneven, which prior work reports only in aggregate; gated
+  dynamic-scene measurement curves (TUM handheld $1.06\%$; ADT egocentric oracle bound
+  $8.7\%$ with a $316\%$ ROI-only control).
 \item \textbf{Honest negatives, released}: prompt-synonym collapse and its ensemble rescue;
   zero-shot dense counting failure (six prompts, $0\%$ acc@10\%) with a partial SAHI
   recovery; a synthetic-to-real matting failure and its directional-synthesis fix; an
-  equivalent-width hypothesis rejected by textured backgrounds.
+  equivalent-width hypothesis rejected by textured backgrounds; adaptive conformal
+  intervals and three difficulty signals all missing a worst-source concept shift.
 \end{enumerate}
 
 \begin{figure}[t]
@@ -262,11 +275,35 @@ Raw SAM~3 mask width ($\theta{=}0.5$) & 0 & 0.730 & $+0.680$ \\
 Global affine calibration & 2 & 0.679 & $+0.633$ \\
 M2 neural refiner (UNet) & 1.9M & 0.564 & $+0.503$ \\
 Quantile-ratio calibration & 5 & 0.480 & $+0.411$ \\
+GaugeHead-Tiny (ExtraTrees, 19 statistics) & $\sim$$10^5$ & 0.472 & $+0.456$ \\
 Logit iso-level $\theta^\ast{=}0.7$ & 1 & 0.493 & $+0.406$ \\
 \textbf{$\theta^\ast$ + quantile} & \textbf{6} & \textbf{0.437} & $+0.367$ \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\subsection{An owned measurement head and its per-source conformal audit}\label{sec:owned}
+Two questions follow the ladder: can \emph{any} learned component overtake the simple
+rungs, and can the instrument state its own uncertainty per domain? First, a tiny tabular
+head (``GaugeHead-Tiny'': ExtraTrees over 19 mask/image statistics, family selected on
+train-source validation only, refit on train+val) becomes the first learned rung to pass
+quantile calibration on held-out sources ($0.472$ vs.\ $0.480$)---though it still trails
+the logit-level scheme ($0.437$), and the worst source (CrackTree200, $0.720$ rel.\ err.)
+is unchanged; we claim a path, not a victory. Second, we calibrate $90\%$ intervals around
+this head four ways---absolute-residual and log-residual split conformal, difficulty-%
+normalized conformal with a learned $\sigma(x)$, and CQR~\citep{romano2019cqr}---selecting
+by validation efficiency only. The non-adaptive log-residual interval covers every
+held-out source ($0.97$/$1.00$/$0.98$); its 5-fold cross-conformal variant keeps the
+$0.472$ point error with per-source coverage $0.91$/$1.00$/$0.95$. The honest negative:
+the \emph{efficient} adaptive intervals collapse on the worst source ($0.21$ and $0.11$
+coverage at the nominal $0.90$), and no feature-based difficulty signal we audited
+(learned $\sigma(x)$, ensemble variance, kNN feature distance; thresholds fixed on
+validation) flags that source---each fires more on the \emph{easiest} source. CrackTree200
+fails through a shifted width--label relationship at similar features (concept shift), not
+through a shifted feature distribution, so exchangeability-based
+adaptivity~\citep{lei2018distfree} should not be trusted across inspection domains without
+exactly this kind of per-source audit. The deployed checkpoint therefore ships the
+non-adaptive interval, and we record the adaptive collapse as a finding.
 
 \subsection{Promptable part metrology on CAD ground truth (T-LESS)}
 BOP-format CAD models are metrically exact: projecting model vertices through the annotated
@@ -354,6 +391,20 @@ compositing achieves real-fray preservation IoU $0.949$ vs.\ guided-filter $0.86
 an honest failure: the blob-synthesis v1 won $20\times$ synthetically yet transferred at
 $0.483$. Synthesis realism, not architecture, was the fix.
 
+\subsection{Dynamic scenes: handheld and egocentric metrology}\label{sec:dynamic}
+Field capture is not a tripod, so we ask whether the metric signal survives camera motion.
+On TUM handheld RGB-D~\citep{sturm2012tum}, after gating out depth-desynchronized and
+anisotropic frames, checkerboard-square measurement over $160$ frames attains
+\textbf{$1.06\%$ median / $2.60\%$ p90} relative error, with every $0.1$--$1.0$\,m/s motion
+bin near $1\%$: gated handheld measurement is essentially static-grade. On Aria Digital
+Twin egocentric walkthroughs~\citep{pan2023adt} ($2$ sequences, $480$ frames, $229$
+objects), multiview RGB-D fusion under an \emph{oracle} GT-pose/volume gate attains
+\textbf{$8.7\%$ median} 3-D dimension error ($9.1\%$ in the $0.5$\,m/s$+$ bin), while an
+ROI-only control without the gate collapses to $316\%$. Motion does not destroy the metric
+signal; \emph{localization} does---consistent with the static-scene finding. We report the
+ADT number explicitly as an upper bound: replacing the oracle gate with promptable masks,
+and reporting the gate failure rate, is the open problem.
+
 \subsection{Metrology rigor}\label{sec:rigor}
 Two silent measurement killers, quantified: camera tilt ($50^\circ$: $19.3\%\rightarrow0.7\%$
 via PlaneScale) and prompt synonym collapse ($0.000\rightarrow0.374/0.352$ via the prompt-set
@@ -379,13 +430,21 @@ real deployments. (3)~\emph{Single image, single depth}: plane scaling degrades 
 depth-elongated objects (worst $34.6\%$ on T-LESS obj.~1); depth-aware measurement is
 future work. (4)~\emph{Transfer of the profile CNN} beyond 6400-dpi concrete scans is
 unvalidated. (5)~Some task heads are trained on datasets with unstated licenses and are
-released for research use only, clearly marked.
+released for research use only, clearly marked. (6)~\emph{Uncertainty}: the conformal
+intervals that survive source shift are wide (median relative width $1.39$, roughly
+$\pm70\%$); their coverage on the worst source is the product of conservatism over $19$
+samples, not of detection---flagging concept-shifted domains from the image evidence
+itself remains open. (7)~\emph{Dynamic scenes}: the ADT result is an oracle-gated upper
+bound; promptable masks have not yet replaced the gate.
 
 \section{Conclusion}
 \ours{} turns promptable segmentation into promptable \emph{measurement}. The decisive move
 is a decomposition---masks for localization, raw signal for quantity---validated on physical
-ground truth at $23.2$\um{} median crack width and $2.5\%$ industrial part dimensions, with
-every number audited, every negative reported, and every artifact released: code and
+ground truth at $23.2$\um{} median crack width and $2.5\%$ industrial part dimensions,
+extended to moving cameras ($1.06\%$ handheld; $8.7\%$ egocentric oracle bound), and
+audited down to its own uncertainty (per-source conformal coverage, with the adaptive
+collapse reported): every number audited, every negative reported, and every artifact
+released: code and
 benchmarks (\href{https://github.com/falcons-eyes/GaugeAnything}{GitHub}), task heads
 (\href{https://huggingface.co/James-joobs/GaugeAnything}{HuggingFace}), and a live project
 page (\href{https://falcons-eyes.github.io/GaugeAnything/}{falcons-eyes.github.io/GaugeAnything}).

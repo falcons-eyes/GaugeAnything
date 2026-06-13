@@ -100,6 +100,62 @@ GT 마스크에서 잰 폭을 참값으로, 예측 마스크 폭과 비교 (mm G
 - thin 크랙 특화: cracktree200=0.084 집중 → σ 축소 + mIoU↑
 - 실제 크랙 사진 + ArUco → width(mm) end-to-end 데모 (계측 코어 selftest 통과 상태)
 
+## M2 v2-a — GaugeHead-Tiny owned measurement head ⭐
+
+**목적**: foundation model fine-tune 전에, 우리가 가진 measurement 노하우만으로 작은 자체 모델이
+기존 neural M2와 단순 보정 baseline을 이길 수 있는지 검증.
+
+**데이터/프로토콜**: 기존 `datasets/m2_cache` train/val/test. test는 source-held-out
+(`cfd`, `cracktree200`, `deepcrack`). 입력은 SAM3 mask + grayscale/mask statistics 19개.
+target은 physical mm가 아니라 mask-derived crack width(px). 모델 family는 train-source validation에서
+선택하고, 선택 family를 train+val로 refit 후 test 평가.
+
+| 방법 | test rel err ↓ | bias | note |
+|---|---:|---:|---|
+| raw SAM3 mask width | 0.7302 | +0.6800 | mask geometry |
+| M2 neural refiner v1 | 0.5640 | +0.5033 | 1.9M UNet, superseded |
+| 5-bin quantile calibration | 0.4804 | +0.4106 | strongest simple baseline |
+| HGB refit train+val | 0.4732 | +0.4395 | close |
+| **GaugeHead-Tiny ExtraTrees** | **0.4724** | +0.4557 | selected by val, refit train+val |
+
+Per-source selected model:
+
+| source | rel err | bias |
+|---|---:|---:|
+| cfd | 0.5497 | +0.5432 |
+| cracktree200 | 0.7201 | +0.7201 |
+| deepcrack | 0.3480 | +0.3180 |
+
+**판정**: 자체 measurement head 경로는 열렸다. 단, 개선폭은 작고 CrackTree200 worst-source가
+여전히 나쁘므로 headline은 "owned model path opened" 수준. 다음은 uncertainty/conformal interval과
+SAM3 raw logit feature를 추가한 M2 v2-b.
+
+결과: `experiments/results/m2_specialist_tabular.json`, checkpoint: `checkpoints/gaugehead_tiny_width.pkl`.
+
+## M2 v2-b — GaugeHead-Tiny conformal interval ⭐
+
+**목적**: v2-a의 silently-overconfident worst-source 문제에 uncertainty를 붙여, 90% interval이
+모든 held-out source에서 실제로 90%를 cover하는지 검증.
+
+**프로토콜**: split conformal(train fit, val calibration) + train+val 5-fold cross-conformal.
+방법 선택은 val 효율(median rel width)만 사용. interval 방법 4종 비교(abs/log/normalized/CQR).
+
+| method | coverage | cfd / cracktree200 / deepcrack | med rel width | point rel err |
+|---|---:|---|---:|---:|
+| conformal_normalized (val 선택) | 0.813 | 0.90 / **0.21** / 0.84 | 1.115 | 0.4899 |
+| cqr_log | 0.877 | 0.96 / **0.11** / 0.94 | 1.392 | 0.4899 |
+| **conformal_log_cv_trainval** | **0.936** | **0.91 / 1.00 / 0.95** | 1.394 | **0.4724** |
+
+**판정**: 성공 기준 1·2 달성 — rel err 0.4724 유지 + 전 source coverage ≥ 0.90.
+단 (1) adaptive 방법(normalized/CQR)은 CrackTree200에서 붕괴(0.21/0.11), (2) 난이도 신호 3종
+(학습 σ·ensemble std·kNN 거리) 모두 CrackTree200 플래깅 실패 — covariate shift가 아닌
+**concept shift**라 feature 기반 OOD로 원리적으로 안 잡힘(정직한 음성 결과). interval은
+calibrated이지만 tight하지 않음(±~70%).
+
+결과: `experiments/results/m2_uncertainty_conformal.json`,
+checkpoint: `checkpoints/gaugehead_tiny_width_conformal.pkl`,
+상세: `docs/progress/2026-06-13_m2-v2b-uncertainty-conformal.md`.
+
 ## 학습형 Soft 방법 (#1 DRAEM, #2 Matting) — regime별 학습 헤드 ⭐⭐
 
 고전 PoC로 방향을 확정한 뒤, regime별 **학습형 헤드**를 자체 학습(license-clean)으로 검증.
@@ -467,3 +523,94 @@ CMd_0.23_2mths/Image1 (6,305×9,448px, 6 stages × 90 profiles):
 합의까지 오염) → depth 패치 무효 → x/y 분리 진단으로 원인 특정 → 게이트 도입 1.06%.
 ③ 한계(정직): 저속 bin(0-0.1m/s, n=14) 이상치 0.46은 소표본 — 추가 조사. 다음: E-dyn-1
 (EuRoC 드론 블러 3단계), E-dyn-2 (ARKitScenes 인스펙터 워크스루).
+
+## E-dyn-3a — ADT ATEK access/geometry chain probe ⭐
+
+**목적**: 사용자 액션으로 확보된 ADT access JSON이 실제 동적·미터법 GT 실험으로 이어지는지 확인.
+Signed URL은 repo에 커밋하지 않고, ATEK cubercnn shard만 다운로드해 검증. 재현:
+`experiments/adt_atek_projection_audit.py`.
+
+**데이터**: `Apartment_release_golden_skeleton_seq100_10s_sample_M1292`, ATEK cubercnn shards 2개
+(총 50프레임). RGB + 3-D OBB dimensions + object/world/device/camera pose + intrinsics.
+
+**체인**: `inv(T_device_camera) @ inv(T_world_device) @ T_world_object` 로 3-D OBB corner를 RGB
+camera에 투영하고, released 2-D box와 비교.
+
+| 지표 | 값 |
+|---|---:|
+| evaluated frames / instances | 50 / 3264 |
+| mean IoU / median IoU | 0.658 / **0.675** |
+| p10 IoU | 0.385 |
+| pass@IoU 0.50 / 0.75 | 80.4% / 35.5% |
+| median center error | **3.86 px** |
+| camera speed median / p90 / max | 0.094 / 0.215 / 0.313 m/s |
+
+**판정**:
+1. ADT access는 실제로 작동하며, ATEK shard만으로 promptable 치수 실험에 필요한 metric dynamic
+   geometry chain을 구성할 수 있다.
+2. 아직 SAM3 성능은 아니다. 이것은 **GT geometry access probe**이며, 다음 단계는 GT-box/mask
+   upper bound와 SAM3 promptable object mask 비교다.
+3. overlay: `docs/assets/adt_atek_projection_audit.png` — 초록=released 2-D box, 자홍=3-D GT 재투영.
+
+## E-dyn-3b — ADT box-only dimension upper bound (negative but useful) ⭐
+
+**질문**: released 2-D box와 ADT GT pose/intrinsics만으로, 같은 instance의 여러 프레임에서 3-D 치수를
+역추정할 수 있는가? 재현: `experiments/adt_atek_box_dimension_upper.py`.
+
+**프로토콜**: instance별 constant dimension vector `(x,y,z)`를 최적화해 3-D OBB 투영 box가 released
+2-D box와 맞도록 fitting. 비교 대상은 ADT `object_dimensions`. 필터: visibility≥0.5, box≥16px,
+views≥5.
+
+| 지표 | 값 |
+|---|---:|
+| fitted instances | 75 |
+| axis-median relative error, median / p90 | **25.4% / 93.9%** |
+| axis-mean relative error, median | 40.1% |
+| pass@10% / pass@25% | 17.3% / 49.3% |
+
+**판정**:
+1. ADT geometry chain은 열렸지만, 2-D box-only 치수 역추정은 깊이 방향이 쉽게 붕괴한다.
+2. 따라서 ADT에서 promptable object measurement를 주장하려면 box만으로 우회하면 안 된다.
+3. 다음 실험은 depth/segmentation upper bound 또는 mask+depth fusion이어야 한다. 이 negative 결과는
+   cherry-picking 방지에 중요하다.
+
+## E-dyn-3c — ADT oracle-volume depth fusion upper bound ⭐⭐
+
+**질문**: ADT EFM의 RGB-depth와 GT object pose/volume을 oracle gate로 쓰면, 여러 프레임 depth를
+object coordinate로 fuse해서 치수를 복원할 수 있는가? 재현: `experiments/adt_atek_depth_upper.py`.
+
+**프로토콜**: ATEK `efm` shard의 Fisheye624 RGB-depth(240×240), camera/device pose, object pose/dimensions를
+사용. object 3-D box를 RGB fisheye로 투영해 후보 ROI를 잡고, depth point를 object coordinate로 변환한 뒤
+GT object volume 안의 점만 oracle mask로 사용한다. instance별 multiview point를 fuse하고 2-98 percentile
+extent를 치수로 읽는다. `other` category 제외.
+
+| 지표 | 값 |
+|---|---:|
+| sequences / shards | 2 / 3 |
+| frames / frame observations | 480 / 18,036 |
+| fitted instances | 229 |
+| axis-median relative error, median / p90 | **8.7% / 36.1%** |
+| axis-mean relative error, median | 15.8% |
+| pass@10% / pass@25% | 56.3% / 79.5% |
+| depth-mode diagnostic | ray: 229 inst / 8.7%, z: 127 inst / 9.8% |
+| ROI-only negative control | 251 inst / **316.0%** median / pass@10% 0.0% |
+
+| subset | n | camera speed median | median error | p90 error |
+|---|---:|---:|---:|---:|
+| golden_skeleton_seq100 | 52 | 0.11 m/s | 8.6% | 44.8% |
+| multiuser_clean_seq119 | 177 | 0.61 m/s | 8.9% | 33.7% |
+| speed 0.10-0.25 m/s | 43 | 0.11 m/s | 8.3% | 34.0% |
+| speed 0.25-0.50 m/s | 16 | 0.47 m/s | 5.3% | 43.4% |
+| **speed 0.50+ m/s** | **160** | **0.61 m/s** | **9.1%** | **32.5%** |
+
+**판정**:
+1. depth+multiview를 쓰면 box-only 25.4%보다 확실히 좋아지고, 0.5m/s 이상 에고센트릭 보행 구간에서도
+   중앙 오차가 9.1%로 크게 무너지지 않는다. 이 숫자가 "동적/비통제 환경에서도 미터법 신호가 남는다"의
+   가장 강한 현재 증거다.
+2. ROI-only depth fusion은 median 316.0%로 붕괴한다. "박스 영역 depth만 모으면 된다"는 우회는
+   성립하지 않고, object mask/volume gate가 핵심 병목임이 분명하다.
+3. 하지만 8.7% 결과는 GT volume/pose를 쓰는 **oracle upper bound**다. SAM3 promptable 성능이 아니다.
+4. 다음 단계는 oracle gate를 ADT segmentation 또는 SAM3 mask로 대체하고, speed/blur/occlusion bin별
+   gate 실패율까지 보고하는 것이다.
+5. visual: `docs/assets/adt_atek_depth_upper.png` — RGB + GT 3D projection + depth heatmap.
+   summary visual: `docs/assets/adt_dynamic_multiseq_summary.png`.

@@ -98,13 +98,19 @@
         <span class="badge">SAM 3 backbone · commercial-OK</span>
         <span class="badge">CrackSeg9k + Magnetic-Tile + krkCMd</span>
         <span class="badge">coins 1.74% · krkCMd 27.8±2.5 μm (5-fold)</span>
+        <span class="badge">dynamic ADT 8.7% · 0.5m/s+ 9.1% (oracle RGB-D)</span>
         <span class="badge">torch 2.12+cu130 · sm_121</span>
       </div>
       <div style="margin-top:1.1rem;font-size:.86rem;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;background:#f6f9f8;border:1px solid #e2ece8;border-radius:10px;padding:.8rem 1.1rem">
         <b>News</b> ·
-        <b>2026-06-12</b>: paper draft v1 (<a href="static/pdfs/gaugeanything.pdf">PDF</a>) and
-        <a href="https://huggingface.co/James-joobs/GaugeAnything">5 task heads on HuggingFace</a>;
+        <b>2026-06-13</b>: paper draft v2 (<a href="static/pdfs/gaugeanything.pdf">PDF</a>) — owned
+        measurement head <b>GaugeHead-Tiny</b> (rel. err 0.472, first learned rung past quantile
+        calibration) + per-source <b>conformal coverage audit</b> (adaptive intervals collapse to
+        0.21/0.11 on the worst source; non-adaptive keeps ≥0.90 everywhere) + dynamic-scene section ·
+        <b>2026-06-12</b>: paper draft v1 and
+        <a href="https://huggingface.co/James-joobs/GaugeAnything">task heads on HuggingFace</a>;
         signal-based width hits <b>23.2&nbsp;μm</b> median on physical GT ·
+        dynamic ADT walkthrough upper bound reaches <b>8.7%</b> median dimension error ·
         <b>2026-06-11</b>: open-source release with fully audited benchmarks
       </div>
     </div>
@@ -136,6 +142,82 @@
     <h2 class="title is-3 has-text-centered">What GaugeAnything Adds</h2>
     <p class="lead">Segment Anything shows masks. Count Anything shows counts. GaugeAnything shows the inspection quantities that turn a mask into a field decision.</p>
     <figure class="fig" style="max-width:1180px"><img src="assets/story_inspection_atoms.png" alt="GaugeAnything story: detect, measure, validate, deploy honestly"></figure>
+  </div>
+</section>
+
+<!-- ===== PHYSICAL COVERAGE ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">Physical AI Coverage</div>
+    <h2 class="title is-3 has-text-centered">From Vision Prompts to Physical Quantities</h2>
+    <p class="lead">GaugeAnything is a measurement layer: cracks, defects, parts, counts, known objects, dynamic scenes, and physical-state signals share one output grammar.</p>
+    <figure class="fig" style="max-width:1180px"><img src="assets/physical_coverage_matrix.png" alt="GaugeAnything physical AI coverage matrix across datasets and physical quantities"></figure>
+    <p class="cap">Coverage atoms are tracked in <a href="PHYSICAL_COVERAGE_MATRIX.md">PHYSICAL_COVERAGE_MATRIX.md</a>. Green = audited, blue = partial or upper-bound, red = negative bottleneck, amber = next adapter.</p>
+
+    <div class="columns is-multiline" style="margin-top:1.2rem">
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/gallery_rissbilder.png" alt="Concrete crack width" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#16805d">Crack width</div><div class="tt">mask → px/mm width</div>
+        <p>SAM&nbsp;3 wins mIoU, but measurement error exposes the gap.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/krkcmd_profile.png" alt="krkCMd physical crack width profiles" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#2b83ba">Physical μm GT</div><div class="tt">signal → crack width</div>
+        <p>krkCMd gives manual μm width; signal width reaches 23.2&nbsp;μm median when localized.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/dom_mt_blowhole.png" alt="Metal tile blowhole diameter" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#16805d">Sharp defect</div><div class="tt">hole → diameter</div>
+        <p>Blob-like defects switch from thin-width to diameter/area measurement.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/matte_fray_real.png" alt="Real fray matting" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#16805d">Fuzzy boundary</div><div class="tt">fray → α/area</div>
+        <p>Directional matting v2 transfers to real fray, above the guided-filter anchor.</p>
+      </div></div>
+
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/soft_uneven.png" alt="Uneven field residual" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#16805d">Boundaryless field</div><div class="tt">mura → severity</div>
+        <p>Binary masks collapse; illumination residual maps recover ranking signal.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/coins_mm.png" alt="Coin known-object millimeter consistency" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#16805d">Known object</div><div class="tt">coin → mm scale</div>
+        <p>Known-object LOO consistency reaches 1.74% mean error across real scenes.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/results_summary.png" alt="Industrial part metrology summary" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#16805d">CAD metric</div><div class="tt">part → mm dimension</div>
+        <p>T-LESS CAD+pose validates promptable industrial-part dimensions at 2.5% median.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/rebar_sahi_count.png" alt="SAHI rebar counting result" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#e0394b">Counting bottleneck</div><div class="tt">rebar → count</div>
+        <p>Tiling helps, but dense touching bars still need density or supervision.</p>
+      </div></div>
+
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/adt_dynamic_multiseq_summary.png" alt="Dynamic metrology speed bins" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#2b83ba">Dynamic metric</div><div class="tt">motion → stable units</div>
+        <p>ADT oracle depth keeps 8.7% median dimension error; 0.5m/s+ remains 9.1%.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/adt_atek_depth_upper.png" alt="ADT depth fusion visual" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#2b83ba">3D object</div><div class="tt">RGB-D → dimensions</div>
+        <p>ROI-only depth fails at 316%, so object gating is the next model target.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/physical_coverage_matrix.png" alt="Document and card scale adapter plan" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#2b83ba">Document scale</div><div class="tt">A4 → plane units</div>
+        <p>SmartDoc 5k frames show naive scale drifts 10-17%; GT plane geometry is the upper bound.</p>
+      </div></div>
+      <div class="column is-3"><div class="rcard">
+        <img src="assets/physical_coverage_matrix.png" alt="Timber and fish adapter plan" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
+        <div class="h" style="color:#b5791a">Next adapter</div><div class="tt">logs/fish → count/length</div>
+        <p>TimberSeg and DeepFish expand physical coverage beyond cracks and rigid CAD parts.</p>
+      </div></div>
+    </div>
   </div>
 </section>
 
@@ -175,6 +257,9 @@
           recovers signal that binary masks discard. We further validate the measurement chain with real-metric substitutes:
           coin known-object scenes reach <b>1.74% mean error</b>, and krkCMd profile-level crack-width evaluation reaches
           <b>27.8&nbsp;±&nbsp;2.5&nbsp;μm MAE</b> (group 5-fold; leave-one-series worst 46.7&nbsp;μm) against manual physical GT.
+          In dynamic scenes, gated TUM handheld RGB-D reaches <b>1.06%</b> median error, and ADT egocentric
+          RGB-D multiview fusion reaches <b>8.7%</b> median 3-D dimension error over 2 sequences / 480 frames
+          / 229 objects (oracle GT-volume gate; not yet promptable SAM&nbsp;3).
           Finally, reading width from the raw intensity signal instead of mask geometry — <b>mask for <i>where</i>, signal for <i>how wide</i></b> —
           reaches <b>23.2&nbsp;μm median</b> physical crack-width error and <b>2.5%</b> promptable part dimensions on T-LESS CAD GT.
           All results are measured on an NVIDIA&nbsp;GB10.
@@ -383,6 +468,34 @@
   </div>
 </section>
 
+<!-- ===== DYNAMIC METROLOGY ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">Dynamic Scenes</div>
+    <h2 class="title is-3 has-text-centered">Moving Cameras, Still Metric</h2>
+    <p class="lead">The field scenario is not a tripod. We test handheld and egocentric walkthroughs, report the gate cost, and keep the oracle/promptable boundary explicit.</p>
+    <figure class="fig" style="max-width:1180px"><img src="assets/adt_dynamic_multiseq_summary.png" alt="ADT dynamic metrology summary across sequences and camera speeds"></figure>
+
+    <div class="columns is-multiline" style="margin-top:1.3rem">
+      <div class="column is-half">
+        <div class="rcard" style="border-top:3px solid #16805d">
+          <div class="h" style="color:#16805d">TUM handheld checkerboard</div>
+          <div class="tt">Gated RGB-D stays near static accuracy</div>
+          <p>After rejecting depth-sync and anisotropic frames, 160 handheld frames reach <b class="good">1.06%</b> median / <b>2.60%</b> p90 relative error. Motion bins from 0.1-1.0 m/s remain around 1%.</p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="rcard" style="border-top:3px solid #16805d">
+          <div class="h" style="color:#16805d">ADT egocentric walkthroughs</div>
+          <div class="tt">Object dimensions survive motion</div>
+          <p>Oracle-volume RGB-D fusion over 2 ADT sequences, 480 frames, and 229 fitted objects gives <b class="good">8.7%</b> median 3-D dimension error. The 0.5m/s+ bin remains <b class="good">9.1%</b> median, so motion does not collapse the metric signal. ROI-only depth collapses to <b class="bad">316%</b>, which makes the next mask-gating problem explicit.</p>
+        </div>
+      </div>
+    </div>
+    <p class="cap">ADT result uses GT object pose/volume as an oracle gate. It validates metric multiview depth under egocentric motion; the next result must replace that gate with ADT segmentation or promptable SAM&nbsp;3 masks.</p>
+  </div>
+</section>
+
 <!-- ===== REAL METRIC EVIDENCE ===== -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -446,6 +559,20 @@
           <div class="h" style="color:#e0394b">Counting gap</div>
           <div class="tt">Rebar zero-shot fails honestly</div>
           <p>On ROI-1555, the best zero-shot prompt reaches MAE <b>13.2</b> bars with <b class="bad">0%</b> acc@10% — and six prompts all fail, so it is not wording. SAHI tiling recovers to MAE <b>7.4-8.9</b>, but dense touching ends still undercount: density or supervision is the remaining fix.</p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="rcard" style="border-top:3px solid #16805d">
+          <div class="h" style="color:#16805d">Owned model (M2 v2-a)</div>
+          <div class="tt">GaugeHead-Tiny passes the quantile bar</div>
+          <p>A tiny ExtraTrees head over 19 mask/image statistics is the first <i>learned</i> rung to beat quantile calibration on held-out sources: rel. err <b class="good">0.472</b> vs 0.480 (quantile) and 0.564 (1.9M UNet). It still trails the logit-level scheme (0.437) and the worst source stays 0.720 — a path opened, not a victory.</p>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="rcard" style="border-top:3px solid #1b4d89">
+          <div class="h" style="color:#1b4d89">Uncertainty audit (M2 v2-b)</div>
+          <div class="tt">Only non-adaptive intervals survive source shift</div>
+          <p>90% conformal intervals around GaugeHead-Tiny: the non-adaptive log interval keeps rel. err 0.4724 with per-source coverage <b class="good">0.91 / 1.00 / 0.95</b>. The efficient adaptive variants (normalized, CQR) collapse to <b class="bad">0.21 / 0.11</b> on CrackTree200 — and σ(x), ensemble variance, and kNN distance all fail to flag it: a <b>concept shift</b>, not a covariate shift.</p>
         </div>
       </div>
     </div>

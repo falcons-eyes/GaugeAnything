@@ -62,7 +62,10 @@ data/                   # dataset acquisition guide + download scripts
 |---|---|
 | [Results log](experiments/RESULTS.md) | Every audited number, protocol and verdict, in order |
 | [Rigor audit](docs/RIGOR_AUDIT.md) | How we attacked our own results (leakage, metric traps) |
+| [Physical coverage matrix](docs/PHYSICAL_COVERAGE_MATRIX.md) | Dataset/quantity coverage across cracks, defects, parts, counts, known objects, dynamic scenes, and next adapters |
+| [Owned model roadmap](docs/MODEL_RESEARCH_ROADMAP.md) | GaugeHead/GaugeSpecialist training plan, baseline ladder, and first tiny specialist result |
 | [Width bottleneck analysis](docs/WIDTH_BOTTLENECK_ANALYSIS.md) | Physics + method space behind "mask=WHERE, signal=WIDTH" |
+| [Dynamic metrology design](docs/DYNAMIC_METROLOGY_DESIGN.md) | TUM/ADT dynamic RGB-D evidence and next uncontrolled-scene experiments |
 | [Capture protocol](docs/CAPTURE_PROTOCOL.md) | ArUco+caliper field protocol (printable board included) |
 | [Dataset map](paper/DATASETS.md) | All datasets used/found, licenses, traps |
 | [Progress log](docs/progress/) | Per-step research records, including failures |
@@ -138,6 +141,17 @@ Best mIoU is not best measurement — the core motivation for measurement-aware 
 | Camera tilt 50° (scale error) | 19.3% | **0.7%** (PlaneScale homography) |
 | Prompt synonym collapse ("fracture"/"pit") | mIoU 0.000 | **0.374 / 0.352** (prompt-set ensemble) |
 
+**Dynamic / uncontrolled scenes** — first evidence that the metric signal survives moving cameras:
+
+| Track | Data | Result |
+|---|---|---|
+| TUM handheld checkerboard | 160 gated frames | **1.06% / 2.60%** median/p90 relative error |
+| ADT egocentric walkthroughs | 2 sequences, 480 frames, 229 objects | **8.7%** median 3-D dimension error; **9.1%** in the 0.5m/s+ speed bin |
+
+ADT is an oracle-depth upper bound using GT object volume/pose gates, not SAM3 promptable performance yet.
+The ROI-only negative control collapses to **316%** median error, so the next real model problem is replacing
+the oracle gate with segmentation or promptable masks.
+
 **Honest negative results** (we publish these too): a matting head that wins 20× on synthetic
 fuzzy boundaries **failed to transfer** to real fray (mask IoU 0.48 vs guided filter 0.86) —
 synthetic blob distribution ≠ directional texture. Production keeps the classical guided filter;
@@ -159,10 +173,13 @@ documented. Per-step progress logs live in [docs/progress/](docs/progress/).
 - [x] PlaneScale (tilt-robust mm) + prompt-set ensemble
 - [x] Measurement-aware refinement head (M2 v1) — superseded: a 5-number quantile calibration beats it (0.480 vs 0.564 rel. err, held-out); M2 v2 bar = 0.480 + per-source worst-case
 - [x] Real-metric substitutes — coins LOO 1.74% real-photo consistency; krkCMd profile-level crack width MAE 27.8±2.5μm (5-fold; single split 25.9) vs manual GT
+- [x] Dynamic metric evidence — TUM handheld 1.06% gated error; ADT oracle RGB-D multiview 8.7% over 2 sequences/480 frames/229 objects
+- [x] Owned measurement head (M2 v2-a) — GaugeHead-Tiny rel. err **0.472**, first learned rung past the quantile bar (0.480); see [model roadmap](docs/MODEL_RESEARCH_ROADMAP.md)
+- [x] Uncertainty audit (M2 v2-b) — 90% conformal intervals keep 0.4724 rel. err with per-source coverage 0.91/1.00/0.95; adaptive variants collapse on the worst source (0.21/0.11) and no difficulty signal flags it (concept shift — honest negative)
 - [ ] Real-metric ground truth capture (ArUco/caliper field protocol)
-- [ ] Counting & spacing validation (fastener datasets)
-- [x] HuggingFace weights release — **https://huggingface.co/James-joobs/GaugeAnything** (5 task heads + audited model card)
-- [x] Paper draft v1 — [PDF on the project page](https://falcons-eyes.github.io/GaugeAnything/static/pdfs/gaugeanything.pdf) (arXiv submission pending endorsement)
+- [ ] Counting & spacing validation (fastener datasets) — next: ROI-1555 density/centroid head (Count v1, target MAE < 5)
+- [x] HuggingFace weights release — **https://huggingface.co/James-joobs/GaugeAnything** (task heads + audited model card)
+- [x] Paper draft v2 — [PDF on the project page](https://falcons-eyes.github.io/GaugeAnything/static/pdfs/gaugeanything.pdf) (arXiv submission pending endorsement; v2 adds owned-model ladder rung, conformal audit, dynamic-scene section)
 
 ## License & third-party
 
