@@ -14,7 +14,10 @@
       "track": "Crack / Thin Structure",
       "quantity": "crack mask + pixel width",
       "unit": "px",
-      "datasets": ["CrackSeg9k", "VT LCW"],
+      "datasets": [
+        "CrackSeg9k",
+        "VT LCW"
+      ],
       "gt_mechanism": "pixel mask; width is measured from mask geometry",
       "status": "official",
       "headline": "SAM3 crack mIoU 0.442 vs adaptive 0.181, but width relative error remains 62.9%.",
@@ -28,7 +31,10 @@
       "track": "Crack / Physical GT",
       "quantity": "crack width",
       "unit": "um",
-      "datasets": ["krkCMd table", "krkCMd image subset"],
+      "datasets": [
+        "krkCMd table",
+        "krkCMd image subset"
+      ],
       "gt_mechanism": "manual profile width MANwidth, 3.96875 um/px",
       "status": "partial",
       "headline": "GaugeProfile+cal 27.8±2.5um 5-fold; signal-width path 39.9um MAE / 23.2um median where localized.",
@@ -42,7 +48,9 @@
       "track": "Surface Defect / Sharp",
       "quantity": "hole diameter and area",
       "unit": "px now, mm when scale exists",
-      "datasets": ["Magnetic-Tile Defect"],
+      "datasets": [
+        "Magnetic-Tile Defect"
+      ],
       "gt_mechanism": "pixel mask",
       "status": "official",
       "headline": "Metal-tile blowhole prompt maps to blob measurement; mIoU 0.429 and diameter 11.6px.",
@@ -56,7 +64,10 @@
       "track": "Surface Defect / Fuzzy Boundary",
       "quantity": "soft boundary alpha and affected area",
       "unit": "alpha, px area",
-      "datasets": ["Magnetic-Tile Defect", "synthetic directional fray"],
+      "datasets": [
+        "Magnetic-Tile Defect",
+        "synthetic directional fray"
+      ],
       "gt_mechanism": "pixel mask plus synthetic alpha supervision",
       "status": "official",
       "headline": "Directional matting v2 reaches 0.949 real-fray mask IoU vs guided matte 0.860.",
@@ -70,7 +81,9 @@
       "track": "Surface Defect / Boundaryless Field",
       "quantity": "mura/uneven severity",
       "unit": "Sa, Sq, AUC",
-      "datasets": ["Magnetic-Tile Defect"],
+      "datasets": [
+        "Magnetic-Tile Defect"
+      ],
       "gt_mechanism": "pixel defect masks evaluated as ranking AUC",
       "status": "official",
       "headline": "Binary SAM3 is chance-like on uneven; illumination residual reaches 0.669 test AUC.",
@@ -84,7 +97,9 @@
       "track": "Known Object Scale",
       "quantity": "coin diameter consistency",
       "unit": "mm, relative %",
-      "datasets": ["kaa coins"],
+      "datasets": [
+        "kaa coins"
+      ],
       "gt_mechanism": "legal coin diameters; leave-one-out same-denomination scale",
       "status": "official",
       "headline": "22 real-photo scenes: mean/median relative error 1.74% / 1.68%, pass@5% 100%.",
@@ -98,7 +113,9 @@
       "track": "Industrial Parts / CAD Metric",
       "quantity": "visible part dimension",
       "unit": "mm, relative %",
-      "datasets": ["T-LESS"],
+      "datasets": [
+        "T-LESS"
+      ],
       "gt_mechanism": "CAD(mm)+pose+intrinsics",
       "status": "official",
       "headline": "T-LESS SAM3 masks match GT objects at 100%; median dimension error 2.5%.",
@@ -112,7 +129,10 @@
       "track": "Counting / Dense Industrial",
       "quantity": "count, density, spacing",
       "unit": "count",
-      "datasets": ["ROI-1555 Rebar", "RebarDSC candidate"],
+      "datasets": [
+        "ROI-1555 Rebar",
+        "RebarDSC candidate"
+      ],
       "gt_mechanism": "instance masks / boxes",
       "status": "negative",
       "headline": "Global SAM3 MAE 13.2; SAHI tiled improves to MAE 7.35 but dense touching bars remain open.",
@@ -126,7 +146,9 @@
       "track": "Dynamic / Handheld Scale",
       "quantity": "checkerboard cell/edge consistency",
       "unit": "relative %",
-      "datasets": ["TUM RGB-D checkerboard_large"],
+      "datasets": [
+        "TUM RGB-D checkerboard_large"
+      ],
       "gt_mechanism": "checkerboard geometry + RGB-D + motion capture",
       "status": "official",
       "headline": "Gated handheld RGB-D gives 1.06% median / 2.60% p90 relative error over 160 frames.",
@@ -140,7 +162,9 @@
       "track": "Dynamic / Object Dimensions",
       "quantity": "3D object dimension",
       "unit": "relative %",
-      "datasets": ["Aria Digital Twin ATEK EFM"],
+      "datasets": [
+        "Aria Digital Twin ATEK EFM"
+      ],
       "gt_mechanism": "RGB-D + object pose/dimensions; oracle volume gate",
       "status": "partial",
       "headline": "ADT oracle multiview depth: 8.7% median over 2 seq/480 frames/229 objects; 0.5m/s+ is 9.1%.",
@@ -154,21 +178,27 @@
       "track": "Known Object Scale / Documents",
       "quantity": "document/card metric scale",
       "unit": "mm, relative %",
-      "datasets": ["SmartDoc15-CH1", "MIDV-500"],
+      "datasets": [
+        "SmartDoc15-CH1",
+        "MIDV-500"
+      ],
       "gt_mechanism": "A4 or ID-1 known-size quadrilateral",
-      "status": "partial",
-      "headline": "SmartDoc 5k-frame A4 smoke test: naive global scale is 10.3%/14.9% p90 on height and 11.4%/17.5% p90 on width; GT quad homography is 0% by construction.",
+      "status": "official",
+      "headline": "P2-1b promptable detected quad: SAM3 'document' prompt reaches gate pass 96%, quad IoU 0.968, edge rel err median 1.5% (vs naive 10-17%); tail remains heavy (p90 27-32%).",
       "asset": "physical_coverage_matrix.png",
-      "result_json": "experiments/results/smartdoc_scale_eval.json",
-      "caveat": "Uses SmartDoc GT quadrilaterals, not detected document masks or prompts; this is a scale-geometry diagnostic upper bound.",
-      "next_step": "Replace GT quad with document detector/SAM3 prompt and evaluate MIDV-500 ID-card scale."
+      "result_json": "experiments/results/smartdoc_detected_quad_eval.json",
+      "caveat": "Median is promptable and real; the p90 tail (14-32% depending on prompt) means a per-frame quality gate is still required before field claims. MIDV-500 not yet run.",
+      "next_step": "Add per-frame quality gate to cut the p90 tail; evaluate MIDV-500 ID-card scale."
     },
     {
       "id": "fish_length_mm",
       "track": "Biological / Length",
       "quantity": "fish length",
       "unit": "mm or cm",
-      "datasets": ["DeepFish tray", "AutoFish candidate"],
+      "datasets": [
+        "DeepFish tray",
+        "AutoFish candidate"
+      ],
       "gt_mechanism": "tray homography or provided length labels",
       "status": "next",
       "headline": "Next adapter: non-industrial but physical length shows GaugeAnything beyond rigid parts.",
@@ -182,7 +212,10 @@
       "track": "Counting / Natural Industrial",
       "quantity": "log count and diameter distribution",
       "unit": "count, px/mm if scale exists",
-      "datasets": ["TimberSeg 1.0", "FSC-147 logs candidate"],
+      "datasets": [
+        "TimberSeg 1.0",
+        "FSC-147 logs candidate"
+      ],
       "gt_mechanism": "instance masks",
       "status": "next",
       "headline": "Next adapter: count/density family outside rebar, less touching and more natural clutter.",
@@ -196,7 +229,9 @@
       "track": "Outdoor / Known Standard",
       "quantity": "traffic sign diameter",
       "unit": "mm, relative %",
-      "datasets": ["KITTI object/sign candidate"],
+      "datasets": [
+        "KITTI object/sign candidate"
+      ],
       "gt_mechanism": "3D boxes plus standard sign diameters",
       "status": "candidate",
       "headline": "Candidate adapter: outdoor moving-camera known-object metric sanity check.",
@@ -210,7 +245,10 @@
       "track": "Physical Sensors / State",
       "quantity": "fault state or RUL",
       "unit": "class, cycles, health score",
-      "datasets": ["bearing cross-source", "N-CMAPSS"],
+      "datasets": [
+        "bearing cross-source",
+        "N-CMAPSS"
+      ],
       "gt_mechanism": "machine labels and run-to-failure telemetry",
       "status": "partial",
       "headline": "Bearing cross-source collapses even for physics features; N-CMAPSS RUL anchors physical-state framing.",

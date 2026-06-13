@@ -1,0 +1,50 @@
+{
+  "protocol": "P2-1b: SAM3 promptable document mask -> quad gate -> detected-quad homography; GT corners mapped to the metric plane, edge lengths vs A4/model dims. GT-quad upper bound is 0% by construction (P2-1); this measures the detection cost. Gate failures are reported as not-measurable, never guessed.",
+  "dataset": "SmartDoc15-CH1",
+  "n_frames": 150,
+  "prompts": {
+    "document": {
+      "n_frames": 150,
+      "n_measured": 144,
+      "gate_pass_rate": 0.96,
+      "gate_failures": {
+        "no_instance": 6
+      },
+      "quad_iou_median": 0.9679,
+      "corner_err_px_median": 5.67,
+      "edge_rel_err_median": 0.0154,
+      "edge_rel_err_p90": 0.3165
+    },
+    "paper": {
+      "n_frames": 150,
+      "n_measured": 147,
+      "gate_pass_rate": 0.98,
+      "gate_failures": {
+        "too_small": 3
+      },
+      "quad_iou_median": 0.9671,
+      "corner_err_px_median": 5.93,
+      "edge_rel_err_median": 0.0161,
+      "edge_rel_err_p90": 0.2683
+    },
+    "white paper sheet": {
+      "n_frames": 150,
+      "n_measured": 138,
+      "gate_pass_rate": 0.92,
+      "gate_failures": {
+        "no_instance": 3,
+        "too_small": 8,
+        "quad_mask_mismatch": 1
+      },
+      "quad_iou_median": 0.9679,
+      "corner_err_px_median": 5.83,
+      "edge_rel_err_median": 0.0158,
+      "edge_rel_err_p90": 0.14
+    }
+  },
+  "best_prompt": "document",
+  "anchor_p2_1": {
+    "gt_quad_upper_bound": 0.0,
+    "naive_scale_median": "0.10-0.17 (smartdoc_scale_eval.json)"
+  }
+}

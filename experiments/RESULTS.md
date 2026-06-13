@@ -156,6 +156,26 @@ calibrated이지만 tight하지 않음(±~70%).
 checkpoint: `checkpoints/gaugehead_tiny_width_conformal.pkl`,
 상세: `docs/progress/2026-06-13_m2-v2b-uncertainty-conformal.md`.
 
+## P2-1b — SmartDoc detected quad: promptable 문서 스케일 ⭐
+
+**목적**: P2-1의 GT-quad 상한(0% by construction)을 실제 SAM3 promptable 성능으로 교체.
+
+**프로토콜**: 150 frames (배경 5 × 문서 30 stratified) → SAM3 prompt → mask→quad 게이트
+(4코너·볼록·면적·정합) → detected-quad homography로 GT 코너 사상 → 변 길이 vs A4 규격.
+게이트 실패는 "측정 불가"로 집계.
+
+| prompt | gate pass | quad IoU | edge rel err median | p90 |
+|---|---:|---:|---:|---:|
+| **document** | **0.96** | 0.968 | **0.0154** | 0.317 |
+| paper | 0.98 | 0.967 | 0.0161 | 0.268 |
+| white paper sheet | 0.92 | 0.968 | 0.0158 | 0.140 |
+
+**판정**: promptable 문서 스케일 개통 — median 1.5%로 naive(10-17%) 대비 ~10×.
+단 **p90 tail 14-32%는 무겁다**: 게이트 통과 후에도 기하가 깨지는 프레임 존재 →
+per-frame 품질 게이트가 다음 단계. coverage atom `document_card_scale` official 승격
+(caveat 병기). 결과: `experiments/results/smartdoc_detected_quad_eval.json`,
+상세: `docs/progress/2026-06-13_gaugebench-v1-p2-1b.md`.
+
 ## 학습형 Soft 방법 (#1 DRAEM, #2 Matting) — regime별 학습 헤드 ⭐⭐
 
 고전 PoC로 방향을 확정한 뒤, regime별 **학습형 헤드**를 자체 학습(license-clean)으로 검증.

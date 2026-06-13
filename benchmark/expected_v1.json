@@ -1,0 +1,64 @@
+{
+  "version": "1.0",
+  "pinned_date": "2026-06-13",
+  "note": "GaugeBench v1.0 official numbers. Values are pinned to the canonical result JSONs under experiments/results/. collect_results.py verifies each within tolerance and fails loudly on drift.",
+  "tracks": {
+    "S_crackseg9k_segmentation": {
+      "source": "experiments/results/gauge_bench.json",
+      "metrics": {
+        "sam3_crack_miou": {"value": 0.4422, "tol": 0.02},
+        "sam3_clean_rate": {"value": 0.679, "tol": 0.05},
+        "adaptive_crack_miou": {"value": 0.1812, "tol": 0.02},
+        "frangi_crack_miou": {"value": 0.115, "tol": 0.02}
+      }
+    },
+    "W_width_ladder": {
+      "source": [
+        "experiments/results/m2v2_logit_threshold.json",
+        "experiments/results/m2_specialist_tabular.json",
+        "experiments/results/m2_uncertainty_conformal.json"
+      ],
+      "metrics": {
+        "raw_relerr": {"value": 0.7302, "tol": 0.005},
+        "quantile_relerr": {"value": 0.4804, "tol": 0.005},
+        "gaugehead_tiny_relerr": {"value": 0.4724, "tol": 0.005},
+        "theta_qcal_relerr": {"value": 0.4368, "tol": 0.005},
+        "conformal_marginal_coverage": {"value": 0.936, "tol": 0.02},
+        "conformal_worst_source_coverage": {"value": 0.91, "tol": 0.03}
+      }
+    },
+    "P_krkcmd_physical_um": {
+      "source": [
+        "experiments/results/krkcmd_profile_eval.json",
+        "experiments/results/krkcmd_signal_width.json",
+        "experiments/results/krkcmd_multiinstance_eval.json"
+      ],
+      "metrics": {
+        "author_dlm_test_mae_um": {"value": 11.108, "tol": 0.2},
+        "gaugeprofile_cal_test_mae_um": {"value": 25.911, "tol": 0.5},
+        "signal_cnn_table_mae_um": {"value": 18.6, "tol": 0.5},
+        "multiinstance_recall": {"value": 0.926, "tol": 0.02},
+        "multiinstance_mae_um": {"value": 29.8, "tol": 1.0},
+        "multiinstance_median_um": {"value": 15.7, "tol": 1.0}
+      }
+    },
+    "D_tless_cad_mm": {
+      "source": [
+        "experiments/results/tless_upper_bound.json",
+        "experiments/results/tless_sam3_eval.json"
+      ],
+      "metrics": {
+        "perfect_mask_rel_err_median": {"value": 0.0283, "tol": 0.002},
+        "sam3_best_prompt_rel_err_median": {"value": 0.0251, "tol": 0.003},
+        "sam3_best_prompt_match_rate": {"value": 1.0, "tol": 0.001}
+      }
+    },
+    "K_coins_known_object": {
+      "source": "experiments/results/coins_mm_eval.json",
+      "metrics": {
+        "loo_rel_err_mean": {"value": 0.0174, "tol": 0.002},
+        "pass_at_5pct": {"value": 1.0, "tol": 0.001}
+      }
+    }
+  }
+}
