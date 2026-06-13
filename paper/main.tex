@@ -235,6 +235,9 @@ separation (configuration selected on validation only), held-out test \emph{sour
 multi-seed reporting where applicable, and crack-only metrics with empty-GT images scored
 separately. Datasets and licenses are catalogued in the repository
 (\texttt{paper/DATASETS.md}); deprecated pre-audit numbers are retained in the results log.
+All headline numbers are pinned to canonical result files and re-verified by a release gate
+(\texttt{benchmark/}); learned krkCMd width heads and SAM-localized end-to-end numbers carry
+${\sim}1$\um{} of GPU run-to-run variance, which the gate tolerances reflect.
 
 \subsection{Zero-shot promptable segmentation (Gauge-Bench)}
 On CrackSeg9k (crack-only IoU, empty-GT excluded, 3 seeds):
@@ -341,7 +344,7 @@ the released ROI coordinates (correlation-verified, $0.95$ gate), widths read fr
 mask geometry err $144$--$186$\um{} even after $\theta^\ast$ transfer (which itself
 improves the default by ${\sim}30\%$, showing the logit knob generalizes across datasets
 and into physical units).
-\textbf{Image level, signal-based (ours).} The 1-D profile CNN reaches $17.9$\um{} on the
+\textbf{Image level, signal-based (ours).} The 1-D profile CNN reaches $18.6$\um{} on the
 table test split; applied at \emph{oracle} positions in the image, $26.2$\um; applied at
 SAM~3-localized, valley-snapped positions, \textbf{$39.9$\um{} MAE / $23.2$\um{} median}
 on the $46$--$66\%$ of stations passing the localization gate (failed stations: $186$\um,
@@ -351,7 +354,7 @@ coverage ceiling is largely an \emph{annotation-matching artifact}: the scenes c
 than one genuine crack, and a single-path selector cannot know which one the annotator chose.
 When the instrument reports \emph{all} crack instances---each measured along its own
 centerline, as our Inspection Atoms formulation prescribes---the annotated crack is covered
-at \textbf{$93\%$ recall} with \textbf{$30.5$\um{} MAE ($16.4$\um{} median)} on the matched
+at \textbf{$93\%$ recall} with \textbf{$29.8$\um{} MAE ($15.7$\um{} median)} on the matched
 instance. Width information survives imaging; binary masks were the bottleneck; and the
 remaining open items are the $7\%$ unrecovered stations and per-station confidence gating,
 not path selection.
@@ -366,7 +369,7 @@ localization confidence gate (coverage $46$--$66\%$).}
 Level & Method & MAE \\
 \midrule
 Profile (table) & authors' DLM (supervised) & 11.1 \\
-Profile (table) & \textbf{ours: 1-D CNN} & \textbf{17.9} \\
+Profile (table) & \textbf{ours: 1-D CNN} & \textbf{18.6} \\
 Profile (table) & valley rule + linear cal.\ (5-fold) & $27.8\pm2.5$ \\
 Image, oracle pos. & ours: 1-D CNN & 26.2 \\
 \textbf{Image, promptable (gated)} & \textbf{ours: SAM~3 locate + 1-D CNN} & \textbf{39.9 (median 23.2)} \\

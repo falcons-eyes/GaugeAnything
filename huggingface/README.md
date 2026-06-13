@@ -23,7 +23,7 @@ inspection pipeline for industrial micro-vision (SAM 3 backbone + metrology core
 
 | File | Task | Audited result | Training data | Use |
 |---|---|---|---|---|
-| `profile_width_cnn.pt` | **1-D crack-width regression** from a 501-px brightness profile (the "signal for HOW WIDE" head) | table test MAE **17.9 μm**; end-to-end promptable **39.9 μm MAE / 23.2 μm median** (localization-gated) | krkCMd, 14,424 profiles (**CC BY 4.0** — license-clean) | ✅ commercial OK |
+| `profile_width_cnn.pt` | **1-D crack-width regression** from a 501-px brightness profile (the "signal for HOW WIDE" head) | table test MAE **≈18.6 μm** (~1 μm GPU run variance); end-to-end promptable **39.9 μm MAE / 23.2 μm median** (localization-gated) | krkCMd, 14,424 profiles (**CC BY 4.0** — license-clean) | ✅ commercial OK |
 | `gaugehead_tiny_width.pkl` | Tiny owned crack-width specialist over SAM-mask/image statistics | held-out source rel.err **0.472** vs 5-bin quantile 0.480 and old neural M2 0.564; worst source still 0.720 | CrackSeg9k M2 cache | ⚠️ research (subset licenses vary) |
 | `gaugehead_tiny_width_conformal.pkl` | GaugeHead-Tiny + 90% conformal interval (log cross-conformal; μ + σ-diagnostic + q) | keeps rel.err **0.4724** with per-source coverage **0.91/1.00/0.95** @90%; adaptive variants collapse on the worst source (0.21/0.11) — see repo `experiments/results/m2_uncertainty_conformal.json` | CrackSeg9k M2 cache | ⚠️ research (subset licenses vary) |
 | `m2_refiner.pt` | Measurement-aware crack mask refiner (UNet, 1.9M) | superseded baseline: a logit-threshold + quantile calibration beats it (0.437 vs 0.564 rel. err) — kept for reproducibility | CrackSeg9k train sources | ⚠️ research (subset licenses vary) |
