@@ -62,6 +62,7 @@ data/                   # dataset acquisition guide + download scripts
 | Guide | What it covers |
 |---|---|
 | [**GaugeBench v1.0**](benchmark/README.md) | The promptable physical-measurement benchmark: 5 tracks, fixed splits, pinned numbers, submission guide |
+| [**Demo server**](serve/README.md) | FastAPI + Docker inference server (SAM 3 + metrology core) — `/inspect`, `/count_rebar`, live demo UI; RTX 5090 warm latency ~0.2s |
 | [Results log](experiments/RESULTS.md) | Every audited number, protocol and verdict, in order |
 | [Rigor audit](docs/RIGOR_AUDIT.md) | How we attacked our own results (leakage, metric traps) |
 | [Physical coverage matrix](docs/PHYSICAL_COVERAGE_MATRIX.md) | Dataset/quantity coverage across cracks, defects, parts, counts, known objects, dynamic scenes, and next adapters |
