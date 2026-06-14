@@ -32,6 +32,15 @@
   .rcard .h{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
   .rcard .tt{font-weight:700;font-size:1.05rem;margin:.2rem 0 .5rem}
   .rcard p{color:#46586a;font-size:.95rem}
+  /* large result cards — concrete image + big number */
+  .qcard{border:1px solid #e6ecf1;border-radius:14px;overflow:hidden;height:100%;background:#fff;display:flex;flex-direction:column}
+  .qcard img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;border-bottom:1px solid #eef2f5}
+  .qcard .body{padding:1.1rem 1.2rem 1.3rem}
+  .qcard .io{font-family:'JetBrains Mono',monospace;font-size:.78rem;letter-spacing:.04em;color:#16805d;text-transform:uppercase;margin-bottom:.35rem}
+  .qcard .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:2.1rem;line-height:1;color:#16805d}
+  .qcard .num small{font-size:1rem;color:#6b7a88;font-weight:600}
+  .qcard .desc{color:#46586a;font-size:1rem;margin-top:.55rem;line-height:1.45}
+  .qcard.neg .io,.qcard.neg .num{color:#b5791a}
   pre code{font-family:'JetBrains Mono',monospace}
   .footer{background:#0e1620;color:#9fb2c0}
   .footer a{color:#36e0b0}
@@ -137,33 +146,55 @@
   </div>
 </section>
 
-<!-- ===== 4 · ONE IDEA ===== -->
-<section class="section" style="padding-bottom:1.4rem">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">The Idea</div>
-    <h2 class="title is-3 has-text-centered">What GaugeAnything Adds</h2>
-    <p class="lead">Segment Anything shows masks. Count Anything shows counts. GaugeAnything reads the
-      inspection quantities that turn a mask into a field decision.</p>
-    <figure class="fig" style="max-width:1180px"><img src="assets/story_inspection_atoms.png" alt="GaugeAnything: image + prompt → inspection atoms (measure, count, grade)"></figure>
-  </div>
-</section>
-
-<!-- ===== 5 · PROOF AT A GLANCE ===== -->
+<!-- ===== 4 · PROOF AT A GLANCE ===== -->
 <section class="section hero is-light">
   <div class="container is-max-desktop">
     <div class="eyebrow">Evidence</div>
-    <h2 class="title is-3 has-text-centered">Audited, Across Many Physical Quantities</h2>
-    <div class="stats" style="margin-bottom:2rem">
-      <div class="stat"><div class="v">23.2&nbsp;μm</div><div class="k">median physical crack-width error (promptable image → signal)</div></div>
-      <div class="stat"><div class="v">2.5%</div><div class="k">promptable part dimensions on T-LESS CAD GT (≈ perfect-mask ceiling 2.83%)</div></div>
-      <div class="stat"><div class="v">1.74%</div><div class="k">real-photo coin known-object mm consistency (pass@5% 100%)</div></div>
-      <div class="stat"><div class="v">2.44×</div><div class="k">SAM 3 zero-shot vs. classical crack segmentation (crack-only mIoU)</div></div>
+    <h2 class="title is-3 has-text-centered">One Grammar, Many Physical Quantities — Each Audited</h2>
+    <p class="lead">Different surfaces, different units, one promptable measurement layer. Four representative
+      cases below; the full audited set is in GaugeBench.</p>
+    <div class="columns is-multiline">
+      <div class="column is-half"><div class="qcard">
+        <img src="assets/krkcmd_profile.png" alt="krkCMd physical crack-width profile">
+        <div class="body">
+          <div class="io">crack → physical width (μm)</div>
+          <div class="num">23.2 <small>μm median</small></div>
+          <div class="desc">Promptable image → signal pipeline on krkCMd, against <b>manually measured
+            physical ground truth</b> — reading width from mask geometry costs 4–6×.</div>
+        </div>
+      </div></div>
+      <div class="column is-half"><div class="qcard">
+        <img src="assets/results_summary.png" alt="T-LESS industrial part dimension measurement">
+        <div class="body">
+          <div class="io">industrial part → dimension (mm)</div>
+          <div class="num">2.5% <small>median error</small></div>
+          <div class="desc">Promptable part measurement on <b>T-LESS CAD ground truth</b>, statistically
+            indistinguishable from the perfect-mask ceiling (2.83%).</div>
+        </div>
+      </div></div>
+      <div class="column is-half"><div class="qcard">
+        <img src="assets/coins_mm.png" alt="Coin known-object millimetre consistency">
+        <div class="body">
+          <div class="io">known object → scale (mm)</div>
+          <div class="num">1.74% <small>mean, pass@5% 100%</small></div>
+          <div class="desc">Leave-one-out consistency over 22 <b>real photos</b> — the segmentation →
+            diameter chain on real imagery, no markers.</div>
+        </div>
+      </div></div>
+      <div class="column is-half"><div class="qcard">
+        <img src="assets/smartdoc_demo_poster.jpg" alt="SmartDoc document A4 scale">
+        <div class="body">
+          <div class="io">document → A4 scale (mm)</div>
+          <div class="num">1.5% <small>median edge error</small></div>
+          <div class="desc">Promptable detected quad on handheld video (gate pass 96%), vs <b>10–17% for
+            naive scaling</b> — the live demo above.</div>
+        </div>
+      </div></div>
     </div>
-    <figure class="fig" style="max-width:1180px"><img src="assets/physical_coverage_matrix.png" alt="GaugeAnything physical coverage matrix across datasets and quantities"></figure>
-    <p class="cap">One output grammar across cracks, defects, parts, counts, known objects, and dynamic scenes.
-      Full tables, protocols, and the leaderboard: <a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/benchmark">GaugeBench</a> ·
-      <a href="static/pdfs/gaugeanything.pdf">paper</a> ·
-      <a href="https://github.com/falcons-eyes/GaugeAnything/blob/main/STATUS.md">status</a>.</p>
+    <p class="cap" style="margin-top:.4rem">…and crack segmentation (2.44× classical), defect diameter,
+      counting, and dynamic scenes — full coverage map, protocols, and leaderboard in
+      <a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/benchmark">GaugeBench</a> ·
+      <a href="static/pdfs/gaugeanything.pdf">paper</a>.</p>
   </div>
 </section>
 
