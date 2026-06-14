@@ -105,8 +105,8 @@
       </div>
       <div style="margin-top:1.1rem;font-size:.86rem;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;background:#f6f9f8;border:1px solid #e2ece8;border-radius:10px;padding:.8rem 1.1rem">
         <b>News</b> ·
-        <b>2026-06-14</b>: <b>live video demo</b> — promptable A4 measurement tracked across a handheld
-        SmartDoc scan (70/70 frames, median <b>0.7%</b> error) ·
+        <b>2026-06-14</b>: <b>measurement-in-motion demos</b> — three video sequences (SmartDoc document
+        scale 70/70 @0.7%, TUM handheld checkerboard 66/70 @0.98%, crack-width Ken&nbsp;Burns) ·
         <b>2026-06-13</b>: <b>live demo server</b> — FastAPI + Docker inference on RTX 5090
         (SAM&nbsp;3 + metrology core), warm latency <b>~90&nbsp;ms</b>, 10.4 req/s
         (<a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/serve">serve/</a>) ·
@@ -150,22 +150,48 @@
 <!-- ===== LIVE VIDEO ===== -->
 <section class="section" style="padding-top:2.4rem;padding-bottom:1.2rem">
   <div class="container is-max-desktop">
-    <div class="eyebrow">Live, On Real Video</div>
-    <h2 class="title is-3 has-text-centered">Promptable Measurement, Frame by Frame</h2>
-    <p class="lead">A handheld phone scan from SmartDoc. The prompt is just <span class="mono">"document"</span>.
-      Every frame: SAM&nbsp;3 finds the page, the metrology core fits its quadrilateral and reads the
-      <b>A4 size in millimetres</b> — as the camera moves and the perspective shears.</p>
+    <div class="eyebrow">Measurement in Motion</div>
+    <h2 class="title is-3 has-text-centered">Not a Still Frame — Measured Across the Video</h2>
+    <p class="lead">Three sequences from the datasets we target. Each frame is measured independently;
+      where the geometry breaks, the instrument says <i>not measurable</i> rather than guessing.</p>
+
+    <!-- hero video: SmartDoc -->
     <figure class="fig" style="max-width:1000px">
       <video src="assets/smartdoc_demo.mp4" autoplay loop muted playsinline
              poster="assets/smartdoc_demo_poster.jpg"
              style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:12px"></video>
     </figure>
     <p class="cap">
-      SmartDoc15 sequence (70 frames). <span class="good">70/70 frames measurable, median width error 0.7%</span>
-      against the A4 reference — no per-frame tuning. Frames where the page geometry breaks are reported as
-      <i>not measurable</i> rather than guessed.
-      Running on an <b>RTX&nbsp;5090</b> inference server (SAM&nbsp;3 + metrology core), warm latency ~90&nbsp;ms/frame.
+      <b>SmartDoc handheld scan</b> · prompt <span class="mono">"document"</span> → SAM&nbsp;3 page +
+      A4 size in mm, frame by frame as the perspective shears.
+      <span class="good">70/70 frames measurable, median width error 0.7%</span> vs the A4 reference.
+      RTX&nbsp;5090, ~90&nbsp;ms/frame.
     </p>
+
+    <!-- secondary videos: TUM + crack -->
+    <div class="columns" style="margin-top:1.2rem">
+      <div class="column">
+        <figure class="fig">
+          <video src="assets/tum_demo.mp4" autoplay loop muted playsinline
+                 poster="assets/tum_demo_poster.jpg"
+                 style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video>
+        </figure>
+        <p class="cap"><b>TUM handheld RGB-D</b> · checkerboard square size in mm from depth back-projection,
+          while the camera moves (speed shown). <span class="good">66/70 measurable, median 0.98%</span>;
+          blurred / depth-desynced frames are honestly rejected.</p>
+      </div>
+      <div class="column">
+        <figure class="fig">
+          <video src="assets/crack_demo.mp4" autoplay loop muted playsinline
+                 poster="assets/crack_demo_poster.jpg"
+                 style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video>
+        </figure>
+        <p class="cap"><b>Crack width along a 0.23&nbsp;mm crack</b> (krkCMd scan, CC&nbsp;BY&nbsp;4.0).
+          Width is read at each position and varies along the crack.
+          <span style="color:#b5791a">Synthetic Ken&nbsp;Burns motion over a static 9448×6305 scan</span> —
+          labelled on-screen, not a real video.</p>
+      </div>
+    </div>
   </div>
 </section>
 
