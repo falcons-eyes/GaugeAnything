@@ -41,6 +41,16 @@
   .qcard .num small{font-size:1rem;color:#6b7a88;font-weight:600}
   .qcard .desc{color:#46586a;font-size:1rem;margin-top:.55rem;line-height:1.45}
   .qcard.neg .io,.qcard.neg .num{color:#b5791a}
+  /* demo gallery */
+  .gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:1000px){.gal{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:680px){.gal{grid-template-columns:repeat(2,1fr)}}
+  .gcell{border:1px solid #e6ecf1;border-radius:10px;overflow:hidden;background:#0e1620}
+  .gcell video{width:100%;display:block;aspect-ratio:16/10;object-fit:cover;background:#0e1620}
+  .gcap{padding:.5rem .6rem .6rem}
+  .gcap .gt{font-family:'JetBrains Mono',monospace;font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:#36e0b0}
+  .gcap .gd{font-size:.8rem;color:#cdd9e3;margin-top:.15rem;line-height:1.3}
+  .gcap .gn{color:#fff;font-weight:700}
   pre code{font-family:'JetBrains Mono',monospace}
   .footer{background:#0e1620;color:#9fb2c0}
   .footer a{color:#36e0b0}
@@ -198,6 +208,59 @@
   </div>
 </section>
 
+<!-- ===== 5b · DEMO GALLERY ===== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">Generality</div>
+    <h2 class="title is-3 has-text-centered">One Model, Many Tasks & Scenes</h2>
+    <p class="lead">The same promptable measurement layer — across surfaces, objects, and units.
+      Each clip measures a physical quantity live; videos play as you scroll.</p>
+    <div class="gal" id="gal">
+      <!-- crack width -->
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/crack_concrete_028_poster.jpg" data-src="assets/demos/crack_concrete_028.mp4"></video>
+        <div class="gcap"><div class="gt">crack width · μm</div><div class="gd">concrete scan (krkCMd) · <span class="gn">0.28 mm</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/defect_mt_crack_poster.jpg" data-src="assets/demos/defect_mt_crack.mp4"></video>
+        <div class="gcap"><div class="gt">defect · crack</div><div class="gd">metal tile (Magnetic-Tile) · <span class="gn">sub-pixel width</span></div></div></div>
+      <!-- document scale -->
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/doc_datasheet_poster.jpg" data-src="assets/demos/doc_datasheet.mp4"></video>
+        <div class="gcap"><div class="gt">document scale · mm</div><div class="gd">datasheet (SmartDoc) · <span class="gn">1.5%</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/doc_tax_poster.jpg" data-src="assets/demos/doc_tax.mp4"></video>
+        <div class="gcap"><div class="gt">document scale · mm</div><div class="gd">tax form (SmartDoc) · <span class="gn">1.7%</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/doc_patent_poster.jpg" data-src="assets/demos/doc_patent.mp4"></video>
+        <div class="gcap"><div class="gt">document scale · mm</div><div class="gd">patent (SmartDoc) · <span class="gn">naive vs metric</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/doc_letter_poster.jpg" data-src="assets/demos/doc_letter.mp4"></video>
+        <div class="gcap"><div class="gt">document scale · mm</div><div class="gd">letter (SmartDoc)</div></div></div>
+      <!-- industrial part dimension -->
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000004_poster.jpg" data-src="assets/demos/part_tless_000004.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 4 · <span class="gn">1.6% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000003_poster.jpg" data-src="assets/demos/part_tless_000003.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 3 · <span class="gn">1.9% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000001_poster.jpg" data-src="assets/demos/part_tless_000001.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 1 · <span class="gn">2.1% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000006_poster.jpg" data-src="assets/demos/part_tless_000006.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 6 · <span class="gn">2.5% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000015_poster.jpg" data-src="assets/demos/part_tless_000015.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 15 · <span class="gn">2.6% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000005_poster.jpg" data-src="assets/demos/part_tless_000005.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 5 · <span class="gn">3.0% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000010_poster.jpg" data-src="assets/demos/part_tless_000010.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 10 · <span class="gn">4.1% vs CAD</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/part_tless_000020_poster.jpg" data-src="assets/demos/part_tless_000020.mp4"></video>
+        <div class="gcap"><div class="gt">part dimension · mm</div><div class="gd">T-LESS scene 20 · <span class="gn">9.9% vs CAD</span></div></div></div>
+      <!-- known-object scale -->
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/coin_1_euro_coin_poster.jpg" data-src="assets/demos/coin_1_euro_coin.mp4"></video>
+        <div class="gcap"><div class="gt">known object · mm</div><div class="gd">1€ coins · <span class="gn">1.0% consistency</span></div></div></div>
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/coin_2_euro_coin_poster.jpg" data-src="assets/demos/coin_2_euro_coin.mp4"></video>
+        <div class="gcap"><div class="gt">known object · mm</div><div class="gd">2€ coins · <span class="gn">25.75 mm</span></div></div></div>
+      <!-- counting -->
+      <div class="gcell"><video muted loop playsinline preload="none" poster="assets/demos/count_rebar_poster.jpg" data-src="assets/demos/count_rebar.mp4"></video>
+        <div class="gcap"><div class="gt">counting · density</div><div class="gd">rebar (ROI-1555) · <span class="gn">27 vs GT 30</span></div></div></div>
+    </div>
+    <p class="cap" style="margin-top:1rem">Plus the three featured videos above (handheld document scan, moving-camera RGB-D, crack profile).
+      Some clips use a labelled synthetic Ken-Burns pan over a static image; others are real handheld/sequence video.</p>
+  </div>
+</section>
+
 <!-- ===== 6 · HONESTY ===== -->
 <section class="section">
   <div class="container is-max-desktop">
@@ -267,5 +330,18 @@
   </div>
 </footer>
 
+<script>
+// 갤러리 영상: 화면에 들어올 때만 src 로드+재생, 나가면 일시정지 (성능)
+(function(){
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var v=e.target;
+      if(e.isIntersecting){ if(!v.src){v.src=v.dataset.src;} v.play().catch(function(){}); }
+      else { v.pause(); }
+    });
+  },{rootMargin:'200px 0px',threshold:0.15});
+  document.querySelectorAll('#gal video').forEach(function(v){io.observe(v);});
+})();
+</script>
 </body>
 </html>

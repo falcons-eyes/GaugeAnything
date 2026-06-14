@@ -25,6 +25,7 @@ OUT_MP4 = Path("docs/assets/crack_demo.mp4")
 OUT_WEBP = Path("docs/assets/crack_demo.webp")
 VIEW_W, VIEW_H = 1000, 620
 ZOOM = 2.4
+SURFACE = "concrete (krkCMd, CC BY 4.0)"
 NORM_HALF = 46          # 단면 샘플 반경(px, proc 스케일)
 GREEN, AMBER, CY, GREY, WHITE = (54, 224, 176), (40, 170, 240), (34, 195, 230), (181, 200, 214), (255, 255, 255)
 
@@ -116,7 +117,7 @@ def draw_view(scan_bgr, cx, cy, mask_mm, sig_mm, gt_mm, prof, idx, n, scale_mm_p
     cv2.rectangle(view, (0, 0), (VIEW_W, 92), (14, 22, 32), -1)
     cv2.putText(view, "Width read from the raw signal - a physical quantity, not a box.", (16, 32),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.66, GREEN, 2, cv2.LINE_AA)
-    cv2.putText(view, f"krkCMd scan (CC BY 4.0)  |  synthetic Ken Burns over a static 9448x6305 image  |  a {gt_mm:.2f} mm crack is ~50 px wide  |  {idx+1}/{n}",
+    cv2.putText(view, f"surface: {SURFACE}  |  synthetic Ken Burns over a static image  |  width measured at each point along the crack  |  {idx+1}/{n}",
                 (16, 64), cv2.FONT_HERSHEY_SIMPLEX, 0.42, GREY, 1, cv2.LINE_AA)
 
     # 단면 프로파일 패널 (우상단)
@@ -144,10 +145,16 @@ def draw_view(scan_bgr, cx, cy, mask_mm, sig_mm, gt_mm, prof, idx, n, scale_mm_p
     # 측정 패널 (하단)
     cv2.rectangle(view, (0, VIEW_H - 70), (VIEW_W, VIEW_H), (14, 22, 32), -1)
     if not np.isnan(sig_mm):
-        cv2.putText(view, f"crack width  {sig_mm*1000:4.0f} um   ({sig_mm:.3f} mm)", (16, VIEW_H - 40),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.62, GREEN, 2, cv2.LINE_AA)
-        cv2.putText(view, f"sub-pixel, from the brightness profile   |   GT mean {gt_mm*1000:.0f} um, width varies along the crack",
-                    (16, VIEW_H - 14), cv2.FONT_HERSHEY_SIMPLEX, 0.46, GREY, 1, cv2.LINE_AA)
+        if gt_mm > 0:
+            cv2.putText(view, f"crack width  {sig_mm*1000:4.0f} um   ({sig_mm:.3f} mm)", (16, VIEW_H - 40),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.62, GREEN, 2, cv2.LINE_AA)
+            cv2.putText(view, f"sub-pixel, from the brightness profile   |   GT mean {gt_mm*1000:.0f} um, width varies along the crack",
+                        (16, VIEW_H - 14), cv2.FONT_HERSHEY_SIMPLEX, 0.46, GREY, 1, cv2.LINE_AA)
+        else:
+            cv2.putText(view, f"crack width  {sig_mm:4.1f} px", (16, VIEW_H - 40),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.62, GREEN, 2, cv2.LINE_AA)
+            cv2.putText(view, "sub-pixel, from the brightness profile (add a scale reference for mm)   |   width varies along the crack",
+                        (16, VIEW_H - 14), cv2.FONT_HERSHEY_SIMPLEX, 0.46, GREY, 1, cv2.LINE_AA)
     else:
         cv2.putText(view, "low contrast here - not measurable (reported, not guessed)", (16, VIEW_H - 22),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, AMBER, 1, cv2.LINE_AA)
@@ -162,17 +169,22 @@ def draw_view(scan_bgr, cx, cy, mask_mm, sig_mm, gt_mm, prof, idx, n, scale_mm_p
 
 
 def main() -> int:
+    global ZOOM, SURFACE
     import cv2
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--scan-glob", default="datasets/krkcmd/**/CMd_0.23*Image1.tif")
     ap.add_argument("--gt-mm", type=float, default=0.23)
+    ap.add_argument("--surface", default="concrete (krkCMd, CC BY 4.0)", help="표면/데이터셋 라벨")
     ap.add_argument("--frames", type=int, default=80)
     ap.add_argument("--fps", type=int, default=14)
     ap.add_argument("--proc-width", type=int, default=3600)
+    ap.add_argument("--zoom", type=float, default=2.4)
     ap.add_argument("--out-mp4", type=Path, default=OUT_MP4)
     ap.add_argument("--out-webp", type=Path, default=OUT_WEBP)
     args = ap.parse_args()
+    ZOOM = args.zoom
+    SURFACE = args.surface
 
     files = sorted(glob.glob(args.scan_glob, recursive=True))
     if not files:
@@ -181,8 +193,8 @@ def main() -> int:
     from PIL import Image
     full = np.array(Image.open(files[0]).convert("L"))
     H0, W0 = full.shape
-    s = args.proc_width / W0
-    gray = cv2.resize(full, (args.proc_width, int(H0 * s)), interpolation=cv2.INTER_AREA)
+    s = min(1.0, args.proc_width / W0)               # 작은 이미지는 upscale 금지
+    gray = cv2.resize(full, (int(W0 * s), int(H0 * s)), interpolation=cv2.INTER_AREA) if s < 1 else full
     scan_bgr = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
     mask, path = find_crack(gray)
     path = smooth_path(path, args.frames)
@@ -202,7 +214,8 @@ def main() -> int:
 
     sig_all = np.array([r["sig_px"] for r in recs if not np.isnan(r["sig_px"])])
     mask_all = np.array([r["mask_px"] for r in recs if r["mask_px"] > 0])
-    scale_mm_px = args.gt_mm / max(np.median(sig_all), 1e-6)     # signal 중앙값 → GT 캘리브
+    # gt_mm>0이면 signal 중앙값 → GT 캘리브, 아니면 px 모드(scale=1)
+    scale_mm_px = (args.gt_mm / max(np.median(sig_all), 1e-6)) if args.gt_mm > 0 else 1.0
     ratio = np.median(mask_all) / max(np.median(sig_all), 1e-6)
     print(f"signal median {np.median(sig_all):.1f}px, mask median {np.median(mask_all):.1f}px → mask/signal {ratio:.1f}x", flush=True)
 
