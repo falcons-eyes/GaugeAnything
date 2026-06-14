@@ -4,11 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>GaugeAnything: Promptable Quantitative Inspection for Industrial Micro-Vision</title>
-<meta name="description" content="A promptable foundation-model pipeline that outputs metric measurements, physical crack-width evidence, counts, and condition grades for industrial inspection — not just masks.">
+<meta name="description" content="A promptable foundation-model pipeline that reads physical measurements — millimetres, micrometres, counts — for industrial inspection. Detection finds it; measurement is the hard part.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/css/bulma-carousel.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
   html,body{font-family:'Inter',sans-serif;background:#fff;color:#1a2430}
@@ -18,44 +16,22 @@
   .section{padding:3.4rem 1.5rem}
   h2.title.is-3{font-weight:800;letter-spacing:-.015em}
   .eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.18em;color:#16805d;text-transform:uppercase;text-align:center;margin-bottom:.5rem}
-  .lead{color:#5b6b7a;max-width:62ch;margin:0 auto 1.8rem;text-align:center}
-  /* figures — consistent alignment */
+  .lead{color:#5b6b7a;max-width:64ch;margin:0 auto 1.8rem;text-align:center}
   figure.fig{margin:0 auto;max-width:980px}
   figure.fig img{width:100%;display:block;border:1px solid #e6ecf1;border-radius:12px}
   .cap{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:#6b7a88;text-align:center;margin-top:.6rem;line-height:1.5}
-  .method-fig{padding:1.1rem;background:#fbfdff;border:1px solid #e6ecf1;border-radius:12px;max-width:1040px;margin:0 auto}
-  .story-hero{position:relative;max-width:1180px;margin:0 auto;border-radius:14px;overflow:hidden;border:1px solid #e6ecf1;background:#111}
-  .story-hero img{width:100%;display:block}
-  .story-overlay{position:absolute;left:0;top:0;bottom:0;width:46%;padding:42px 46px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(90deg,rgba(9,18,28,.88),rgba(9,18,28,.54),rgba(9,18,28,0))}
-  .story-overlay h2{color:#fff;font-size:2.25rem;line-height:1.08;font-weight:800;letter-spacing:-.02em;margin-bottom:1rem}
-  .story-overlay p{color:#d7e6ef;font-size:1.08rem;line-height:1.45;max-width:34ch}
-  .story-overlay .tag{font-family:'JetBrains Mono',monospace;color:#36e0b0;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
-  @media(max-width:768px){.story-overlay{position:relative;width:auto;background:#0e1620;padding:24px}.story-overlay h2{font-size:1.7rem}.story-overlay p{font-size:.96rem}}
-  /* tables */
-  table.gtab{font-family:'JetBrains Mono',monospace;font-size:.9rem}
-  table.gtab td,table.gtab th{vertical-align:middle;border-color:#edf1f4}
-  table.gtab thead th{color:#8a97a3;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;border-bottom-width:1.5px}
-  tr.win td{color:#16805d;font-weight:700;background:#eafaf3}
-  .num{color:#b5791a;font-weight:700}
   .bad{color:#e0394b;font-weight:700}.good{color:#16805d;font-weight:700}
-  /* badges & buttons */
   .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.7rem;border:1px solid #cfe6dd;background:#f1faf6;color:#16805d;border-radius:99px;padding:3px 11px;margin:3px}
   .publication-links .button{margin:4px}
-  /* stat strip */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;max-width:1000px;margin:0 auto}
   @media(max-width:768px){.stats{grid-template-columns:repeat(2,1fr)}}
   .stat{border:1px solid #e6ecf1;border-radius:12px;padding:18px 16px;text-align:center;background:#fff}
   .stat .v{font-family:'JetBrains Mono',monospace;font-size:1.9rem;font-weight:700;color:#16805d;line-height:1}
   .stat .k{font-size:.74rem;color:#6b7a88;margin-top:.5rem;line-height:1.35}
-  /* cards */
   .rcard{border:1px solid #e6ecf1;border-radius:12px;padding:1.3rem;height:100%;background:#fff}
   .rcard .h{font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem}
   .rcard .tt{font-weight:700;font-size:1.05rem;margin:.2rem 0 .5rem}
   .rcard p{color:#46586a;font-size:.95rem}
-  /* carousels */
-  .results-carousel .item{padding:0 .5rem}
-  .results-carousel .item img{border:1px solid #e6ecf1;border-radius:10px;width:100%;display:block}
-  .results-carousel .cap{margin-top:.55rem}
   pre code{font-family:'JetBrains Mono',monospace}
   .footer{background:#0e1620;color:#9fb2c0}
   .footer a{color:#36e0b0}
@@ -63,644 +39,202 @@
 </head>
 <body>
 
-<!-- ===== HERO ===== -->
+<!-- ===== 1 · HERO ===== -->
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop has-text-centered">
       <h1 class="title is-1 publication-title"><span class="ga">GaugeAnything</span></h1>
-      <h2 class="subtitle is-4" style="margin-top:.5rem;max-width:50ch;margin-left:auto;margin-right:auto">
-        Promptable <b>Quantitative</b> Inspection for Industrial Micro-Vision
+      <h2 class="subtitle is-4" style="margin-top:.6rem;max-width:52ch;margin-left:auto;margin-right:auto">
+        Promptable <b>measurement</b> for industrial micro-vision
       </h2>
       <p class="lead" style="margin-top:.4rem">
-        Foundation models tell you <i>what</i> and <i>where</i>. GaugeAnything tells you
-        <b class="good">how many millimeters</b>, <b class="good">how many instances</b>, and <b class="good">which condition grade</b>.
+        Foundation models find <i>what</i> and <i>where</i>. GaugeAnything reads
+        <b class="good">how many millimetres</b> — the physical quantity that drives the field decision.
+        <b>Detection is easy; measurement is the hard part.</b>
       </p>
-      <div class="is-size-7 mono" style="color:#8a97a3;margin:.6rem 0 1rem">
-        Industrial&nbsp;Anything · FalconEyes &nbsp;|&nbsp; measured on NVIDIA GB10 Grace Blackwell (aarch64, CUDA&nbsp;13.1)
-      </div>
-      <div class="publication-links">
+      <div class="publication-links" style="margin-top:1rem">
         <a class="button is-dark is-rounded" href="static/pdfs/gaugeanything.pdf" target="_blank">
           <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper&nbsp;(PDF)</span></a>
-        <a class="button is-dark is-rounded" href="https://huggingface.co/James-joobs/GaugeAnything" target="_blank">
-          <span class="icon">🤗</span><span>Weights</span></a>
-        <a class="button is-dark is-rounded" href="#BibTeX">
-          <span class="icon"><i class="fas fa-quote-right"></i></span><span>BibTeX</span></a>
         <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything" target="_blank">
           <span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a>
         <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything/tree/main/benchmark" target="_blank">
           <span class="icon"><i class="fas fa-ranking-star"></i></span><span>GaugeBench</span></a>
-        <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything/blob/main/DESIGN.md" target="_blank">
-          <span class="icon"><i class="fas fa-file-lines"></i></span><span>Design Doc</span></a>
-        <a class="button is-dark is-rounded" href="#results">
-          <span class="icon"><i class="fas fa-chart-column"></i></span><span>Results</span></a>
-        <a class="button is-dark is-rounded" href="assets/architecture.drawio" download>
-          <span class="icon"><i class="fas fa-diagram-project"></i></span><span>Architecture&nbsp;(.drawio)</span></a>
+        <a class="button is-dark is-rounded" href="https://huggingface.co/James-joobs/GaugeAnything" target="_blank">
+          <span class="icon">🤗</span><span>Weights</span></a>
+        <a class="button is-dark is-rounded" href="#cite">
+          <span class="icon"><i class="fas fa-quote-right"></i></span><span>Cite</span></a>
       </div>
       <div style="margin-top:1rem">
-        <span class="badge">SAM 3 backbone · commercial-OK</span>
-        <span class="badge">CrackSeg9k + Magnetic-Tile + krkCMd</span>
-        <span class="badge">coins 1.74% · krkCMd 27.8±2.5 μm (5-fold)</span>
-        <span class="badge">dynamic ADT 8.7% · 0.5m/s+ 9.1% (oracle RGB-D)</span>
-        <span class="badge">torch 2.12+cu130 · sm_121</span>
-      </div>
-      <div style="margin-top:1.1rem;font-size:.86rem;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;background:#f6f9f8;border:1px solid #e2ece8;border-radius:10px;padding:.8rem 1.1rem">
-        <b>News</b> ·
-        <b>2026-06-14</b>: <b>detection ≠ measurement</b> demos — naive detect+track drifts to 27-44%
-        on a moving SmartDoc scan while our metric holds 1.5%; plus motion-robust TUM mm and
-        sub-pixel crack width from the raw signal ·
-        <b>2026-06-13</b>: <b>live demo server</b> — FastAPI + Docker inference on RTX 5090
-        (SAM&nbsp;3 + metrology core), warm latency <b>~90&nbsp;ms</b>, 10.4 req/s
-        (<a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/serve">serve/</a>) ·
-        owned <b>rebar density head</b> (Count v1) beats zero-shot SAHI: MAE <b>7.0</b> vs 8.9 ·
-        <b>GaugeBench v1.0</b> released — 5 tracks, 21 pinned metrics, external
-        submissions open (<a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/benchmark">benchmark/</a>) ·
-        promptable document scale opens: SAM&nbsp;3 detected quad reaches <b>1.5%</b> median edge error
-        (gate pass 96%; naive scale 10–17%) ·
-        paper draft v2 (<a href="static/pdfs/gaugeanything.pdf">PDF</a>) — owned
-        measurement head <b>GaugeHead-Tiny</b> (rel. err 0.472, first learned rung past quantile
-        calibration) + per-source <b>conformal coverage audit</b> (adaptive intervals collapse to
-        0.21/0.11 on the worst source; non-adaptive keeps ≥0.90 everywhere) + dynamic-scene section ·
-        <b>2026-06-12</b>: paper draft v1 and
-        <a href="https://huggingface.co/James-joobs/GaugeAnything">task heads on HuggingFace</a>;
-        signal-based width hits <b>23.2&nbsp;μm</b> median on physical GT ·
-        dynamic ADT walkthrough upper bound reaches <b>8.7%</b> median dimension error ·
-        <b>2026-06-11</b>: open-source release with fully audited benchmarks
+        <span class="badge">SAM 3 backbone</span>
+        <span class="badge">audited benchmarks</span>
+        <span class="badge">honest negatives</span>
+        <span class="badge">RTX 5090 live demo ~90 ms</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== TEASER ===== -->
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <div class="story-hero">
-      <img src="assets/story_industrial_hero.png" alt="Industrial inspection scene with measurement overlays">
-      <div class="story-overlay">
-        <div class="tag">Field story</div>
-        <h2>Not just "where is the defect?"</h2>
-        <p>In the field, the next question is always quantitative: how wide, how many, how far apart, and what decision follows.</p>
-      </div>
-    </div>
-    <p class="cap">
-      Visual concept for communication; exact reported numbers are in the audited tables below.
-      <b>GaugeAnything turns perception into inspection atoms: find, measure, count, decide.</b>
-    </p>
-  </div>
-</section>
-
-<!-- ===== LIVE VIDEO ===== -->
-<section class="section" style="padding-top:2.4rem;padding-bottom:1.2rem">
+<!-- ===== 2 · HOOK VIDEO ===== -->
+<section class="section" style="padding-top:1.6rem;padding-bottom:1.6rem">
   <div class="container is-max-desktop">
     <div class="eyebrow">Detection ≠ Measurement</div>
     <h2 class="title is-3 has-text-centered">Finding It Is Easy. Reading It in Millimetres Is the Hard Part.</h2>
     <p class="lead">Anyone can put a box on the page. The research problem is recovering a <b>physical
-      quantity</b> — mm, μm — under perspective, motion, and scale ambiguity. These videos show the
-      obvious "detect&nbsp;+&nbsp;track" approach failing, and what precise measurement actually takes.</p>
+      quantity</b> — mm, μm — under perspective, motion, and scale ambiguity.</p>
 
-    <!-- hero video: SmartDoc naive vs metric -->
     <figure class="fig" style="max-width:1000px">
       <video src="assets/smartdoc_demo.mp4" autoplay loop muted playsinline
              poster="assets/smartdoc_demo_poster.jpg"
              style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:12px"></video>
     </figure>
     <p class="cap">
-      <b>Same detected page, two ways to read its size.</b> The naive "detection + tracking" reading
-      (apparent pixels × a fixed scale) swings to <span class="bad">27% median, 44% peak error</span> as
-      the camera moves and tilts. GaugeAnything's per-frame homography to a metric plane holds
-      <span class="good">1.5%</span> — and outputs a metric-rectified document, not just a box.
-      <i>Detection was never the hard part.</i>
+      <b>Same detected page, two ways to read its size.</b> Naive "detect&nbsp;+&nbsp;track" (apparent
+      pixels × fixed scale) swings to <span class="bad">27% median, 44% peak error</span> as the camera
+      moves; GaugeAnything's per-frame metric homography holds <span class="good">1.5%</span> — and outputs
+      a rectified document, not just a box. <i>Detection was never the hard part.</i>
     </p>
 
-    <!-- secondary videos: TUM + crack -->
     <div class="columns" style="margin-top:1.2rem">
       <div class="column">
-        <figure class="fig">
-          <video src="assets/tum_demo.mp4" autoplay loop muted playsinline
-                 poster="assets/tum_demo_poster.jpg"
-                 style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video>
-        </figure>
-        <p class="cap"><b>Metric survives motion.</b> TUM handheld RGB-D: checkerboard square size in mm
-          from depth back-projection while the camera moves at tens of cm/s.
-          <span class="good">66/70 measurable, median 0.98%</span>; blurred / depth-desynced frames are
-          honestly rejected, never guessed.</p>
+        <figure class="fig"><video src="assets/tum_demo.mp4" autoplay loop muted playsinline
+               poster="assets/tum_demo_poster.jpg"
+               style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video></figure>
+        <p class="cap"><b>Metric survives motion.</b> TUM handheld RGB-D — mm from depth while the camera
+          moves. <span class="good">66/70 measurable, 0.98%</span>; bad frames rejected, never guessed.</p>
       </div>
       <div class="column">
-        <figure class="fig">
-          <video src="assets/crack_demo.mp4" autoplay loop muted playsinline
-                 poster="assets/crack_demo_poster.jpg"
-                 style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video>
-        </figure>
-        <p class="cap"><b>A box can't give you 0.23&nbsp;mm.</b> The crack is a brightness <i>valley</i>,
-          only ~50&nbsp;px wide in a 9448&nbsp;px scan; width is read sub-pixel from the cross-section
-          profile (shown live). <span style="color:#b5791a">Synthetic Ken&nbsp;Burns motion over a static
-          krkCMd scan</span> (CC&nbsp;BY&nbsp;4.0) — labelled on-screen.</p>
+        <figure class="fig"><video src="assets/crack_demo.mp4" autoplay loop muted playsinline
+               poster="assets/crack_demo_poster.jpg"
+               style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video></figure>
+        <p class="cap"><b>A box can't give you 0.23&nbsp;mm.</b> The crack is a brightness valley, ~50&nbsp;px
+          in a 9448&nbsp;px scan; width read sub-pixel from the profile.
+          <span style="color:#b5791a">Synthetic Ken&nbsp;Burns over a static krkCMd scan.</span></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== STORYBOARD ===== -->
-<section class="section" style="padding-top:2.2rem;padding-bottom:1rem">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">One-Glance Story</div>
-    <h2 class="title is-3 has-text-centered">What GaugeAnything Adds</h2>
-    <p class="lead">Segment Anything shows masks. Count Anything shows counts. GaugeAnything shows the inspection quantities that turn a mask into a field decision.</p>
-    <figure class="fig" style="max-width:1180px"><img src="assets/story_inspection_atoms.png" alt="GaugeAnything story: detect, measure, validate, deploy honestly"></figure>
-  </div>
-</section>
-
-<!-- ===== PHYSICAL COVERAGE ===== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Physical AI Coverage</div>
-    <h2 class="title is-3 has-text-centered">From Vision Prompts to Physical Quantities</h2>
-    <p class="lead">GaugeAnything is a measurement layer: cracks, defects, parts, counts, known objects, dynamic scenes, and physical-state signals share one output grammar.</p>
-    <figure class="fig" style="max-width:1180px"><img src="assets/physical_coverage_matrix.png" alt="GaugeAnything physical AI coverage matrix across datasets and physical quantities"></figure>
-    <p class="cap">Coverage atoms are tracked in <a href="PHYSICAL_COVERAGE_MATRIX.md">PHYSICAL_COVERAGE_MATRIX.md</a>. Green = audited, blue = partial or upper-bound, red = negative bottleneck, amber = next adapter.</p>
-
-    <div class="columns is-multiline" style="margin-top:1.2rem">
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/gallery_rissbilder.png" alt="Concrete crack width" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">Crack width</div><div class="tt">mask → px/mm width</div>
-        <p>SAM&nbsp;3 wins mIoU, but measurement error exposes the gap.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/krkcmd_profile.png" alt="krkCMd physical crack width profiles" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#2b83ba">Physical μm GT</div><div class="tt">signal → crack width</div>
-        <p>krkCMd gives manual μm width; signal width reaches 23.2&nbsp;μm median when localized.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/dom_mt_blowhole.png" alt="Metal tile blowhole diameter" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">Sharp defect</div><div class="tt">hole → diameter</div>
-        <p>Blob-like defects switch from thin-width to diameter/area measurement.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/matte_fray_real.png" alt="Real fray matting" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">Fuzzy boundary</div><div class="tt">fray → α/area</div>
-        <p>Directional matting v2 transfers to real fray, above the guided-filter anchor.</p>
-      </div></div>
-
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/soft_uneven.png" alt="Uneven field residual" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">Boundaryless field</div><div class="tt">mura → severity</div>
-        <p>Binary masks collapse; illumination residual maps recover ranking signal.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/coins_mm.png" alt="Coin known-object millimeter consistency" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">Known object</div><div class="tt">coin → mm scale</div>
-        <p>Known-object LOO consistency reaches 1.74% mean error across real scenes.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/results_summary.png" alt="Industrial part metrology summary" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">CAD metric</div><div class="tt">part → mm dimension</div>
-        <p>T-LESS CAD+pose validates promptable industrial-part dimensions at 2.5% median.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/rebar_sahi_count.png" alt="SAHI rebar counting result" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#e0394b">Counting bottleneck</div><div class="tt">rebar → count</div>
-        <p>Tiling helps, but dense touching bars still need density or supervision.</p>
-      </div></div>
-
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/adt_dynamic_multiseq_summary.png" alt="Dynamic metrology speed bins" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#2b83ba">Dynamic metric</div><div class="tt">motion → stable units</div>
-        <p>ADT oracle depth keeps 8.7% median dimension error; 0.5m/s+ remains 9.1%.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/adt_atek_depth_upper.png" alt="ADT depth fusion visual" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#2b83ba">3D object</div><div class="tt">RGB-D → dimensions</div>
-        <p>ROI-only depth fails at 316%, so object gating is the next model target.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/physical_coverage_matrix.png" alt="Document and card scale adapter plan" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#16805d">Document scale</div><div class="tt">A4 → plane units</div>
-        <p>SAM&nbsp;3 detected quad: gate pass 96%, edge error median <b class="good">1.5%</b> vs naive 10-17%. The p90 tail (14-32%) still needs a per-frame quality gate.</p>
-      </div></div>
-      <div class="column is-3"><div class="rcard">
-        <img src="assets/physical_coverage_matrix.png" alt="Timber and fish adapter plan" style="width:100%;aspect-ratio:16/10;object-fit:cover;border:1px solid #e6ecf1;border-radius:8px;margin-bottom:.75rem">
-        <div class="h" style="color:#b5791a">Next adapter</div><div class="tt">logs/fish → count/length</div>
-        <p>TimberSeg and DeepFish expand physical coverage beyond cracks and rigid CAD parts.</p>
-      </div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== STAT STRIP ===== -->
-<section class="section" style="padding-top:2rem;padding-bottom:2rem">
-  <div class="container is-max-desktop">
-    <div class="stats">
-      <div class="stat"><div class="v">2.44×</div><div class="k">SAM 3 zero-shot vs. classical crack segmentation (mIoU)</div></div>
-      <div class="stat"><div class="v">1.74%</div><div class="k">real-photo coin known-object mm consistency (22 scenes, pass@5% 100%)</div></div>
-      <div class="stat"><div class="v">2.5%</div><div class="k">promptable industrial-part measurement on T-LESS (SAM 3 masks ≈ perfect-mask ceiling 2.83%)</div></div>
-      <div class="stat"><div class="v">23.2&nbsp;μm</div><div class="k">median physical crack-width error, promptable image→signal pipeline (localization-gated)</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== ABSTRACT ===== -->
+<!-- ===== 3 · ABSTRACT ===== -->
 <section class="section hero is-light">
   <div class="container is-max-desktop">
     <div class="columns is-centered"><div class="column is-four-fifths">
       <h2 class="title is-3 has-text-centered">Abstract</h2>
       <div class="content has-text-justified is-size-5" style="color:#33414e">
         <p>
-          Promptable foundation models — Segment&nbsp;Anything, Depth&nbsp;Anything, Count&nbsp;Anything — have generalized
-          the <b>perception</b> of industrial inspection, yet the <b>metrology</b> that drives field decisions
-          (crack width, bolt dimension, part spacing, condition grade) remains absent.
-          We present <span class="ga"><b>GaugeAnything</b></span>, a pipeline that, from an image and a prompt
-          (noun phrase, exemplar, or point), emits <b>instances, counts, metric dimensions (mm&nbsp;±&nbsp;σ), and condition grades</b>
-          as atomic, parallel outputs.
+          Promptable foundation models — Segment&nbsp;Anything, Depth&nbsp;Anything, Count&nbsp;Anything —
+          generalized the <b>perception</b> of industrial inspection, yet the <b>metrology</b> that drives
+          field decisions (crack width, part dimension, condition grade) remains absent. We present
+          <span class="ga"><b>GaugeAnything</b></span>: from an image and a prompt, it emits
+          <b>instances, counts, metric dimensions (mm&nbsp;±&nbsp;σ), and condition grades</b> as atomic
+          outputs, by pairing a frozen SAM&nbsp;3 backbone with a metrology core. Our central finding —
+          <b>mask for <i>where</i>, signal for <i>how&nbsp;wide</i></b> — reaches <b>23.2&nbsp;μm median</b>
+          physical crack-width error and <b>2.5%</b> promptable part dimensions on CAD ground truth, where
+          reading width from mask geometry costs 4–6×. Everything is audited, every negative reported, and
+          the full benchmark, models, and a live inference server are released.
         </p>
-        <p>
-          We pair the commercially usable <b>SAM&nbsp;3</b> backbone with a pixel→mm <b>scale resolver</b> (ArUco / bolt-head specs)
-          and a skeleton + distance-transform <b>mask-geometry core</b>. On real data (CrackSeg9k), SAM&nbsp;3 zero-shot is
-          <b>2.44× more accurate than classical crack segmentation</b> (crack-only, 3 seeds), yet <b>every method systematically under-estimates crack width</b>
-          (SAM&nbsp;3 by −22%), quantifying the absence of a measurement-ready model. For defects without a crisp boundary —
-          frayed edges and uneven (mura) brightness — binary segmentation collapses to chance (AUC≈0.50), and we show that
-          a <b>regime-aware soft representation</b> (matting for fuzzy edges, illumination-field modeling for boundaryless defects)
-          recovers signal that binary masks discard. We further validate the measurement chain with real-metric substitutes:
-          coin known-object scenes reach <b>1.74% mean error</b>, and krkCMd profile-level crack-width evaluation reaches
-          <b>27.8&nbsp;±&nbsp;2.5&nbsp;μm MAE</b> (group 5-fold; leave-one-series worst 46.7&nbsp;μm) against manual physical GT.
-          In dynamic scenes, gated TUM handheld RGB-D reaches <b>1.06%</b> median error, and ADT egocentric
-          RGB-D multiview fusion reaches <b>8.7%</b> median 3-D dimension error over 2 sequences / 480 frames
-          / 229 objects (oracle GT-volume gate; not yet promptable SAM&nbsp;3).
-          Finally, reading width from the raw intensity signal instead of mask geometry — <b>mask for <i>where</i>, signal for <i>how wide</i></b> —
-          reaches <b>23.2&nbsp;μm median</b> physical crack-width error and <b>2.5%</b> promptable part dimensions on T-LESS CAD GT.
-          All results are measured on an NVIDIA&nbsp;GB10.
-        </p>
-        <figure class="fig" style="margin-top:1.2rem"><img src="assets/results_summary.png" alt="Results summary: width ladder and part metrology ceiling"></figure>
       </div>
     </div></div>
   </div>
 </section>
 
-<!-- ===== ARCHITECTURE ===== -->
-<section class="section">
+<!-- ===== 4 · ONE IDEA ===== -->
+<section class="section" style="padding-bottom:1.4rem">
   <div class="container is-max-desktop">
-    <div class="eyebrow">Architecture</div>
-    <h2 class="title is-3 has-text-centered">Compose → Specialize → Distill</h2>
-    <p class="lead">A commercial backbone, a measurement core (green) that is our contribution, and a regime router that adapts to the boundary.</p>
-    <div class="method-fig"><img src="assets/architecture.svg" alt="GaugeAnything architecture" style="width:100%"></div>
-    <p class="cap">Editable source: <a href="assets/architecture.drawio" download>architecture.drawio</a> (draw.io / diagrams.net).</p>
+    <div class="eyebrow">The Idea</div>
+    <h2 class="title is-3 has-text-centered">What GaugeAnything Adds</h2>
+    <p class="lead">Segment Anything shows masks. Count Anything shows counts. GaugeAnything reads the
+      inspection quantities that turn a mask into a field decision.</p>
+    <figure class="fig" style="max-width:1180px"><img src="assets/story_inspection_atoms.png" alt="GaugeAnything: image + prompt → inspection atoms (measure, count, grade)"></figure>
   </div>
 </section>
 
-<!-- ===== QUALITATIVE ===== -->
+<!-- ===== 5 · PROOF AT A GLANCE ===== -->
 <section class="section hero is-light">
   <div class="container is-max-desktop">
-    <div class="eyebrow">Qualitative Results</div>
-    <h2 class="title is-3 has-text-centered">Crack Width, Zero-Shot</h2>
-    <p class="lead">Same pipeline across surfaces, no training. The hardest case (thin cracks) is included honestly.</p>
-    <div id="crack-carousel" class="carousel results-carousel">
-      <div class="item"><img src="assets/gallery_rissbilder.png"><div class="cap">Concrete wall (Rissbilder) · 4 instances · mean width 1.53 mm</div></div>
-      <div class="item"><img src="assets/gallery_cfd.png"><div class="cap">Road surface (CFD) · 9 instances · mean width 1.70 mm</div></div>
-      <div class="item"><img src="assets/gallery_volker.png"><div class="cap">Structure (Volker) · 8 instances · mean width 1.48 mm</div></div>
-      <div class="item"><img src="assets/gallery_cracktree200.png"><div class="cap">Thin cracks (CrackTree) · 8 instances · mean width 0.70 mm — hard case</div></div>
-      <div class="item"><img src="assets/gallery_deepcrack.png"><div class="cap">Surface crack (DeepCrack) · 1 instance · mean width 7.73 mm</div></div>
+    <div class="eyebrow">Evidence</div>
+    <h2 class="title is-3 has-text-centered">Audited, Across Many Physical Quantities</h2>
+    <div class="stats" style="margin-bottom:2rem">
+      <div class="stat"><div class="v">23.2&nbsp;μm</div><div class="k">median physical crack-width error (promptable image → signal)</div></div>
+      <div class="stat"><div class="v">2.5%</div><div class="k">promptable part dimensions on T-LESS CAD GT (≈ perfect-mask ceiling 2.83%)</div></div>
+      <div class="stat"><div class="v">1.74%</div><div class="k">real-photo coin known-object mm consistency (pass@5% 100%)</div></div>
+      <div class="stat"><div class="v">2.44×</div><div class="k">SAM 3 zero-shot vs. classical crack segmentation (crack-only mIoU)</div></div>
     </div>
+    <figure class="fig" style="max-width:1180px"><img src="assets/physical_coverage_matrix.png" alt="GaugeAnything physical coverage matrix across datasets and quantities"></figure>
+    <p class="cap">One output grammar across cracks, defects, parts, counts, known objects, and dynamic scenes.
+      Full tables, protocols, and the leaderboard: <a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/benchmark">GaugeBench</a> ·
+      <a href="static/pdfs/gaugeanything.pdf">paper</a> ·
+      <a href="https://github.com/falcons-eyes/GaugeAnything/blob/main/STATUS.md">status</a>.</p>
   </div>
 </section>
 
-<!-- ===== GENERALIZATION ===== -->
+<!-- ===== 6 · HONESTY ===== -->
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="eyebrow">Generalization</div>
-    <h2 class="title is-3 has-text-centered">Across Domains & Measurement Primitives</h2>
-    <p class="lead">One pipeline, different prompts and surfaces. The measurement primitive (width ↔ diameter) is auto-selected from shape.</p>
-    <div id="domain-carousel" class="carousel results-carousel">
-      <div class="item"><img src="assets/dom_crack_concrete.png"><div class="cap">Concrete crack → thin → width</div></div>
-      <div class="item"><img src="assets/dom_mt_blowhole.png"><div class="cap">Metal-tile blowhole → blob → diameter (IoU 0.87)</div></div>
-      <div class="item"><img src="assets/dom_mt_crack.png"><div class="cap">Metal-tile crack → thin → width</div></div>
-      <div class="item"><img src="assets/dom_mt_break.png"><div class="cap">Metal-tile break → hard case</div></div>
-      <div class="item"><img src="assets/dom_mt_fray.png"><div class="cap">Metal-tile fray → texture anomaly → zero-shot limit</div></div>
-    </div>
-    <div class="columns is-centered" style="margin-top:1.4rem"><div class="column is-three-quarters">
-      <table class="table is-fullwidth is-hoverable gtab">
-        <thead><tr><th>Domain</th><th>Prompt</th><th>mIoU</th><th>Measurement (auto)</th></tr></thead>
-        <tbody>
-          <tr class="win"><td>Metal-tile crack</td><td>"crack"</td><td>0.454</td><td>thin → width 3.9 px</td></tr>
-          <tr class="win"><td>Metal-tile blowhole</td><td>"hole"</td><td>0.429</td><td>blob → dia 11.6 px</td></tr>
-          <tr class="win"><td>Concrete crack</td><td>"crack"</td><td>0.367</td><td>thin → width 8.0 px</td></tr>
-          <tr><td>Metal-tile break</td><td>"crack"</td><td>0.030</td><td>mixed</td></tr>
-          <tr><td>Metal-tile fray</td><td>"scratch"</td><td>0.025</td><td>mixed</td></tr>
-          <tr><td>Metal-tile uneven</td><td>"stain"</td><td>0.005</td><td>mixed</td></tr>
-        </tbody>
-      </table>
-      <p class="cap">
-        <span class="good">The metrology core crosses domains</span> (concrete ↔ metal, width ↔ diameter) ·
-        <span class="good">SAM 3 generalizes to concrete-noun defects</span> (crack, hole) ·
-        <span class="bad">zero-shot fails on abstract texture anomalies</span> (fray, uneven) — the motivation for the next section.
-      </p>
-    </div></div>
-  </div>
-</section>
-
-<!-- ===== SOFT INSPECTION ===== -->
-<section class="section hero is-light">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Beyond Binary</div>
-    <h2 class="title is-3 has-text-centered">Soft Inspection — Three Regimes</h2>
-    <p class="lead">The right tool depends on the <i>boundary</i>. Binary segmentation collapses to chance on fuzzy and boundaryless defects.</p>
-
-    <div class="columns is-multiline" style="margin-bottom:.3rem">
-      <div class="column is-4"><div class="rcard" style="border-top:3px solid #3b82c4">
-        <div class="h" style="color:#2f6aa8">Regime (a) · sharp boundary</div>
-        <div class="tt">crack · hole · scratch</div>
-        <p>Crisp edge → <b>binary segmentation</b> (SAM 3). A 0/1 mask suffices.</p>
-      </div></div>
-      <div class="column is-4"><div class="rcard" style="border-top:3px solid #8a5cd1">
-        <div class="h" style="color:#6d3fbf">Regime (a′) · fuzzy boundary</div>
-        <div class="tt">fray · worn edge</div>
-        <p>Boundary is blurred but <i>present</i> → <b>alpha matting</b> (α∈[0,1]) regresses the foreground/background mix.</p>
-      </div></div>
-      <div class="column is-4"><div class="rcard" style="border-top:3px solid #16805d">
-        <div class="h" style="color:#16805d">Regime (b) · no boundary</div>
-        <div class="tt">uneven / mura · diffuse corrosion</div>
-        <p>No foreground to separate → <b>illumination-field modeling</b>. The residual of a smooth fit is the severity field.</p>
-      </div></div>
-    </div>
-
-    <div id="soft-carousel" class="carousel results-carousel">
-      <div class="item"><img src="assets/matte_fray.png"><div class="cap">Fuzzy regime (fray) → self-supervised matting head recovers the soft α, including the fragment the binary mask drops</div></div>
-      <div class="item"><img src="assets/soft_uneven.png"><div class="cap">Field regime (uneven) → illumination-residual soft map; column-detrend isolates the brightness field</div></div>
-      <div class="item"><img src="assets/draem_uneven.png"><div class="cap">Field regime (uneven) → learned anomaly (DRAEM-lite, low-frequency synthesis on normal tiles)</div></div>
-      <div class="item"><img src="assets/soft_fray.png"><div class="cap">Fray → continuous anomaly map; the fuzzy edge calls for matting (smoothing destroys it)</div></div>
-    </div>
-
-    <div class="columns is-centered" style="margin-top:1.4rem">
-      <div class="column is-half">
-        <h3 class="title is-6 has-text-centered" style="color:#6b7a88">Detection — boundaryless / fuzzy (AUC)</h3>
-        <table class="table is-fullwidth is-hoverable gtab">
-          <thead><tr><th>Defect</th><th>SAM 3 binary</th><th>Classical soft</th><th>Learned</th></tr></thead>
-          <tbody>
-            <tr><td>Uneven (field)</td><td><span class="bad">0.499</span></td><td class="num">0.669</td><td>0.636 <span style="color:#8a97a3">DRAEM</span></td></tr>
-            <tr><td>Fray (fuzzy)</td><td><span class="bad">0.526</span></td><td class="num">0.644</td><td>—</td></tr>
-          </tbody>
-        </table>
-        <p class="cap"><span class="bad">Binary ≈ 0.50 = chance</span> (note: a binary mask is structurally limited on AUC; the primary evidence is IoU ≤ 0.03). Uneven numbers use a val/test split — configs chosen on val, reported on test.</p>
-      </div>
-      <div class="column is-half">
-        <h3 class="title is-6 has-text-centered" style="color:#6b7a88">Matting head — α fidelity (MAE ↓)</h3>
-        <table class="table is-fullwidth is-hoverable gtab">
-          <thead><tr><th>Representation</th><th>α-MAE on synthetic holdout</th></tr></thead>
-          <tbody>
-            <tr><td>binary mask (synthetic)</td><td>0.2007</td></tr>
-            <tr class="win"><td>matting head, synthetic holdout</td><td>0.0100</td></tr>
-            <tr><td>v1 real fray transfer (mask IoU)</td><td><span class="bad">0.483</span> vs guided filter <b>0.860</b></td></tr>
-            <tr class="win"><td>v2 directional matting, real fray</td><td><b>0.949</b> vs guided filter <b>0.860</b></td></tr>
-          </tbody>
-        </table>
-        <p class="cap">The first blob-synthesis head was an honest failure on real fray. Directional synthesis v2 fixes the transfer gap: learned matting reaches <span class="good">0.949 IoU</span> on real MT_Fray, above the guided filter anchor.</p>
-      </div>
-    </div>
-    <p class="lead" style="margin-top:.4rem;font-size:.9rem">
-      Honest note: a well-tuned classical illumination model is still strongest on the narrow uneven case; learned synthesis closes the gap. For fuzzy boundaries, directional matting v2 now transfers to real fray. The established result is that <b>continuous representations beat binary</b>, with the regime dictating the tool.
-    </p>
-  </div>
-</section>
-
-<!-- ===== QUANTITATIVE ===== -->
-<section class="section" id="results">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Quantitative Results</div>
-    <h2 class="title is-3 has-text-centered">Segmentation vs. Measurement</h2>
-    <p class="lead">CrackSeg9k (9,159 pairs, 14 source datasets) · cross-source · measured on GB10. Segmentation rank ≠ measurement rank.</p>
-    <div class="columns">
-      <div class="column">
-        <h3 class="title is-6 has-text-centered" style="color:#6b7a88">Segmentation</h3>
-        <table class="table is-fullwidth is-hoverable gtab">
-          <thead><tr><th>Method</th><th>crack mIoU&nbsp;↑ (±std, 3 seeds)</th><th>non-crack clean&nbsp;↑</th></tr></thead>
-          <tbody>
-            <tr><td>frangi (classical)</td><td>0.115 ± 0.005</td><td>0.26</td></tr>
-            <tr><td>adaptive (classical)</td><td>0.181 ± 0.006</td><td>0.00</td></tr>
-            <tr class="win"><td>SAM 3 zero-shot</td><td>0.442 ± 0.011</td><td>0.68</td></tr>
-          </tbody>
-        </table>
-        <p class="cap">SAM 3 = <span class="num">2.44×</span> the best classical baseline (crack-only protocol, empty-GT excluded) · also wins detection (0.68 vs 0.00 clean rate on defect-free surfaces) · supervised U-Nets reach ~0.7+ — the claim is promptability, not SOTA</p>
-      </div>
-      <div class="column">
-        <h3 class="title is-6 has-text-centered" style="color:#6b7a88">Measurement fidelity</h3>
-        <table class="table is-fullwidth is-hoverable gtab">
-          <thead><tr><th>Method</th><th>width MAE (px)&nbsp;↓</th><th>width rel.&nbsp;↓</th><th>GT 11.3px →</th></tr></thead>
-          <tbody>
-            <tr><td>frangi</td><td>8.87</td><td>61.6%</td><td>2.4 px</td></tr>
-            <tr><td>adaptive</td><td>6.67</td><td><span class="good">43.5%</span></td><td>5.0 px</td></tr>
-            <tr class="win"><td>SAM 3</td><td>5.67</td><td>62.9%</td><td>8.8 px</td></tr>
-          </tbody>
-        </table>
-        <p class="cap"><b>Best mIoU ≠ best measurement.</b> Every method under-estimates width.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== METROLOGY RIGOR ===== -->
-<section class="section hero is-light">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Metrology Rigor</div>
-    <h2 class="title is-3 has-text-centered">Trust the Millimeters</h2>
-    <p class="lead">Two failure modes that silently corrupt field measurements — quantified and fixed.</p>
-    <div class="columns">
-      <div class="column">
-        <h3 class="title is-6 has-text-centered" style="color:#6b7a88">Camera tilt — naive scale vs. homography</h3>
-        <table class="table is-fullwidth is-hoverable gtab">
-          <thead><tr><th>tilt θ</th><th>naive mm/px err</th><th>PlaneScale (homography)</th></tr></thead>
-          <tbody>
-            <tr><td>0°</td><td>0.6%</td><td>0.6%</td></tr>
-            <tr><td>30°</td><td>6.4%</td><td>1.0%</td></tr>
-            <tr class="win"><td>50°</td><td><span class="bad">19.3%</span></td><td><span class="good">0.7%</span></td></tr>
-          </tbody>
-        </table>
-        <p class="cap">The fronto-parallel assumption costs up to <span class="bad">19% error</span> at field-typical tilts.
-        Mapping pixels through the marker-plane homography holds <span class="good">≤1%</span>.
-        Synthetic-geometric validation (ArUco 20 mm + 60 mm bar); real-mm capture is the next data milestone.</p>
-      </div>
-      <div class="column">
-        <h3 class="title is-6 has-text-centered" style="color:#6b7a88">Prompt vocabulary — synonym collapse &amp; rescue</h3>
-        <table class="table is-fullwidth is-hoverable gtab">
-          <thead><tr><th>user prompt</th><th>single</th><th>ensemble (mapping)</th></tr></thead>
-          <tbody>
-            <tr><td>"fracture" (concrete crack)</td><td><span class="bad">0.000</span></td><td><span class="good">0.374</span></td></tr>
-            <tr><td>"pit" (blowhole)</td><td><span class="bad">0.000</span></td><td><span class="good">0.352</span></td></tr>
-          </tbody>
-        </table>
-        <p class="cap">SAM 3's concept vocabulary is narrow: valid synonyms collapse to zero.
-        A validated prompt-set ensemble (<span class="mono">PROMPT_SETS</span>) restores best-prompt
-        performance regardless of the word the user types — at the cost of |prompts|× inference.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== DYNAMIC METROLOGY ===== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Dynamic Scenes</div>
-    <h2 class="title is-3 has-text-centered">Moving Cameras, Still Metric</h2>
-    <p class="lead">The field scenario is not a tripod. We test handheld and egocentric walkthroughs, report the gate cost, and keep the oracle/promptable boundary explicit.</p>
-    <figure class="fig" style="max-width:1180px"><img src="assets/adt_dynamic_multiseq_summary.png" alt="ADT dynamic metrology summary across sequences and camera speeds"></figure>
-
-    <div class="columns is-multiline" style="margin-top:1.3rem">
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #16805d">
-          <div class="h" style="color:#16805d">TUM handheld checkerboard</div>
-          <div class="tt">Gated RGB-D stays near static accuracy</div>
-          <p>After rejecting depth-sync and anisotropic frames, 160 handheld frames reach <b class="good">1.06%</b> median / <b>2.60%</b> p90 relative error. Motion bins from 0.1-1.0 m/s remain around 1%.</p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #16805d">
-          <div class="h" style="color:#16805d">ADT egocentric walkthroughs</div>
-          <div class="tt">Object dimensions survive motion</div>
-          <p>Oracle-volume RGB-D fusion over 2 ADT sequences, 480 frames, and 229 fitted objects gives <b class="good">8.7%</b> median 3-D dimension error. The 0.5m/s+ bin remains <b class="good">9.1%</b> median, so motion does not collapse the metric signal. ROI-only depth collapses to <b class="bad">316%</b>, which makes the next mask-gating problem explicit.</p>
-        </div>
-      </div>
-    </div>
-    <p class="cap">ADT result uses GT object pose/volume as an oracle gate. It validates metric multiview depth under egocentric motion; the next result must replace that gate with ADT segmentation or promptable SAM&nbsp;3 masks.</p>
-  </div>
-</section>
-
-<!-- ===== REAL METRIC EVIDENCE ===== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Real-Metric Evidence</div>
-    <h2 class="title is-3 has-text-centered">From Pixels to Physical Units</h2>
-    <p class="lead">We separate the claims: geometric scale, known-object real photos, physical crack-width GT — and now the image-level promptable μm chain, measured end-to-end with honest localization gating.</p>
-
-    <div class="columns is-multiline">
-      <div class="column is-half">
-        <figure class="fig"><img src="assets/coins_mm.png" alt="Coin known-object mm consistency"></figure>
-        <table class="table is-fullwidth is-hoverable gtab" style="margin-top:1rem">
-          <thead><tr><th>E-mm-1</th><th>Value</th></tr></thead>
-          <tbody>
-            <tr><td>real photos</td><td>22 scenes, 8-60 coins/image</td></tr>
-            <tr class="win"><td>mean / median relative error</td><td>1.74% / 1.68%</td></tr>
-            <tr class="win"><td>pass@5% / pass@10%</td><td>100% / 100%</td></tr>
-          </tbody>
-        </table>
-        <p class="cap">Leave-one-out known-object consistency: each coin is measured using the other same-denomination coins as the scale reference. This validates the segmentation→diameter chain on real imagery, not the absolute marker chain.</p>
-      </div>
-
-      <div class="column is-half">
-        <figure class="fig"><img src="assets/krkcmd_profile.png" alt="krkCMd profile-level crack-width evaluation"></figure>
-        <table class="table is-fullwidth is-hoverable gtab" style="margin-top:1rem">
-          <thead><tr><th>E-mm-3</th><th>test MAE ↓</th><th>r</th></tr></thead>
-          <tbody>
-            <tr class="win"><td>author DLM anchor</td><td>11.1 μm</td><td>0.973</td></tr>
-            <tr class="win"><td>GaugeProfile + linear calibration</td><td>25.9 μm (5-fold 27.8 ± 2.5)</td><td>0.864</td></tr>
-            <tr><td>author AED anchor</td><td>26.5 μm</td><td>0.930</td></tr>
-            <tr><td>GaugeProfile, uncalibrated</td><td>31.3 μm</td><td>0.864</td></tr>
-          </tbody>
-        </table>
-        <p class="cap">krkCMd table: 19,098 scanner brightness profiles, manual width GT in μm, group-split test 4,674 profiles. This is profile-level physical GT, not yet promptable image segmentation.</p>
-      </div>
-    </div>
-
-    <div class="columns is-multiline" style="margin-top:.5rem">
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #1b4d89">
-          <div class="h" style="color:#1b4d89">Promptable parts metrology (E-mm-2b)</div>
-          <div class="tt">SAM 3 masks ≈ perfect masks on T-LESS</div>
-          <p>Same CAD-derived mm protocol, masks swapped from ground truth to SAM 3 zero-shot: match rate <b class="good">100%</b>, mask IoU <b>0.94</b>, measurement median error <b class="good">2.5%</b> vs the perfect-mask ceiling of 2.83%. Concrete-noun prompts work; the abstract prompt "industrial part" matches <b class="bad">0%</b> — synonym collapse, again.</p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #1b4d89">
-          <div class="h" style="color:#1b4d89">Signal-based width (E-mm-3c)</div>
-          <div class="tt">Mask for WHERE, signal for HOW WIDE</div>
-          <p>Reading width from binary masks costs 4-6× accuracy (144-186 μm). Using the mask only for centerline localization and regressing width from the raw intensity profile (1-D CNN trained on 19k krkCMd profiles): <b class="good">39.9 μm MAE / 23.2 μm median</b> where localization succeeds (46-66% coverage, gated and reported honestly). Physics says yes: the information survives imaging.</p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #16805d">
-          <div class="h" style="color:#16805d">Geometry scale</div>
-          <div class="tt">PlaneScale fixes tilt</div>
-          <p>At 50° tilt, a single marker-derived px/mm gives <b class="bad">19.3%</b> length error; local homography scale gives <b class="good">0.7%</b>. This protects every downstream millimeter.</p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #e0394b">
-          <div class="h" style="color:#b5791a">Counting — owned head beats SAHI</div>
-          <div class="tt">Rebar density head (Count v1)</div>
-          <p>Zero-shot SAM&nbsp;3 fails (MAE 13.2, 0% acc@10%); SAHI tiling reaches 8.9. A tiny owned <b>density head (0.11M)</b> beats it on a fair split: <b class="good">MAE 7.0</b>, acc@10% 0.19. But dense bars (GT≥40) still undercount by ~29 — the open structural problem, next attacked with high-res + count-weighted training.</p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #16805d">
-          <div class="h" style="color:#16805d">Owned model (M2 v2-a)</div>
-          <div class="tt">GaugeHead-Tiny passes the quantile bar</div>
-          <p>A tiny ExtraTrees head over 19 mask/image statistics is the first <i>learned</i> rung to beat quantile calibration on held-out sources: rel. err <b class="good">0.472</b> vs 0.480 (quantile) and 0.564 (1.9M UNet). It still trails the logit-level scheme (0.437) and the worst source stays 0.720 — a path opened, not a victory.</p>
-        </div>
-      </div>
-      <div class="column is-half">
-        <div class="rcard" style="border-top:3px solid #1b4d89">
-          <div class="h" style="color:#1b4d89">Uncertainty audit (M2 v2-b)</div>
-          <div class="tt">Only non-adaptive intervals survive source shift</div>
-          <p>90% conformal intervals around GaugeHead-Tiny: the non-adaptive log interval keeps rel. err 0.4724 with per-source coverage <b class="good">0.91 / 1.00 / 0.95</b>. The efficient adaptive variants (normalized, CQR) collapse to <b class="bad">0.21 / 0.11</b> on CrackTree200 — and σ(x), ensemble variance, and kNN distance all fail to flag it: a <b>concept shift</b>, not a covariate shift.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== KEY FINDINGS ===== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="eyebrow">Key Findings</div>
+    <div class="eyebrow">Rigor</div>
     <h2 class="title is-3 has-text-centered">We Attacked Our Own Results First</h2>
-    <p class="lead">Most reported numbers are inflated by leakage or confounds. We surface the traps before a reviewer does.</p>
+    <p class="lead">Most reported numbers are inflated by leakage or confounds. We surface the traps —
+      and the negatives — before a reviewer does.</p>
     <div class="columns">
       <div class="column"><div class="rcard" style="border-top:3px solid #ffb648">
-        <div class="h" style="color:#b5791a">Finding 01 · Measurement gap</div>
-        <div class="tt">No measurement-ready model</div>
-        <p>SAM 3 wins on mIoU and absolute width error, yet its <b class="bad">62.9% relative width error</b> is worse than classical adaptive (<b class="good">43.5%</b>). Segmentation metrics hide it.</p>
+        <div class="h" style="color:#b5791a">Measurement gap</div>
+        <div class="tt">Segmentation metrics hide it</div>
+        <p>SAM 3 wins mIoU yet its <b class="bad">62.9%</b> relative width error is worse than classical
+          adaptive (<b class="good">43.5%</b>). Best mask ≠ best measurement.</p>
       </div></div>
       <div class="column"><div class="rcard" style="border-top:3px solid #ffb648">
-        <div class="h" style="color:#b5791a">Finding 02 · Boundary regimes</div>
-        <div class="tt">Binary ≈ chance on fuzzy/field defects</div>
-        <p>On fray and uneven, SAM 3 binary AUC is <b class="bad">~0.50</b>. Fuzzy edges respond to matting; boundaryless fields to illumination modeling — <b>opposite</b> treatments.</p>
+        <div class="h" style="color:#b5791a">Honest negatives</div>
+        <div class="tt">We publish what fails</div>
+        <p>Zero-shot dense counting collapses; a matting head that won 20× on synthetic data
+          <b class="bad">failed to transfer</b> until the synthesis was made realistic. Reported, not hidden.</p>
       </div></div>
       <div class="column"><div class="rcard" style="border-top:3px solid #ffb648">
-        <div class="h" style="color:#b5791a">Finding 03 · Physical GT</div>
-        <div class="tt">μm evidence is now on the table</div>
-        <p>krkCMd gives a physical crack-width benchmark: GaugeProfile+cal reaches <b class="good">27.8 ± 2.5 μm MAE</b> (5-fold; single split 25.9, leave-one-series worst 46.7) vs manual GT; the specialized author DLM anchor reaches <b>11.1 μm</b>.</p>
+        <div class="h" style="color:#b5791a">Calibrated uncertainty</div>
+        <div class="tt">It says "not measurable"</div>
+        <p>Per-source conformal intervals keep 90% coverage; gated frames are reported as
+          <b>not measurable</b> rather than guessed — the instrument's contract.</p>
       </div></div>
     </div>
   </div>
 </section>
 
-<!-- ===== BIBTEX ===== -->
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title is-3">BibTeX</h2>
-    <pre style="background:#0e1620;color:#dfe9f0;border-radius:10px;padding:1.2rem"><code>@misc{gaugeanything2026,
+<!-- ===== 7 · RESOURCES + CITE ===== -->
+<section class="section hero is-light" id="cite">
+  <div class="container is-max-desktop has-text-centered">
+    <div class="eyebrow">Get It</div>
+    <h2 class="title is-3 has-text-centered">Open Source, Audited, Reproducible</h2>
+    <div class="publication-links" style="margin-bottom:2rem">
+      <a class="button is-dark is-rounded" href="static/pdfs/gaugeanything.pdf" target="_blank">
+        <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span></a>
+      <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything" target="_blank">
+        <span class="icon"><i class="fab fa-github"></i></span><span>Code</span></a>
+      <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything/tree/main/benchmark" target="_blank">
+        <span class="icon"><i class="fas fa-ranking-star"></i></span><span>GaugeBench</span></a>
+      <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything/blob/main/MODELS.md" target="_blank">
+        <span class="icon"><i class="fas fa-brain"></i></span><span>Models</span></a>
+      <a class="button is-dark is-rounded" href="https://huggingface.co/James-joobs/GaugeAnything" target="_blank">
+        <span class="icon">🤗</span><span>Weights</span></a>
+      <a class="button is-dark is-rounded" href="https://github.com/falcons-eyes/GaugeAnything/tree/main/serve" target="_blank">
+        <span class="icon"><i class="fas fa-server"></i></span><span>Demo server</span></a>
+    </div>
+    <div class="content" style="max-width:760px;margin:0 auto;text-align:left">
+      <pre style="background:#0e1620;color:#dfe9f0;border-radius:10px;padding:1.2rem"><code>@misc{gaugeanything2026,
   title  = {GaugeAnything: Promptable Quantitative Inspection for Industrial Micro-Vision},
   author = {Joo, Hyunwoo},
   year   = {2026},
-  note   = {Project page, work in progress},
   url    = {https://github.com/falcons-eyes/GaugeAnything}
 }</code></pre>
+    </div>
   </div>
 </section>
 
 <footer class="footer">
   <div class="container has-text-centered" style="padding:2.4rem 1.5rem">
     <p class="is-size-7">
-      Page built on the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> · CC BY-SA 4.0.<br>
-      Measured on NVIDIA GB10 (aarch64, CUDA 13.1) · backbone SAM 3 · data CrackSeg9k / Magnetic-Tile / krkCMd / ROI-1555 / VT Bianchi suite.
+      <b>GaugeAnything</b> · Falcon Eyes · part of the Industrial Anything research program.<br>
+      Measured on NVIDIA GB10 · backbone SAM 3 · data CrackSeg9k / Magnetic-Tile / krkCMd / T-LESS / ROI-1555 / SmartDoc / TUM.
     </p>
   </div>
 </footer>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-carousel.min.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded',function(){
-    var opt={slidesToShow:1,slidesToScroll:1,loop:true,autoplay:true,autoplaySpeed:4600,pagination:true};
-    bulmaCarousel.attach('#crack-carousel',opt);
-    bulmaCarousel.attach('#domain-carousel',Object.assign({},opt,{autoplaySpeed:5200}));
-    bulmaCarousel.attach('#soft-carousel',Object.assign({},opt,{autoplaySpeed:5800}));
-  });
-</script>
 </body>
 </html>
