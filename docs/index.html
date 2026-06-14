@@ -105,6 +105,8 @@
       </div>
       <div style="margin-top:1.1rem;font-size:.86rem;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;background:#f6f9f8;border:1px solid #e2ece8;border-radius:10px;padding:.8rem 1.1rem">
         <b>News</b> ·
+        <b>2026-06-14</b>: <b>live video demo</b> — promptable A4 measurement tracked across a handheld
+        SmartDoc scan (70/70 frames, median <b>0.7%</b> error) ·
         <b>2026-06-13</b>: <b>live demo server</b> — FastAPI + Docker inference on RTX 5090
         (SAM&nbsp;3 + metrology core), warm latency <b>~90&nbsp;ms</b>, 10.4 req/s
         (<a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/serve">serve/</a>) ·
@@ -141,6 +143,28 @@
     <p class="cap">
       Visual concept for communication; exact reported numbers are in the audited tables below.
       <b>GaugeAnything turns perception into inspection atoms: find, measure, count, decide.</b>
+    </p>
+  </div>
+</section>
+
+<!-- ===== LIVE VIDEO ===== -->
+<section class="section" style="padding-top:2.4rem;padding-bottom:1.2rem">
+  <div class="container is-max-desktop">
+    <div class="eyebrow">Live, On Real Video</div>
+    <h2 class="title is-3 has-text-centered">Promptable Measurement, Frame by Frame</h2>
+    <p class="lead">A handheld phone scan from SmartDoc. The prompt is just <span class="mono">"document"</span>.
+      Every frame: SAM&nbsp;3 finds the page, the metrology core fits its quadrilateral and reads the
+      <b>A4 size in millimetres</b> — as the camera moves and the perspective shears.</p>
+    <figure class="fig" style="max-width:1000px">
+      <video src="assets/smartdoc_demo.mp4" autoplay loop muted playsinline
+             poster="assets/smartdoc_demo_poster.jpg"
+             style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:12px"></video>
+    </figure>
+    <p class="cap">
+      SmartDoc15 sequence (70 frames). <span class="good">70/70 frames measurable, median width error 0.7%</span>
+      against the A4 reference — no per-frame tuning. Frames where the page geometry breaks are reported as
+      <i>not measurable</i> rather than guessed.
+      Running on an <b>RTX&nbsp;5090</b> inference server (SAM&nbsp;3 + metrology core), warm latency ~90&nbsp;ms/frame.
     </p>
   </div>
 </section>
