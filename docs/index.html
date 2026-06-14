@@ -105,8 +105,9 @@
       </div>
       <div style="margin-top:1.1rem;font-size:.86rem;text-align:left;max-width:760px;margin-left:auto;margin-right:auto;background:#f6f9f8;border:1px solid #e2ece8;border-radius:10px;padding:.8rem 1.1rem">
         <b>News</b> ·
-        <b>2026-06-14</b>: <b>measurement-in-motion demos</b> — three video sequences (SmartDoc document
-        scale 70/70 @0.7%, TUM handheld checkerboard 66/70 @0.98%, crack-width Ken&nbsp;Burns) ·
+        <b>2026-06-14</b>: <b>detection ≠ measurement</b> demos — naive detect+track drifts to 27-44%
+        on a moving SmartDoc scan while our metric holds 1.5%; plus motion-robust TUM mm and
+        sub-pixel crack width from the raw signal ·
         <b>2026-06-13</b>: <b>live demo server</b> — FastAPI + Docker inference on RTX 5090
         (SAM&nbsp;3 + metrology core), warm latency <b>~90&nbsp;ms</b>, 10.4 req/s
         (<a href="https://github.com/falcons-eyes/GaugeAnything/tree/main/serve">serve/</a>) ·
@@ -150,22 +151,24 @@
 <!-- ===== LIVE VIDEO ===== -->
 <section class="section" style="padding-top:2.4rem;padding-bottom:1.2rem">
   <div class="container is-max-desktop">
-    <div class="eyebrow">Measurement in Motion</div>
-    <h2 class="title is-3 has-text-centered">Not a Still Frame — Measured Across the Video</h2>
-    <p class="lead">Three sequences from the datasets we target. Each frame is measured independently;
-      where the geometry breaks, the instrument says <i>not measurable</i> rather than guessing.</p>
+    <div class="eyebrow">Detection ≠ Measurement</div>
+    <h2 class="title is-3 has-text-centered">Finding It Is Easy. Reading It in Millimetres Is the Hard Part.</h2>
+    <p class="lead">Anyone can put a box on the page. The research problem is recovering a <b>physical
+      quantity</b> — mm, μm — under perspective, motion, and scale ambiguity. These videos show the
+      obvious "detect&nbsp;+&nbsp;track" approach failing, and what precise measurement actually takes.</p>
 
-    <!-- hero video: SmartDoc -->
+    <!-- hero video: SmartDoc naive vs metric -->
     <figure class="fig" style="max-width:1000px">
       <video src="assets/smartdoc_demo.mp4" autoplay loop muted playsinline
              poster="assets/smartdoc_demo_poster.jpg"
              style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:12px"></video>
     </figure>
     <p class="cap">
-      <b>SmartDoc handheld scan</b> · prompt <span class="mono">"document"</span> → SAM&nbsp;3 page +
-      A4 size in mm, frame by frame as the perspective shears.
-      <span class="good">70/70 frames measurable, median width error 0.7%</span> vs the A4 reference.
-      RTX&nbsp;5090, ~90&nbsp;ms/frame.
+      <b>Same detected page, two ways to read its size.</b> The naive "detection + tracking" reading
+      (apparent pixels × a fixed scale) swings to <span class="bad">27% median, 44% peak error</span> as
+      the camera moves and tilts. GaugeAnything's per-frame homography to a metric plane holds
+      <span class="good">1.5%</span> — and outputs a metric-rectified document, not just a box.
+      <i>Detection was never the hard part.</i>
     </p>
 
     <!-- secondary videos: TUM + crack -->
@@ -176,9 +179,10 @@
                  poster="assets/tum_demo_poster.jpg"
                  style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video>
         </figure>
-        <p class="cap"><b>TUM handheld RGB-D</b> · checkerboard square size in mm from depth back-projection,
-          while the camera moves (speed shown). <span class="good">66/70 measurable, median 0.98%</span>;
-          blurred / depth-desynced frames are honestly rejected.</p>
+        <p class="cap"><b>Metric survives motion.</b> TUM handheld RGB-D: checkerboard square size in mm
+          from depth back-projection while the camera moves at tens of cm/s.
+          <span class="good">66/70 measurable, median 0.98%</span>; blurred / depth-desynced frames are
+          honestly rejected, never guessed.</p>
       </div>
       <div class="column">
         <figure class="fig">
@@ -186,10 +190,10 @@
                  poster="assets/crack_demo_poster.jpg"
                  style="width:100%;display:block;border:1px solid #e6ecf1;border-radius:10px"></video>
         </figure>
-        <p class="cap"><b>Crack width along a 0.23&nbsp;mm crack</b> (krkCMd scan, CC&nbsp;BY&nbsp;4.0).
-          Width is read at each position and varies along the crack.
-          <span style="color:#b5791a">Synthetic Ken&nbsp;Burns motion over a static 9448×6305 scan</span> —
-          labelled on-screen, not a real video.</p>
+        <p class="cap"><b>A box can't give you 0.23&nbsp;mm.</b> The crack is a brightness <i>valley</i>,
+          only ~50&nbsp;px wide in a 9448&nbsp;px scan; width is read sub-pixel from the cross-section
+          profile (shown live). <span style="color:#b5791a">Synthetic Ken&nbsp;Burns motion over a static
+          krkCMd scan</span> (CC&nbsp;BY&nbsp;4.0) — labelled on-screen.</p>
       </div>
     </div>
   </div>
